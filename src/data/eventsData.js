@@ -17,21 +17,6 @@ export const eventsData = {
     //   featured: true
     // },
     {
-      id: 17,
-      title: "Brand Clarity as a Business Tool",
-      date: "2026-05-06",
-      time: "12:00 PM EAT",
-      location: "Virtual Event",
-      venue: "Zoom",
-      description: "This session will be led by Penquin focusing on how brand clarity helps teams make better, faster decisions across campaigns, partnerships, and growth initiatives.",
-      image: "https://ik.imagekit.io/nkmvdjnna/PAAN/webinars/brand-clarity.webp",
-      category: "Webinar",
-      price: "Free",
-      registrationUrl: "https://tinyurl.com/4ktctmxx",
-      status: "upcoming",
-      featured: true
-    },
-    {
       id: 15,
       title: "Culture, Data & Behaviour: Understanding Today's African Consumer",
       date: "2026-05-13",
@@ -63,6 +48,21 @@ export const eventsData = {
     },
   ],
   past: [
+    {
+      id: 17,
+      title: "Brand Clarity as a Business Tool",
+      date: "2026-05-06",
+      time: "12:00 PM EAT",
+      location: "Virtual Event",
+      venue: "Zoom",
+      description: "This session will be led by Penquin focusing on how brand clarity helps teams make better, faster decisions across campaigns, partnerships, and growth initiatives.",
+      image: "https://ik.imagekit.io/nkmvdjnna/PAAN/webinars/brand-clarity.webp",
+      category: "Webinar",
+      price: "Completed",
+      registrationUrl: "https://youtu.be/gcOXWukvCBE",
+      status: "past",
+      featured: true
+    },
     {
       id: 16,
       title: "Scaling Campaigns Across Africa: How to Reach the Right Audiences at the Right Time",
