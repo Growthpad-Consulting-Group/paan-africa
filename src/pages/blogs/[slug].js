@@ -16,6 +16,7 @@ import { supabase } from "@/lib/supabase";
 import ScrollToTop from "@/components/ScrollToTop";
 import { calculateReadTime } from '@/utils/readTime';
 import { sanitizeBlogHtml } from '@/utils/sanitizeBlogHtml';
+import { formatBlogSeoTitle } from '@/utils/formatSeoTitle';
 
 // ─── Social Share Icons ────────────────────────────────────────────────────────
 const SocialShare = ({ url, title }) => {
@@ -339,7 +340,7 @@ export default function BlogPost({ blog: initialBlog, error: serverError, pageSl
     return (
       <>
         <Head>
-          <title>Blog Not Found | PAAN</title>
+          <title>Blog Post Not Found | PAAN Blog</title>
           <meta name="robots" content="noindex" />
         </Head>
         <Header />
@@ -378,6 +379,7 @@ export default function BlogPost({ blog: initialBlog, error: serverError, pageSl
   };
 
   const { before: contentBefore, after: contentAfter } = getMidpointSplit(blog.article_body);
+  const pageTitle = formatBlogSeoTitle(blog, slug);
 
   const handleSubscribe = async (e) => {
     e.preventDefault();
@@ -401,7 +403,7 @@ export default function BlogPost({ blog: initialBlog, error: serverError, pageSl
   return (
     <>
       <Head>
-        <title>{blog.meta_title || blog.article_name}</title>
+        <title>{pageTitle}</title>
         <meta name="robots" content="index, follow" />
         <meta name="description" content={blog.meta_description ||
           (blog.article_body ?
@@ -415,7 +417,7 @@ export default function BlogPost({ blog: initialBlog, error: serverError, pageSl
         />
 
         {/* Open Graph */}
-        <meta property="og:title" content={blog.meta_title || blog.article_name} />
+        <meta property="og:title" content={pageTitle} />
         <meta property="og:description" content={blog.meta_description ||
           (blog.article_body ?
             blog.article_body.replace(/<[^>]*>/g, '').substring(0, 160) + '...' :
@@ -431,7 +433,7 @@ export default function BlogPost({ blog: initialBlog, error: serverError, pageSl
 
         {/* Twitter */}
         <meta name="twitter:card" content="summary_large_image" />
-        <meta name="twitter:title" content={blog.meta_title || blog.article_name} />
+        <meta name="twitter:title" content={pageTitle} />
         <meta name="twitter:description" content={blog.meta_description ||
           (blog.article_body ?
             blog.article_body.replace(/<[^>]*>/g, '').substring(0, 160) + '...' :

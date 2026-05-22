@@ -70,7 +70,7 @@ const PaymentSuccessPage = () => {
   return (
     <>
       <SEO
-        title="Payment Successful | PAAN"
+        title="Payment Successful | PAAN Africa"
         description="Your payment has been processed successfully. Thank you for your purchase."
       />
       

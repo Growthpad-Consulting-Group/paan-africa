@@ -575,7 +575,7 @@ const PDFEditorPage = () => {
   return (
     <>
       <SEO
-        title="Free PDF Editor Online | PAAN"
+        title="Free Online PDF Editor | Edit & Sign | PAAN"
         description="Free PDF editor in your browser: preview PDFs, add text and signatures, watermark, page numbers, merge or split files, then download. Private client-side editing by PAAN Africa."
         keywords="free PDF editor, online PDF editor, edit PDF free, merge PDF, split PDF, sign PDF online, PDF signature, watermark PDF, PDF tools, PAAN Africa, paan.africa"
         canonicalUrl="https://paan.africa/pdf-editor"

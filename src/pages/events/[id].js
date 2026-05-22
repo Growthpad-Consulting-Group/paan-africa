@@ -21,7 +21,7 @@ const EventDetailPage = () => {
     return (
       <>
         <SEO 
-          title="Event Not Found - PAAN Africa"
+          title="Event Not Found | Browse PAAN Events"
           description="The requested event could not be found."
         />
         <div className='relative'>
@@ -54,7 +54,7 @@ const EventDetailPage = () => {
   return (
     <>
       <SEO 
-        title={`${event.title} - PAAN Africa`}
+        title={`${event.title} | PAAN Events`}
         description={event.description}
         keywords={`${event.title}, ${event.category}, PAAN events, ${event.location}`}
       />

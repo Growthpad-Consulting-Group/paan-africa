@@ -79,7 +79,7 @@ const PaymentFailurePage = () => {
   return (
     <>
       <SEO
-        title="Payment Failed | PAAN"
+        title="Payment Failed | Try Again | PAAN Africa"
         description="Payment processing failed. Please try again or contact support for assistance."
       />
       

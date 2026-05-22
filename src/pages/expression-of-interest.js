@@ -122,7 +122,7 @@ const ExpressionOfInterest = () => {
   return (
     <>
       <SEO
-        title="Expression of Interest | PAAN"
+        title="Join PAAN | Agency Expression of Interest"
         description="Apply to become a partner agency with the Pan-African Agency Network (PAAN). Submit your Expression of Interest to join exclusive opportunities in SEO, and App Store Optimization across Africa."
         keywords="Expression of Interest, PAAN, opportunities, submit, application, Africa, agency, SEO, ASO"
         canonicalUrl="https://paan.africa/expression-of-interest"

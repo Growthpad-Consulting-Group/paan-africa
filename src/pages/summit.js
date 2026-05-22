@@ -417,13 +417,13 @@ const SummitPage = () => {
   return (
     <>
       <SEO
-        title="PAAN Summit 2026 | Nairobi"
+        title="PAAN Summit 2026 | Creative & Tech Conference"
         description="Join the inaugural PAAN Summit in Nairobi, Kenya — a groundbreaking event uniting Africa's top creative and tech leaders for three days of innovation, collaboration, and growth. Connect with industry leaders, explore cutting-edge trends, and shape the future of African creativity and technology."
         keywords="PAAN Summit 2026, African creative summit, tech conference Africa, Nairobi summit, Pan-African events, African innovation, creative tech Africa, agency summit Africa, creative leadership, tech leadership, African business summit, innovation conference"
         image="https://ik.imagekit.io/nkmvdjnna/PAAN/summit/summit-hero.webp?updatedAt=1757505455932"
         ogTitle="PAAN Summit 2026 | Nairobi"
         ogDescription="Join the inaugural PAAN Summit in Nairobi, Kenya — a groundbreaking event uniting Africa's top creative and tech leaders for three days of innovation, collaboration, and growth."
-        twitterTitle="PAAN Summit 2026 | Nairobi"
+        twitterTitle="PAAN Summit 2026 | Creative & Tech Conference"
         twitterDescription="Join the inaugural PAAN Summit in Nairobi, Kenya — a groundbreaking event uniting Africa's top creative and tech leaders for three days of innovation, collaboration, and growth."
       />
       <Head>
