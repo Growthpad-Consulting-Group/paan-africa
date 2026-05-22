@@ -305,6 +305,7 @@ const HomePage = () => {
         title="Omni Options - PAAN Certified Agency | Full Member | Nigeria"
         description="Omni Options is a PAAN certified agency and Full Member based in Nigeria. We deliver innovative marketing solutions and creative services across Africa, helping brands connect with their audiences through strategic communication and digital excellence."
         keywords="Omni Options, PAAN certified agency, Nigeria, Full Member, marketing agency, creative agency, digital marketing, brand communication, Africa, PAAN network"
+        canonicalUrl="https://paan.africa/certified-agencies/omni-options"
       />
     <div className="relative">
       <main className="px-3 pt-6 sm:px-0 sm:pt-0 relative">

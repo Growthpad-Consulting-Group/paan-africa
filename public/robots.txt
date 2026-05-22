@@ -2,7 +2,6 @@
 User-agent: *
 Allow: /
 Disallow: /thank-you
-Disallow: /pricing
 Disallow: /api/*
 
 # Host

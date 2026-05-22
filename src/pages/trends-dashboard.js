@@ -21,7 +21,9 @@ const TrendsDashboardPage = () => {
         <link rel="canonical" href="https://paan.africa/trends-dashboard" />
       </Head>
 
-      <TrendsDashboard />
+      <main>
+        <TrendsDashboard />
+      </main>
     </>
   );
 };

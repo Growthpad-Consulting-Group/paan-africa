@@ -1,6 +1,7 @@
 import { useState, useEffect, useCallback, useRef } from "react";
 import { supabase } from "@/lib/supabase";
 import { calculateReadTime } from '@/utils/readTime';
+import { sanitizeBlogHtml } from '@/utils/sanitizeBlogHtml';
 
 export const usePublicBlog = (initialData) => {
   const [blogs, setBlogs] = useState(initialData?.blogs || []);
@@ -276,13 +277,16 @@ export const usePublicBlog = (initialData) => {
         console.error('Author query error:', authorError);
       }
 
+      const sanitizedBody = sanitizeBlogHtml(blogData.article_body || '');
+
       // Transform the blog data
       const transformedBlog = {
         ...blogData,
+        article_body: sanitizedBody,
         article_category: blogData.category?.name || 'Uncategorized',
         article_tags: blogData.tags?.map((t) => t.tag.name) || [],
         author: authorData?.name || 'Unknown Author',
-        read_time: calculateReadTime(blogData.article_body),
+        read_time: calculateReadTime(sanitizedBody),
         meta_title: blogData.meta_title || blogData.article_name,
         meta_description: blogData.meta_description || '',
         meta_keywords: blogData.meta_keywords || '',

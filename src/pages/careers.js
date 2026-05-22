@@ -1,4 +1,3 @@
-import dynamic from "next/dynamic";
 import SEO from "@/components/SEO";
 import Header from "@/layouts/standard-header";
 import Image from "next/image";
@@ -10,8 +9,9 @@ import { Icon } from "@iconify/react";
 import CareerApplicationModal from "@/components/CareerApplicationModal";
 import { useAppTranslations } from "../hooks/useTranslations";
 import { useCountUp } from "../hooks/useCountUp";
+import enMessages from "../messages/en.json";
 
-const CareersPage = () => {
+const CareersPage = ({ pageH1 = enMessages.careers.hero.title, pageSubtitle = enMessages.careers.hero.subtitle }) => {
   const { t } = useAppTranslations();
   const [isClient, setIsClient] = useState(false);
   const sectionRefs = {
@@ -101,12 +101,12 @@ const CareersPage = () => {
             {/* Text Content */}
             <div className="flex-1 max-w-3xl text-left space-y-4 sm:space-y-6 lg:space-y-8 w-full">
               <div className="space-y-3 sm:space-y-4">
-                <h1 className="text-xs sm:text-sm text-[#84C1D9] relative uppercase tracking-wide font-semibold">
-                  {t('careers.hero.subtitle')}
+                <p className="text-xs sm:text-sm text-[#84C1D9] relative uppercase tracking-wide font-semibold">
+                  {t('careers.hero.subtitle') || pageSubtitle}
+                </p>
+                <h1 className="text-2xl sm:text-3xl md:text-4xl lg:text-5xl text-white relative font-bold leading-tight">
+                  {t('careers.hero.title') || pageH1}
                 </h1>
-                <h2 className="text-2xl sm:text-3xl md:text-4xl lg:text-5xl text-white relative font-bold leading-tight">
-                  {t('careers.hero.title')}
-                </h2>
                 <p className="text-white text-sm sm:text-base md:text-lg lg:text-xl mb-4 sm:mb-6 lg:mb-8 font-light w-full leading-relaxed">
                   {t('careers.hero.description')}
                 </p>  
@@ -806,6 +806,13 @@ const CareersPage = () => {
   );
 };
 
-export default dynamic(() => Promise.resolve(CareersPage), {
-  ssr: false
-});
+export async function getServerSideProps() {
+  return {
+    props: {
+      pageH1: enMessages.careers.hero.title,
+      pageSubtitle: enMessages.careers.hero.subtitle,
+    },
+  };
+}
+
+export default CareersPage;

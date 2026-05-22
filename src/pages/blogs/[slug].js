@@ -4,7 +4,7 @@ import Image from "next/image";
 import { Icon } from "@iconify/react";
 import Link from "next/link";
 import { useEffect, useState, useRef } from "react";
-import Header from "@/layouts/blogs-header";
+import Header from "@/layouts/standard-header";
 import Footer from "@/layouts/footer";
 import BlogComments from '@/components/blog/BlogComments';
 import CommentCount from '@/components/blog/CommentCount';
@@ -15,6 +15,7 @@ import Head from 'next/head';
 import { supabase } from "@/lib/supabase";
 import ScrollToTop from "@/components/ScrollToTop";
 import { calculateReadTime } from '@/utils/readTime';
+import { sanitizeBlogHtml } from '@/utils/sanitizeBlogHtml';
 
 // ─── Social Share Icons ────────────────────────────────────────────────────────
 const SocialShare = ({ url, title }) => {
@@ -178,7 +179,7 @@ const PostArticleCTABanner = () => (
 
           <div className="flex flex-col sm:items-end gap-3 flex-shrink-0">
             <Link
-              href="/contact"
+              href="/contact-us"
               className="inline-flex items-center gap-2 bg-[#172840] hover:bg-[#1e3f5c] text-white text-sm font-semibold px-6 py-3 rounded-full transition-all duration-300 hover:scale-105 shadow-lg whitespace-nowrap"
             >
               Enquire About Services
@@ -233,7 +234,7 @@ export async function getServerSideProps(context) {
     if (blogError) throw blogError;
 
     if (!blogData) {
-      return { props: { blog: null, error: 'Blog not found' } };
+      return { props: { blog: null, error: 'Blog not found', pageSlug: slug } };
     }
 
     const { data: authorData } = await supabase
@@ -242,29 +243,32 @@ export async function getServerSideProps(context) {
       .eq('id', blogData.author)
       .single();
 
+    const sanitizedBody = sanitizeBlogHtml(blogData.article_body || '');
+
     const transformedBlog = {
       ...blogData,
+      article_body: sanitizedBody,
       article_category: blogData.category?.name || 'Uncategorized',
       article_tags: blogData.tags?.map((t) => t.tag.name) || [],
       author: authorData?.name || 'Unknown Author',
-      read_time: calculateReadTime(blogData.article_body),
+      read_time: calculateReadTime(sanitizedBody),
       meta_title: blogData.meta_title || blogData.article_name,
       meta_description: blogData.meta_description || '',
       meta_keywords: blogData.meta_keywords || '',
       focus_keyword: blogData.focus_keyword || ''
     };
 
-    return { props: { blog: transformedBlog, error: null } };
+    return { props: { blog: transformedBlog, error: null, pageSlug: slug } };
   } catch (error) {
     console.error('Error in getServerSideProps:', error);
-    return { props: { blog: null, error: error.message } };
+    return { props: { blog: null, error: error.message, pageSlug: slug } };
   }
 }
 
 // ─── Page Component ────────────────────────────────────────────────────────────
-export default function BlogPost({ blog: initialBlog, error: serverError }) {
+export default function BlogPost({ blog: initialBlog, error: serverError, pageSlug }) {
   const router = useRouter();
-  const { slug } = router.query;
+  const slug = pageSlug || router.query.slug;
   const {
     currentBlog,
     loading,
@@ -307,8 +311,7 @@ export default function BlogPost({ blog: initialBlog, error: serverError }) {
     setCurrentUrl(window.location.href);
   }, []);
 
-  if (!router.isReady) return null;
-  if (slug === 'index') return null;
+  if (!slug || slug === 'index') return null;
 
   if (loading && !initialBlog) {
     return (
@@ -399,6 +402,7 @@ export default function BlogPost({ blog: initialBlog, error: serverError }) {
     <>
       <Head>
         <title>{blog.meta_title || blog.article_name}</title>
+        <meta name="robots" content="index, follow" />
         <meta name="description" content={blog.meta_description ||
           (blog.article_body ?
             blog.article_body.replace(/<[^>]*>/g, '').substring(0, 160) + '...' :

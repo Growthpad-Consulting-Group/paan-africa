@@ -583,7 +583,7 @@ Generated with PAAN AI Invoice Generator | paan.africa`;
   return (
     <>
       <SEO
-        title="PAAN FREE AI Invoice Generator | Create Professional Invoices Instantly"
+        title="Free AI Invoice Generator | PAAN"
         description="Generate professional, client-ready invoices in seconds with PAAN's free AI-powered invoice generator. Perfect for agencies, freelancers, and businesses across Africa."
         keywords="AI invoice generator, professional invoices, invoice template, business invoicing, PAAN AI tools, African business tools, free invoice generator"
       />

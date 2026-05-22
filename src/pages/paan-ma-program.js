@@ -141,6 +141,7 @@ const PaanMaPage = () => {
         title={t('paanMaProgram.seo.title')}
         description={t('paanMaProgram.seo.description')}
         keywords={t('paanMaProgram.seo.keywords')}
+        canonicalUrl="https://paan.africa/paan-ma-program"
       />
       <main className="relative">
         <PaanMaHeader openModal={openMaModal} />

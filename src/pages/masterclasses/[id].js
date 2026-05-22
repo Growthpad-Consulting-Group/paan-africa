@@ -7,10 +7,11 @@ import Footer from "@/layouts/footer";
 import PaystackScript from "@/components/PaystackScript";
 import jsPDF from 'jspdf';
 import { validateMasterclassPromoCode } from "@/lib/masterclassPromoCodeService";
+import { getMasterclassTitle } from "@/data/masterclassTitles";
 
-const MasterclassDetailPage = () => {
+const MasterclassDetailPage = ({ pageId, pageH1 }) => {
   const router = useRouter();
-  const { id } = router.query;
+  const id = pageId ?? router.query.id;
   const [selectedPricing, setSelectedPricing] = useState('member');
   const [isLoading, setIsLoading] = useState(false);
   const [paystackReady, setPaystackReady] = useState(false);
@@ -1075,12 +1076,31 @@ const MasterclassDetailPage = () => {
     }
   };
 
-  // Add loading state for router query
-  if (!id) {
-    return <div className="min-h-screen bg-gray-50 flex items-center justify-center">Loading...</div>;
-  }
+  const numericId = id ? Number(id) : NaN;
+  const masterclass = !Number.isNaN(numericId) ? masterclasses[numericId] : null;
+  const h1Title = masterclass?.title || pageH1;
 
-  const masterclass = masterclasses[id] || masterclasses[1];
+  if (!id || !masterclass) {
+    return (
+      <>
+        <Head>
+          <title>{h1Title ? `${h1Title} - PAAN Masterclass` : "PAAN Masterclass"}</title>
+        </Head>
+        <Header navLinkColor="text-gray-950" />
+        <div className="min-h-screen bg-gray-50 pt-40 pb-16 px-4 sm:px-6 lg:px-8">
+          <div className="max-w-7xl mx-auto">
+            {h1Title && (
+              <h1 className="text-3xl md:text-4xl font-bold text-slate-900 leading-tight mb-8">
+                {h1Title}
+              </h1>
+            )}
+            <div className="flex items-center justify-center py-12 text-gray-600">Loading...</div>
+          </div>
+        </div>
+        <Footer />
+      </>
+    );
+  }
 
   // Generate meta data
   const pageTitle = `${masterclass.title} - PAAN Masterclass`;
@@ -2126,5 +2146,15 @@ const MasterclassDetailPage = () => {
     </>
   );
 };
+
+export async function getServerSideProps({ params }) {
+  const pageId = params?.id ?? null;
+  return {
+    props: {
+      pageId,
+      pageH1: getMasterclassTitle(pageId),
+    },
+  };
+}
 
 export default MasterclassDetailPage;

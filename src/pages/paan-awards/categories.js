@@ -703,14 +703,15 @@ const SummitPage = () => {
   return (
     <>
       <SEO
-        title="PAAN Awards 2026 | Celebrating Excellence in African Creative & Tech Industry"
-        description="Join the prestigious PAAN Awards 2026, recognizing outstanding achievements in Africa's creative and tech industry. Celebrate innovation, creativity, and excellence across agencies, freelancers, and digital professionals shaping Africa's future."
-        keywords="PAAN Awards 2026, African creative awards, tech industry awards, creative excellence Africa, digital innovation awards, African agency awards, freelancer recognition, creative industry awards, tech leadership awards, African business awards"
+        title="PAAN Awards 2026 Categories"
+        description="Browse every PAAN Awards 2026 category for agencies, campaigns, innovation, and freelancers. Compare award criteria, find the right fit for your work, and prepare your nomination."
+        keywords="PAAN Awards categories, award categories 2026, African creative awards categories, agency awards Africa, campaign awards, freelancer awards Africa, PAAN Awards nomination, award criteria, creative industry categories"
         image="https://ik.imagekit.io/nkmvdjnna/PAAN/awards/hero.png"
-        ogTitle="PAAN Awards 2026 | Celebrating Excellence in African Creative & Tech Industry"
-        ogDescription="Join the prestigious PAAN Awards 2026, recognizing outstanding achievements in Africa's creative and tech industry. Celebrate innovation, creativity, and excellence across agencies, freelancers, and digital professionals shaping Africa's future."
-        twitterTitle="PAAN Awards 2026 | Celebrating Excellence in African Creative & Tech Industry"
-        twitterDescription="Join the prestigious PAAN Awards 2026, recognizing outstanding achievements in Africa's creative and tech industry. Celebrate innovation, creativity, and excellence across agencies, freelancers, and digital professionals shaping Africa's future."
+        ogTitle="PAAN Awards 2026 Categories"
+        ogDescription="Browse every PAAN Awards 2026 category for agencies, campaigns, innovation, and freelancers. Compare award criteria, find the right fit for your work, and prepare your nomination."
+        twitterTitle="PAAN Awards 2026 Categories"
+        twitterDescription="Browse every PAAN Awards 2026 category for agencies, campaigns, innovation, and freelancers. Compare award criteria, find the right fit for your work, and prepare your nomination."
+        canonicalUrl="https://paan.africa/paan-awards/categories"
       />
       <Head>
         <script
@@ -746,7 +747,7 @@ const SummitPage = () => {
                 "https://ik.imagekit.io/nkmvdjnna/PAAN/awards/hero.png",
                 "https://paan.africa/assets/images/hero.webp"
               ],
-              "description": "Join the prestigious PAAN Awards 2026, recognizing outstanding achievements in Africa's creative and tech industry. Celebrate innovation, creativity, and excellence across agencies, freelancers, and digital professionals shaping Africa's future.",
+              "description": "Browse every PAAN Awards 2026 category for agencies, campaigns, innovation, and freelancers. Compare award criteria and find the right category for your nomination.",
               "offers": {
                 "@type": "Offer",
                 "url": "https://paan.africa/paan-awards",

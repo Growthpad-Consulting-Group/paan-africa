@@ -302,7 +302,7 @@ const HomePage = () => {
   return (
     <>
     <SEO
-        title="PENQUIN - PAAN Certified Agency | Integrated Brand & Communication Agency"
+        title="PENQUIN | PAAN Certified Agency"
         description="PENQUIN (Ltd) is a PAAN certified, independent integrated brand and communication agency based in Johannesburg, South Africa. With 82 creative professionals, we deliver award-winning multi-channel marketing solutions through strategy, digital media, creative, social, production, and events & activations."
         keywords="Penquin Airtime, Penquin agency, integrated brand agency, communication agency, Johannesburg, South Africa, PAAN certified, marketing agency, digital media, creative agency, brand strategy, B-BBEE Level 1, award-winning agency, multi-channel marketing"
       />

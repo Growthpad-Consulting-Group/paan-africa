@@ -276,7 +276,7 @@ const HomePage = () => {
         body: JSON.stringify({ 
           ...contactForm, 
           recaptchaToken,
-          agency: 'Omni Options' 
+          agency: 'Xperia Agency' 
         }),
       });
 
@@ -302,9 +302,10 @@ const HomePage = () => {
   return (
     <>
     <SEO
-        title="Omni Options - PAAN Certified Agency | Full Member | Nigeria"
-        description="Omni Options is a PAAN certified agency and Full Member based in Nigeria. We deliver innovative marketing solutions and creative services across Africa, helping brands connect with their audiences through strategic communication and digital excellence."
-        keywords="Omni Options, PAAN certified agency, Nigeria, Full Member, marketing agency, creative agency, digital marketing, brand communication, Africa, PAAN network"
+        title="Xperia Agency - PAAN Certified Agency | Associate Member | Kenya"
+        description="Xperia Agency is a PAAN certified agency and Associate Member based in Kenya. We deliver brand strategy, digital marketing, and creative services across Africa, helping brands grow through strategic communication and multi-channel campaigns."
+        keywords="Xperia Agency, PAAN certified agency, Kenya, Associate Member, marketing agency, creative agency, digital marketing, brand communication, Africa, PAAN network"
+        canonicalUrl="https://paan.africa/certified-agencies/xperia_agency"
       />
     <div className="relative">
       <main className="px-3 pt-6 sm:px-0 sm:pt-0 relative">
@@ -352,7 +353,7 @@ const HomePage = () => {
                       src="/assets/images/certified-members/xperia_agency/logo.png" 
                       width={400} 
                       height={280} 
-                      alt="Omni Options Logo" 
+                      alt="Xperia Agency Logo" 
                       className="mx-auto w-40 sm:w-64 h-24 sm:h-32 object-contain" 
                     />
                   </a>
@@ -366,7 +367,7 @@ const HomePage = () => {
                     src="/assets/images/certified-members/badge.svg" 
                     width={110} 
                     height={70} 
-                    alt="Omni Options PAAN Badge" 
+                    alt="Xperia Agency PAAN Badge" 
                     className="mx-auto w-16 sm:w-20 h-auto object-contain" 
                   />
                 </motion.div>
@@ -458,7 +459,7 @@ const HomePage = () => {
                     <iframe
                       className="w-full h-auto aspect-video object-cover"
                       src="https://www.youtube.com/embed/zJd1akSivAw"
-                      title="Omni Options"
+                      title="Xperia Agency"
                       frameBorder="0"
                       allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
                       allowFullScreen

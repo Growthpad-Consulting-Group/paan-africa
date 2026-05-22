@@ -809,7 +809,7 @@ const MasterclassesPage = () => {
   return (
     <>
       <SEO
-        title="PAAN Masterclasses | Professional Development for African Agencies"
+        title="PAAN Masterclasses | Agency Training"
         description="Join expert-led masterclasses designed specifically for African agencies. Learn from industry leaders, gain practical skills, and accelerate your agency's growth with PAAN's professional development programs."
         keywords="PAAN masterclasses, agency training, professional development Africa, business skills, tender training, RFP masterclass, agency growth, African agencies"
       />

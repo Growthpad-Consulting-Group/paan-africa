@@ -107,10 +107,20 @@ const TrendsDashboard = () => {
 
   if (loading) {
     return (
-      <div className="min-h-screen bg-gradient-to-br from-slate-50 to-blue-50 flex items-center justify-center">
-        <div className="text-center">
-          <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-blue-600 mx-auto mb-4"></div>
-          <p className="text-gray-600">Loading Creative Trends Dashboard...</p>
+      <div className="min-h-screen bg-[#E8EAEC]">
+        <div className="bg-white shadow-lg border-b-2 border-paan-red">
+          <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-6">
+            <h1 className="text-3xl md:text-4xl font-bold text-paan-dark-blue global-font">
+              Creative Trends Dashboard
+            </h1>
+            <p className="text-gray-600 mt-1 text-lg">Discover what&apos;s trending in African creative industries</p>
+          </div>
+        </div>
+        <div className="flex items-center justify-center py-24">
+          <div className="text-center">
+            <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-blue-600 mx-auto mb-4"></div>
+            <p className="text-gray-600">Loading Creative Trends Dashboard...</p>
+          </div>
         </div>
       </div>
     );
@@ -133,7 +143,7 @@ const TrendsDashboard = () => {
                 />
                 <div>
                   <h1 className="text-3xl md:text-4xl font-bold text-paan-dark-blue global-font">
-                    Creative Trends
+                    Creative Trends Dashboard
                   </h1>
                   <p className="text-gray-600 mt-1 text-lg">Discover what's trending in African creative industries</p>
                 </div>

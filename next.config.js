@@ -226,6 +226,18 @@ const nextConfig = {
         destination: "https://paan.africa/:path*",
         permanent: true,
       },
+      {
+        source: "/:path*",
+        has: [
+          {
+            type: "header",
+            key: "x-forwarded-proto",
+            value: "http",
+          },
+        ],
+        destination: "https://paan.africa/:path*",
+        permanent: true,
+      },
     ];
   },
 };

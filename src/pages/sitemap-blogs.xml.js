@@ -59,7 +59,7 @@ function generateBlogSitemap(blogs) {
     const lastmod = new Date(blog.updated_at || blog.created_at).toISOString();
     xml += `
   <url>
-    <loc>${baseUrl}/blog/${blog.slug}</loc>
+    <loc>${baseUrl}/blogs/${blog.slug}</loc>
     <lastmod>${lastmod}</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.7</priority>
