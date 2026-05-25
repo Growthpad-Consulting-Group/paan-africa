@@ -41,6 +41,16 @@ const AgencyLogosMarquee = () => {
       name: 'Omni Options',
       logo: '/assets/images/agencies/omni-options.avif',
     },
+    {
+      id: 8,
+      name: 'Ingenium Concept Ltd',
+      logo: '/assets/images/agencies/ingenium.png',
+    },
+    {
+      id: 9,
+      name: 'Talking Drum Comms',
+      logo: '/assets/images/agencies/TDC_Logo.webp',
+    },
   ];
 
   // Agency logos array for right-sliding marquee
