@@ -16,6 +16,7 @@ import { useAppTranslations } from '../hooks/useTranslations';
 import ContactSection from "@/components/ContactSection";
 import AgencyEnquiryModal from "@/components/AgencyEnquiryModal";
 import AgenciesMarquee from "@/components/AgenciesMarquee";
+import VoicesFromNetwork from "@/components/VoicesFromNetwork";
 import AgencyLogosGrid from "@/components/AgencyLogosGrid";
 import AgencyLogosMarquee from "@/components/AgencyLogosMarquee";
 import ScrollToTop from "@/components/ScrollToTop";
@@ -388,6 +389,8 @@ const HomePage = () => {
         </div>
 
         <AgenciesMarquee />
+
+        <VoicesFromNetwork />
         
         <div
           className="bg-[#172840] relative section px-4 sm:px-6 lg:px-8"
@@ -395,26 +398,11 @@ const HomePage = () => {
           ref={sectionRefs.ourMission}
         >
           {/* Decorative Circles */}
-          <div className="hidden md:block absolute top-4 left-28 w-28 h-28 bg-[#F25849] rounded-full z-20"></div>
-          <div className="hidden sm:block absolute bottom-40 right-10 w-16 h-16 bg-[#F25849] rounded-full z-0"></div>
-          <div className="hidden sm:block absolute top-10 right-10 w-16 h-16 bg-[#D1D3D4] rounded-full z-0"></div>
+          <div className="hidden md:block absolute top-0 left-28 w-16 h-16 -translate-y-1/2 bg-[#F25849] rounded-full z-20"></div>
 
           {/* Main Section */}
           <section className="relative z-10 mt-0 mx-auto max-w-6xl">
-            <div className="grid grid-cols-1 sm:grid-cols-2 gap-10 items-center py-16">
-              {/* Image */}
-              <div className="relative">
-                <Image
-                  src="/assets/images/mission.webp"
-                  width={500}
-                  height={300}
-                  alt="Team collaboration"
-                  className="rounded-lg object-cover w-full h-auto"
-                />
-              </div>
-
-              {/* Vision & Mission Text */}
-              <div className="flex flex-col gap-10 h-full">
+            <div className="flex flex-col sm:flex-row gap-6 sm:gap-8 items-stretch py-16">
                 {/* Vision */}
                 <div className="bg-[#84C1D9] p-6 rounded-lg flex flex-row items-center gap-4 transform transition-transform duration-300 hover:-translate-y-1 flex-1">
                   <div className="flex flex-col items-start">
@@ -456,7 +444,6 @@ const HomePage = () => {
                     </div>
                   </div>
                 </div>
-              </div>
             </div>
           </section>
         </div>
