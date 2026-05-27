@@ -905,26 +905,6 @@ const HomePage = () => {
           <div className="absolute -top-3 left-4 w-6 h-6 bg-[#84C1D9] rounded-full z-0"></div>
           <div className="absolute -top-8 right-4 w-16 h-16 bg-yellow-400 rounded-full z-0"></div>
           <div className="absolute bottom-6 right-4 w-20 h-20 bg-red-500 rounded-full z-0"></div>
-          
-          {/* Floating YouTube Video */}
-          <div className="absolute top-16 right-12 z-10 hidden xl:block">
-            <div className="relative">
-              <div className="transform hover:scale-105 transition-transform duration-300 ease-in-out">
-                <div className="w-80 h-48 bg-black rounded-xl overflow-hidden shadow-2xl border-2 border-white/20">
-                  <iframe
-                    width="100%"
-                    height="100%"
-                    src="https://www.youtube.com/embed/zJd1akSivAw?autoplay=1&mute=1&controls=1&showinfo=0&rel=0&modestbranding=1"
-                    title="PAAN Network Video"
-                    frameBorder="0"
-                    allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
-                    allowFullScreen
-                    className="rounded-xl"
-                  ></iframe>
-                </div>
-              </div>
-            </div>
-          </div>
 
           <section className="relative mx-auto max-w-6xl py-28 px-6">
             <div className="flex flex-col mb-10 w-full md:w-3/4">
