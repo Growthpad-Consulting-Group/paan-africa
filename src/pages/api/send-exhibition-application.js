@@ -1,4 +1,5 @@
 import nodemailer from "nodemailer";
+import { notifyNewExhibitionApplicationSlack } from "../../utils/slackUtils";
 
 export default async function handler(req, res) {
   if (req.method !== "POST") {
@@ -184,7 +185,17 @@ export default async function handler(req, res) {
     console.log("Debug - userEmailResult:", userEmailResult.status);
     
     if (emailSuccess) {
-      return res.status(200).json({ 
+      await notifyNewExhibitionApplicationSlack({
+        companyName,
+        contactPerson,
+        email,
+        phone,
+        country,
+        industry,
+        boothSize,
+      });
+
+      return res.status(200).json({
         message: "Exhibition application submitted successfully. You will receive a confirmation email shortly.",
         status: "success"
       });
