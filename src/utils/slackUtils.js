@@ -75,7 +75,7 @@ export async function notifyNewSpeakerApplicationSlack({
   sessionType,
 }) {
   const message =
-    `:microphone: *New PAAN Summit Speaker Application*\n` +
+    `*New PAAN Summit Speaker Application*\n` +
     `*Name:* ${fullName || "N/A"}\n` +
     `*Contact:* ${email || "N/A"} (${phone || "N/A"})\n` +
     `*Organization:* ${organization || "N/A"}\n` +
