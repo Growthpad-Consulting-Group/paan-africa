@@ -1,6 +1,7 @@
 import nodemailer from 'nodemailer';
 import { generateTicketImage } from '../../lib/ticketGenerator';
 import { generatePDFTicket } from '../../lib/pdfTicketGenerator';
+import { notifyNewTicketPurchaseSlack } from '../../utils/slackUtils';
 
 export default async function handler(req, res) {
   if (req.method !== 'POST') {
@@ -486,6 +487,17 @@ PAAN Summit Team
       customerName: ticketData.name,
       amount: paymentData.amount,
       emailsSent: ['secretariat@paan.africa', ticketData.email]
+    });
+
+    await notifyNewTicketPurchaseSlack({
+      name: ticketData.name,
+      email: ticketData.email,
+      ticketType: ticketData.ticketType,
+      amount: paymentData.amount,
+      currency: paymentData.currency,
+      company: ticketData.company,
+      country: ticketData.country,
+      reference,
     });
 
     res.status(200).json({
