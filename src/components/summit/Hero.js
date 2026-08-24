@@ -1,7 +1,24 @@
 import { motion } from "framer-motion";
 import { Icon } from "@iconify/react";
+import { useEffect, useRef } from "react";
 
 const Hero = ({ sectionRefs, handleScroll, timeLeft }) => {
+  const daysRef = useRef(null);
+  const hoursRef = useRef(null);
+  const minutesRef = useRef(null);
+  const secondsRef = useRef(null);
+
+  // Update countdown text imperatively so React never re-touches these
+  // nodes after mount — Chrome's page-translate feature crashes with a
+  // "Maximum call stack size exceeded" error when it and React both keep
+  // mutating the same fast-changing text nodes.
+  useEffect(() => {
+    if (daysRef.current) daysRef.current.textContent = timeLeft.days || 0;
+    if (hoursRef.current) hoursRef.current.textContent = timeLeft.hours || 0;
+    if (minutesRef.current) minutesRef.current.textContent = timeLeft.minutes || 0;
+    if (secondsRef.current) secondsRef.current.textContent = timeLeft.seconds || 0;
+  }, [timeLeft]);
+
   return (
     <>
       <motion.div
@@ -70,45 +87,41 @@ const Hero = ({ sectionRefs, handleScroll, timeLeft }) => {
                 transition={{ duration: 0.6, delay: 1.2 }}
               >
                 <p className="mb-2">Early-bird price increases in:</p>
-                <div className="flex flex-wrap gap-2 sm:gap-4">
-                  <motion.div 
+                <div className="flex flex-wrap gap-2 sm:gap-4" translate="no">
+                  <motion.div
                     className="bg-paan-dark-blue/80 px-3 py-2 rounded-lg text-center min-w-[60px] backdrop-blur-sm"
-                    key={`days-${timeLeft.days}`}
                     initial={{ scale: 0.8, opacity: 0 }}
                     animate={{ scale: 1, opacity: 1 }}
                     transition={{ duration: 0.3 }}
                   >
-                    <div className="text-lg sm:text-xl font-bold">{timeLeft.days || 0}</div>
+                    <div ref={daysRef} className="text-lg sm:text-xl font-bold" suppressHydrationWarning>0</div>
                     <div className="text-xs">days</div>
                   </motion.div>
-                  <motion.div 
+                  <motion.div
                     className="bg-paan-dark-blue/80 px-3 py-2 rounded-lg text-center min-w-[60px] backdrop-blur-sm"
-                    key={`hours-${timeLeft.hours}`}
                     initial={{ scale: 0.8, opacity: 0 }}
                     animate={{ scale: 1, opacity: 1 }}
                     transition={{ duration: 0.3 }}
                   >
-                    <div className="text-lg sm:text-xl font-bold">{timeLeft.hours || 0}</div>
+                    <div ref={hoursRef} className="text-lg sm:text-xl font-bold" suppressHydrationWarning>0</div>
                     <div className="text-xs">hours</div>
                   </motion.div>
-                  <motion.div 
+                  <motion.div
                     className="bg-paan-dark-blue/80 px-3 py-2 rounded-lg text-center min-w-[60px] backdrop-blur-sm"
-                    key={`minutes-${timeLeft.minutes}`}
                     initial={{ scale: 0.8, opacity: 0 }}
                     animate={{ scale: 1, opacity: 1 }}
                     transition={{ duration: 0.3 }}
                   >
-                    <div className="text-lg sm:text-xl font-bold">{timeLeft.minutes || 0}</div>
+                    <div ref={minutesRef} className="text-lg sm:text-xl font-bold" suppressHydrationWarning>0</div>
                     <div className="text-xs">mins</div>
                   </motion.div>
-                  <motion.div 
+                  <motion.div
                     className="bg-paan-dark-blue/80 px-3 py-2 rounded-lg text-center min-w-[60px] backdrop-blur-sm"
-                    key={`seconds-${timeLeft.seconds}`}
                     initial={{ scale: 0.8, opacity: 0 }}
                     animate={{ scale: 1, opacity: 1 }}
                     transition={{ duration: 0.3 }}
                   >
-                    <div className="text-lg sm:text-xl font-bold">{timeLeft.seconds || 0}</div>
+                    <div ref={secondsRef} className="text-lg sm:text-xl font-bold" suppressHydrationWarning>0</div>
                     <div className="text-xs">secs</div>
                   </motion.div>
                 </div>
@@ -125,7 +138,7 @@ const SeminarLocationAndDate = () => {
   return (
     <div className="flex flex-col sm:flex-row gap-2 sm:gap-4">
       <div className="flex items-center gap-2 text-white text-xs sm:text-sm">
-        <span className="break-words sm:whitespace-nowrap"><span className="font-bold">Create. Connect. Commercialize.</span> &nbsp; Sarit Center, Nairobi • 22-23 Sept 2026</span>
+        <span className="break-words sm:whitespace-nowrap"><span className="font-bold">Create. Connect. Commercialize.</span> &nbsp; Sarit Center, Nairobi • 28-29 Oct 2026</span>
       </div>
     </div>
   );

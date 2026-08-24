@@ -265,8 +265,8 @@ const ExhibitionApplication = () => {
               "mainEntity": {
                 "@type": "Event",
                 "name": "PAAN Summit 2026 - Africa's Premier Creative & Tech Leadership Conference",
-                "startDate": "2026-10-22T09:00:00+03:00",
-                "endDate": "2026-10-24T17:00:00+03:00",
+                "startDate": "2026-10-28T09:00:00+03:00",
+                "endDate": "2026-10-29T17:00:00+03:00",
                 "eventAttendanceMode": "https://schema.org/MixedEventAttendanceMode",
                 "eventStatus": "https://schema.org/EventScheduled",
                 "location": {
@@ -421,7 +421,7 @@ const ExhibitionApplication = () => {
               <div className="grid grid-cols-1 sm:grid-cols-3 gap-4 text-sm">
                 <div className="flex items-center gap-2">
                   <Icon icon="mdi:calendar" className="w-4 h-4" />
-                  <span>October 22-24, 2026</span>
+                  <span>October 28-29, 2026</span>
                 </div>
                 <div className="flex items-center gap-2">
                   <Icon icon="mdi:map-marker" className="w-4 h-4" />

@@ -72,7 +72,7 @@ const TicketPurchaseForm = ({ onClose }) => {
 
   // Early Bird countdown timer
   useEffect(() => {
-    const targetDate = new Date('2026-08-20T23:59:59+03:00'); // August 20, 2026 at 11:59 PM EAT
+    const targetDate = new Date('2026-10-20T23:59:59+03:00'); // October 20, 2026 at 11:59 PM EAT
     
     const interval = setInterval(() => {
       const now = new Date();
@@ -103,12 +103,12 @@ const TicketPurchaseForm = ({ onClose }) => {
       price: 65,
       currency: "USD",
       description: "Only 100 slots, until Aug 20th 2026",
-      validUntil: "August 20th, 2026",
+      validUntil: "October 20th, 2026",
       features: [
         "Full 2-day summit access",
         "Exhibition showcase & networking lounge",
         "Digital speaker presentations post-event",
-        "Save 30% before August 20th, 2026"
+        "Save 30% before October 20th, 2026"
       ]
     },
     {

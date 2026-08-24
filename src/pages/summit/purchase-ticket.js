@@ -621,8 +621,8 @@ const SummitPage = () => {
 
   // Countdown timer effect
   useEffect(() => {
-    // (Early Bird deadline: August 20th, 2026 at 11:59 PM EAT)
-    const targetDate = new Date('2026-08-20T23:59:59+03:00').getTime();
+    // (Early Bird deadline: October 20th, 2026 at 11:59 PM EAT)
+    const targetDate = new Date('2026-10-20T23:59:59+03:00').getTime();
     
     const updateCountdown = () => {
       const now = new Date().getTime();
@@ -786,8 +786,8 @@ const SummitPage = () => {
     <>
       <SEO
         title="Purchase Tickets - PAAN Summit 2026"
-        description="Secure your spot at PAAN Summit 2026, happening on 22-23 September 2026 in Nairobi, Kenya. Choose from various ticket options including General Admission, VIP Delegate, Agency Pass, and more."
-        keywords="PAAN Summit tickets, buy summit tickets, conference registration, PAAN 2026 tickets, September 22-23 2026"
+        description="Secure your spot at PAAN Summit 2026, happening on 28-29 October 2026 in Nairobi, Kenya. Choose from various ticket options including General Admission, VIP Delegate, Agency Pass, and more."
+        keywords="PAAN Summit tickets, buy summit tickets, conference registration, PAAN 2026 tickets, October 28-29 2026"
         image="https://ik.imagekit.io/nkmvdjnna/PAAN/summit/purchase-ticket-hero.webp"
       />
 

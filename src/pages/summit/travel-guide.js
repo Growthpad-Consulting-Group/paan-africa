@@ -263,9 +263,9 @@ const TravelGuide = () => {
     seconds: 0
   });
 
-  // Set target date to September 24, 2026
+  // Set target date to October 28, 2026
   useEffect(() => {
-    const targetDate = new Date('2026-09-24T00:00:00+03:00'); // September 24, 2026 at midnight EAT
+    const targetDate = new Date('2026-10-28T00:00:00+03:00'); // October 28, 2026 at midnight EAT
     
     const interval = setInterval(() => {
       const now = new Date();
@@ -379,8 +379,8 @@ const TravelGuide = () => {
               "mainEntity": {
               "@type": "Event",
                 "name": "PAAN Summit 2026 - Africa's Premier Creative & Tech Leadership Conference",
-                "startDate": "2026-09-22T09:00:00+03:00",
-                "endDate": "2026-09-23T17:00:00+03:00",
+                "startDate": "2026-10-28T09:00:00+03:00",
+                "endDate": "2026-10-29T17:00:00+03:00",
               "eventAttendanceMode": "https://schema.org/MixedEventAttendanceMode",
               "eventStatus": "https://schema.org/EventScheduled",
               "location": {
@@ -1241,7 +1241,7 @@ const SeminarLocationAndDate = ()=> {
     <div className="flex flex-col sm:flex-row gap-2 sm:gap-4">
       <div className="flex items-center gap-2 text-white text-xs sm:text-sm">
         <Icon icon="mdi:map-marker" className="text-red-500 flex-shrink-0" width="20" height="20" />
-        <span className="break-words sm:whitespace-nowrap">Sarit Centre, Nairobi, Kenya - <strong>22–23 September 2026</strong></span>
+        <span className="break-words sm:whitespace-nowrap">Sarit Centre, Nairobi, Kenya - <strong>28–29 October 2026</strong></span>
       </div>
       
       <div className="flex items-center gap-2 text-white text-xs sm:text-sm">

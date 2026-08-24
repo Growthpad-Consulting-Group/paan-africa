@@ -48,9 +48,16 @@ const LanguageSwitch = ({ mode }) => {
     setSelectedLanguage(detectInitialLanguage());
   }, []);
 
+  // Only load/init the widget when actually needed: the user opened the
+  // dropdown, or a non-English language was saved from a previous visit.
+  // Loading it unconditionally on every page mount was crashing pages with
+  // frequently-updating content (RangeError: Maximum call stack size
+  // exceeded inside Google's own element.js) even with no user interaction.
+  const shouldLoadWidget = isOpen || selectedLanguage !== "English";
+
   // Load Google Translate script safely (once)
   useEffect(() => {
-    if (typeof window === "undefined") return;
+    if (typeof window === "undefined" || !shouldLoadWidget) return;
 
     // If google translate already available, mark loaded
     if (window.google && window.google.translate) {
@@ -90,11 +97,11 @@ const LanguageSwitch = ({ mode }) => {
     };
 
     document.body.appendChild(script);
-  }, []);
+  }, [shouldLoadWidget]);
 
   // Initialize Google Translate Widget (singleton)
   useEffect(() => {
-    if (typeof window === "undefined" || !scriptLoaded) return;
+    if (typeof window === "undefined" || !shouldLoadWidget || !scriptLoaded) return;
 
     try {
       // If already initialized elsewhere, just hook into the select
@@ -197,7 +204,7 @@ const LanguageSwitch = ({ mode }) => {
     } catch (error) {
       console.error("Error applying language:", error);
     }
-  }, [selectedLanguage]);
+  }, [selectedLanguage, widgetInitialized]);
 
   // Close dropdown when clicked outside
   useEffect(() => {
