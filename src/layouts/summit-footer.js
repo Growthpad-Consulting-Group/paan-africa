@@ -51,7 +51,7 @@ const SummitFooter = () => {
             {/* Summit Info */}
              <div className="w-full">
               <Image
-                src="https://ik.imagekit.io/nkmvdjnna/PAAN/summit/paan-summit-sept-logo.png"
+                src="https://ik.imagekit.io/nkmvdjnna/PAAN/summit-logo-oct.webp"
                 alt="PAAN Summit Logo"
                 width={280}
                 height={98}

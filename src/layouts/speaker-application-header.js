@@ -69,7 +69,7 @@ const SpeakerApplicationHeader = ({ navLinkColor }) => {
           <div className="flex-shrink-0">
             <Link href="/summit" passHref>
               <Image
-                src="https://ik.imagekit.io/nkmvdjnna/PAAN/summit/paan-summit-sept-logo.png"
+                src="https://ik.imagekit.io/nkmvdjnna/PAAN/summit-logo-oct.webp"
                 alt="PAAN Summit Logo"
                 width={200}
                 height={70}
