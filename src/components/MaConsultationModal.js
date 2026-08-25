@@ -2,6 +2,7 @@ import { useState, useRef } from 'react';
 import Image from 'next/image';
 import toast, { Toaster } from 'react-hot-toast';
 import ReCAPTCHA from 'react-google-recaptcha';
+import Modal, { ModalHeader } from './Modal';
 
 const MaConsultationModal = ({ isOpen, onClose }) => {
   const [formData, setFormData] = useState({
@@ -127,25 +128,12 @@ const MaConsultationModal = ({ isOpen, onClose }) => {
     }
   };
 
-  if (!isOpen) return null;
-
   return (
-    <div className="fixed inset-0 bg-black bg-opacity-50 z-50 flex items-center justify-center p-2 sm:p-4">
-      <div className="bg-white rounded-lg w-full max-w-sm sm:max-w-md md:max-w-lg lg:max-w-2xl relative overflow-hidden shadow-xl max-h-[90vh] overflow-y-auto">
-        {/* Close button */}
-        <button
-          onClick={onClose}
-          className="absolute top-2 right-2 sm:top-4 sm:right-4 text-[#172840] hover:text-[#F25849] transition-colors duration-300 z-10"
-        >
-          <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5 sm:h-6 sm:w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
-          </svg>
-        </button>
-
-        {/* Modal content */}
-        <div className="p-4 sm:p-6 md:p-8">
+    <Modal isOpen={isOpen} onClose={onClose} size="lg">
+      <ModalHeader title="Book Your Confidential Consultation" onClose={onClose} />
+      {/* Modal content */}
+      <div className="p-4 sm:p-6 md:p-8">
           <div className="text-center mb-6 sm:mb-8">
-            <h2 className="text-xl sm:text-2xl font-semibold text-[#172840] mb-2">Book Your Confidential Consultation</h2>
             <p className="text-sm sm:text-base text-gray-600">Tell us about your agency and M&A goals for a personalized consultation</p>
           </div>
 
@@ -351,9 +339,8 @@ const MaConsultationModal = ({ isOpen, onClose }) => {
               </button>
             </div>
           </form>
-        </div>
       </div>
-    </div>
+    </Modal>
   );
 };
 

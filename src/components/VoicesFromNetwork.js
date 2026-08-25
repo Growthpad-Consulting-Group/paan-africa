@@ -1,6 +1,6 @@
 "use client";
 
-import { useCallback, useState } from "react";
+import { useCallback, useEffect, useState } from "react";
 import { Icon } from "@iconify/react";
 
 const VIDEOS = [
@@ -23,76 +23,92 @@ function getEmbedUrl(videoId, { autoplay = false, muted = false } = {}) {
   return `https://www.youtube.com/embed/${videoId}?${params.toString()}`;
 }
 
-function VideoCard({ video, isPlaying, onToggle, startMuted }) {
+function VideoCard({ video, onPlay }) {
   const [thumbQuality, setThumbQuality] = useState("maxresdefault");
   const thumbnail = `https://img.youtube.com/vi/${video.id}/${thumbQuality}.jpg`;
 
   return (
     <article className="group relative overflow-hidden rounded-2xl bg-[#172840] shadow-[0_8px_30px_rgba(23,40,64,0.12)] ring-1 ring-[#172840]/10 transition-all duration-300 hover:shadow-[0_16px_48px_rgba(23,40,64,0.2)] hover:-translate-y-0.5">
       <div className="relative aspect-video">
-        {isPlaying ? (
-          <iframe
-            key={`${video.id}-playing`}
-            className="absolute inset-0 h-full w-full"
-            src={getEmbedUrl(video.id, { autoplay: true, muted: startMuted })}
-            title={video.title}
-            allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
-            allowFullScreen
-          />
-        ) : (
-          <>
-            {/* eslint-disable-next-line @next/next/no-img-element */}
-            <img
-              src={thumbnail}
-              alt={video.title}
-              className="absolute inset-0 h-full w-full object-cover transition-transform duration-500 group-hover:scale-105"
-              onError={() => {
-                if (thumbQuality !== "hqdefault") setThumbQuality("hqdefault");
-              }}
-            />
-            <div className="absolute inset-0 bg-gradient-to-t from-[#172840]/95 via-[#172840]/40 to-[#172840]/20" />
-            <button
-              type="button"
-              onClick={() => onToggle(true)}
-              className="absolute inset-0 flex items-center justify-center"
-              aria-label={`Play ${video.title}`}
-            >
-              <span className="flex h-14 w-14 sm:h-16 sm:w-16 items-center justify-center rounded-full bg-[#F25849] text-white shadow-lg ring-4 ring-white/20 transition-transform duration-300 group-hover:scale-110">
-                <Icon icon="mdi:play" className="ml-1 h-7 w-7 sm:h-8 sm:w-8" />
-              </span>
-            </button>
-          </>
-        )}
-
-        {isPlaying && (
-          <div className="absolute bottom-0 right-0 z-10 p-4">
-            <button
-              type="button"
-              onClick={() => onToggle(false)}
-              aria-label={`Pause ${video.title}`}
-              className="flex h-9 w-9 shrink-0 items-center justify-center rounded-full bg-white/15 text-white shadow-md backdrop-blur-sm transition-colors hover:bg-[#F25849] focus:outline-none focus-visible:ring-2 focus-visible:ring-[#F25849]"
-            >
-              <Icon icon="mdi:pause" className="h-5 w-5" />
-            </button>
-          </div>
-        )}
+        {/* eslint-disable-next-line @next/next/no-img-element */}
+        <img
+          src={thumbnail}
+          alt={video.title}
+          className="absolute inset-0 h-full w-full object-cover transition-transform duration-500 group-hover:scale-105"
+          onError={() => {
+            if (thumbQuality !== "hqdefault") setThumbQuality("hqdefault");
+          }}
+        />
+        <div className="absolute inset-0 bg-gradient-to-t from-[#172840]/95 via-[#172840]/40 to-[#172840]/20" />
+        <button
+          type="button"
+          onClick={onPlay}
+          className="absolute inset-0 flex items-center justify-center"
+          aria-label={`Play ${video.title}`}
+        >
+          <span className="flex h-14 w-14 sm:h-16 sm:w-16 items-center justify-center rounded-full bg-[#F25849] text-white shadow-lg ring-4 ring-white/20 transition-transform duration-300 group-hover:scale-110">
+            <Icon icon="mdi:play" className="ml-1 h-7 w-7 sm:h-8 sm:w-8" />
+          </span>
+        </button>
       </div>
     </article>
   );
 }
 
+function VideoModal({ video, onClose }) {
+  useEffect(() => {
+    const handleKeyDown = (event) => {
+      if (event.key === "Escape") onClose();
+    };
+    document.addEventListener("keydown", handleKeyDown);
+    document.body.style.overflow = "hidden";
+    return () => {
+      document.removeEventListener("keydown", handleKeyDown);
+      document.body.style.overflow = "";
+    };
+  }, [onClose]);
+
+  return (
+    <div
+      className="fixed inset-0 z-50 flex items-center justify-center bg-[#172840]/90 p-4 backdrop-blur-sm"
+      onClick={onClose}
+    >
+      <div
+        className="relative w-full max-w-4xl"
+        onClick={(event) => event.stopPropagation()}
+      >
+        <button
+          type="button"
+          onClick={onClose}
+          aria-label="Close video"
+          className="absolute -top-12 right-0 flex h-9 w-9 items-center justify-center rounded-full bg-white/15 text-white shadow-md backdrop-blur-sm transition-colors hover:bg-[#F25849] focus:outline-none focus-visible:ring-2 focus-visible:ring-[#F25849]"
+        >
+          <Icon icon="mdi:close" className="h-5 w-5" />
+        </button>
+        <div className="relative aspect-video overflow-hidden rounded-2xl bg-[#172840] shadow-2xl">
+          <iframe
+            className="absolute inset-0 h-full w-full"
+            src={getEmbedUrl(video.id, { autoplay: true })}
+            title={video.title}
+            allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
+            allowFullScreen
+          />
+        </div>
+      </div>
+    </div>
+  );
+}
+
 export default function VoicesFromNetwork() {
   const [startIndex, setStartIndex] = useState(0);
-  const [playingById, setPlayingById] = useState({ [VIDEOS[0].id]: true });
+  const [activeVideo, setActiveVideo] = useState(null);
 
   const maxStartIndex = Math.max(0, VIDEOS.length - VIDEOS_PER_VIEW);
   const canGoPrev = startIndex > 0;
   const canGoNext = startIndex < maxStartIndex;
   const visibleVideos = VIDEOS.slice(startIndex, startIndex + VIDEOS_PER_VIEW);
 
-  const setVideoPlaying = useCallback((videoId, playing) => {
-    setPlayingById((prev) => ({ ...prev, [videoId]: playing }));
-  }, []);
+  const closeModal = useCallback(() => setActiveVideo(null), []);
 
   const goToPrev = () => {
     setStartIndex((prev) => Math.max(0, prev - 1));
@@ -137,22 +153,17 @@ export default function VoicesFromNetwork() {
         </div>
 
         <div className="grid grid-cols-1 gap-5 sm:gap-6 md:grid-cols-3">
-          {visibleVideos.map((video, index) => {
-            const globalIndex = startIndex + index;
-            const isPlaying = Boolean(playingById[video.id]);
-
-            return (
-              <VideoCard
-                key={video.id}
-                video={video}
-                isPlaying={isPlaying}
-                startMuted={globalIndex === 0}
-                onToggle={(playing) => setVideoPlaying(video.id, playing)}
-              />
-            );
-          })}
+          {visibleVideos.map((video) => (
+            <VideoCard
+              key={video.id}
+              video={video}
+              onPlay={() => setActiveVideo(video)}
+            />
+          ))}
         </div>
       </div>
+
+      {activeVideo && <VideoModal video={activeVideo} onClose={closeModal} />}
     </section>
   );
 }

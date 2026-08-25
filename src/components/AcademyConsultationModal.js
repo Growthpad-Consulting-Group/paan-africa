@@ -1,21 +1,9 @@
-import { useEffect } from 'react';
 import Image from 'next/image';
+import Modal from './Modal';
 
 const AcademyConsultationModal = ({ isOpen, onClose }) => {
-  useEffect(() => {
-    if (!isOpen) return;
-    const handleEsc = (e) => {
-      if (e.key === 'Escape') onClose();
-    };
-    window.addEventListener('keydown', handleEsc);
-    return () => window.removeEventListener('keydown', handleEsc);
-  }, [isOpen, onClose]);
-
-  if (!isOpen) return null;
-
   return (
-    <div className="fixed inset-0 z-50 flex items-center justify-center bg-black bg-opacity-50 p-2 sm:p-4">
-      <div className="relative bg-paan-dark-blue rounded-lg sm:rounded-xl shadow-2xl w-full max-w-xs sm:max-w-3xl max-h-[85vh] sm:max-h-[95vh] flex flex-col sm:flex-row overflow-hidden">
+    <Modal isOpen={isOpen} onClose={onClose} size="xl" className="!bg-paan-dark-blue sm:!max-w-3xl !flex !flex-col sm:!flex-row !overflow-hidden !rounded-lg sm:!rounded-xl">
         {/* Close button */}
         <button
           onClick={onClose}
@@ -125,8 +113,7 @@ const AcademyConsultationModal = ({ isOpen, onClose }) => {
             />
           </div>
         </div>
-      </div>
-    </div>
+    </Modal>
   );
 };
 

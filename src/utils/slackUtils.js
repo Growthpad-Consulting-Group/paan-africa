@@ -85,3 +85,20 @@ export async function notifyNewSpeakerApplicationSlack({
 
   await postToSlack(message);
 }
+
+export async function notifyNewAgencyContactSlack({
+  name,
+  email,
+  company,
+  agency,
+  message: enquiryMessage,
+}) {
+  const message =
+    `:email: *New Agency Contact Enquiry*\n` +
+    `*Agency:* ${agency || "N/A"}\n` +
+    `*Contact:* ${name || "N/A"} (${email || "N/A"})\n` +
+    `*Company:* ${company || "N/A"}\n` +
+    `*Message:* ${enquiryMessage || "N/A"}`;
+
+  await postToSlack(message);
+}

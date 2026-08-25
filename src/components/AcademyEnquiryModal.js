@@ -2,6 +2,7 @@ import { useState, useRef } from 'react';
 import Image from 'next/image';
 import toast, { Toaster } from 'react-hot-toast';
 import ReCAPTCHA from 'react-google-recaptcha';
+import Modal from './Modal';
 
 const AcademyEnquiryModal = ({ isOpen, onClose }) => {
   const [formData, setFormData] = useState({
@@ -127,11 +128,8 @@ const AcademyEnquiryModal = ({ isOpen, onClose }) => {
     }
   };
 
-  if (!isOpen) return null;
-
   return (
-    <div className="fixed inset-0 bg-black bg-opacity-50 z-50 flex items-center justify-center p-2 sm:p-4">
-      <div className="bg-white rounded-lg w-full max-w-4xl max-h-[90vh] overflow-y-auto relative shadow-xl">
+    <Modal isOpen={isOpen} onClose={onClose} size="xl">
         {/* Close button */}
         <button
           onClick={onClose}
@@ -364,9 +362,8 @@ const AcademyEnquiryModal = ({ isOpen, onClose }) => {
             </div>
           </form>
         </div>
-      </div>
-    </div>
+    </Modal>
   );
 };
 
-export default AcademyEnquiryModal; 
+export default AcademyEnquiryModal;

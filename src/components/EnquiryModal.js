@@ -2,6 +2,7 @@ import { useState, useRef } from 'react';
 import Image from 'next/image';
 import toast, { Toaster } from 'react-hot-toast';
 import ReCAPTCHA from 'react-google-recaptcha';
+import Modal, { ModalHeader } from './Modal';
 
 const EnquiryModal = ({ isOpen, onClose }) => {
   const [formData, setFormData] = useState({
@@ -118,25 +119,12 @@ const EnquiryModal = ({ isOpen, onClose }) => {
     }
   };
 
-  if (!isOpen) return null;
-
   return (
-    <div className="fixed inset-0 bg-black bg-opacity-50 z-50 flex items-center justify-center p-4">
-      <div className="bg-white rounded-lg max-w-2xl w-full relative overflow-hidden shadow-xl">
-        {/* Close button */}
-        <button
-          onClick={onClose}
-          className="absolute top-4 right-4 text-[#172840] hover:text-[#F25849] transition-colors duration-300"
-        >
-          <svg xmlns="http://www.w3.org/2000/svg" className="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
-          </svg>
-        </button>
-
-        {/* Modal content */}
-        <div className="p-8">
+    <Modal isOpen={isOpen} onClose={onClose} size="lg">
+      <ModalHeader title="Find Your Delivery Partner" onClose={onClose} />
+      {/* Modal content */}
+      <div className="p-8">
           <div className="text-center mb-8">
-            <h2 className="text-2xl font-semibold text-[#172840] mb-2">Find Your Delivery Partner</h2>
             <p className="text-gray-600">Tell us about your project and we'll connect you with the right partners</p>
           </div>
 
@@ -270,10 +258,9 @@ const EnquiryModal = ({ isOpen, onClose }) => {
               </button>
             </div>
           </form>
-        </div>
       </div>
-    </div>
+    </Modal>
   );
 };
 
-export default EnquiryModal; 
+export default EnquiryModal;

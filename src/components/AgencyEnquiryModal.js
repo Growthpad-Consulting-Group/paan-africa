@@ -1,6 +1,7 @@
 import { useState } from 'react';
 import toast, { Toaster } from 'react-hot-toast';
 import ReCAPTCHA from 'react-google-recaptcha';
+import Modal, { ModalHeader } from './Modal';
 
 const AgencyEnquiryModal = ({ isOpen, onClose }) => {
   const [formData, setFormData] = useState({
@@ -105,25 +106,12 @@ const AgencyEnquiryModal = ({ isOpen, onClose }) => {
     }
   };
 
-  if (!isOpen) return null;
-
   return (
-    <div className="fixed inset-0 bg-black bg-opacity-50 z-50 flex items-center justify-center p-2 sm:p-4">
-      <div className="bg-white rounded-lg w-full max-w-md sm:max-w-lg md:max-w-xl max-h-[90vh] sm:max-h-[85vh] relative overflow-hidden shadow-xl flex flex-col">
-        {/* Close button */}
-        <button
-          onClick={onClose}
-          className="absolute top-3 right-3 sm:top-4 sm:right-4 text-[#172840] hover:text-[#F25849] transition-colors duration-300 z-10"
-        >
-          <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5 sm:h-6 sm:w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
-          </svg>
-        </button>
-
+    <Modal isOpen={isOpen} onClose={onClose} size="md">
+        <ModalHeader title="Enquire About PAAN" onClose={onClose} />
         {/* Modal content */}
         <div className="p-4 sm:p-6 md:p-8 overflow-y-auto flex-1">
           <div className="text-center mb-6 sm:mb-8">
-            <h2 className="text-xl sm:text-2xl font-semibold text-[#172840] mb-2">Enquire About PAAN</h2>
             <p className="text-gray-600 text-sm sm:text-base">Send us a message and we'll get back to you shortly</p>
           </div>
 
@@ -231,9 +219,8 @@ const AgencyEnquiryModal = ({ isOpen, onClose }) => {
             </div>
           </form>
         </div>
-      </div>
-    </div>
+    </Modal>
   );
 };
 
-export default AgencyEnquiryModal; 
+export default AgencyEnquiryModal;

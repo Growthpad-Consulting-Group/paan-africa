@@ -1,21 +1,9 @@
-import { useEffect } from 'react';
 import Image from 'next/image';
+import Modal from './Modal';
 
 const PaanAmbassadorProgramModal = ({ isOpen, onClose }) => {
-  useEffect(() => {
-    if (!isOpen) return;
-    const handleEsc = (e) => {
-      if (e.key === 'Escape') onClose();
-    };
-    window.addEventListener('keydown', handleEsc);
-    return () => window.removeEventListener('keydown', handleEsc);
-  }, [isOpen, onClose]);
-
-  if (!isOpen) return null;
-
   return (
-    <div className="fixed inset-0 z-50 flex items-center justify-center bg-black bg-opacity-60 p-4">
-      <div className="relative bg-paan-dark-blue rounded-xl shadow-2xl w-full max-w-4xl max-h-[90vh] flex flex-col lg:flex-row overflow-hidden animate-in fade-in zoom-in-95 duration-300">
+    <Modal isOpen={isOpen} onClose={onClose} size="xl" className="!bg-paan-dark-blue !rounded-xl !flex !flex-col lg:!flex-row !overflow-hidden">
         {/* Close button */}
         <button
           onClick={onClose}
@@ -131,8 +119,7 @@ const PaanAmbassadorProgramModal = ({ isOpen, onClose }) => {
             </div>
           </div>
         </div>
-      </div>
-    </div>
+    </Modal>
   );
 };
 
