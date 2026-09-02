@@ -1,5 +1,6 @@
 import { useState, useEffect } from 'react';
 import { Icon } from '@iconify/react';
+import Modal, { ModalHeader } from './Modal';
 
 export default function BecomeAmbassadorModal({ isOpen, onClose }) {
   // Load gtag script if not already loaded
@@ -104,50 +105,25 @@ export default function BecomeAmbassadorModal({ isOpen, onClose }) {
     }
   };
 
-  if (!isOpen) return null;
-
   return (
-    <div className="fixed inset-0 bg-black bg-opacity-60 flex items-center justify-center z-50 p-2 sm:p-4 backdrop-blur-sm">
-      <div className="bg-white rounded-xl sm:rounded-2xl w-full max-w-4xl max-h-[95vh] sm:max-h-[90vh] overflow-y-auto shadow-2xl border border-gray-100 mx-2">
-        {/* Header */}
-        <div className="bg-gradient-to-r from-paan-dark-blue via-paan-blue to-paan-dark-blue text-white p-4 sm:p-6 md:p-8 rounded-t-xl sm:rounded-t-2xl relative overflow-hidden">
-          {/* Background Pattern */}
-          <div className="absolute inset-0 opacity-10">
-            <div className="absolute top-2 right-2 sm:top-4 sm:right-4 w-16 h-16 sm:w-32 sm:h-32 bg-white rounded-full"></div>
-            <div className="absolute bottom-2 left-2 sm:bottom-4 sm:left-4 w-8 h-8 sm:w-16 sm:h-16 bg-paan-yellow rounded-full"></div>
-            <div className="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 w-12 h-12 sm:w-24 sm:h-24 bg-paan-red rounded-full"></div>
+    <Modal isOpen={isOpen} onClose={onClose} size="xl">
+        <ModalHeader title="Become a PAAN Ambassador" onClose={onClose} />
+        <div className="px-4 sm:px-6 md:px-8 pt-4 sm:pt-6">
+          <div className="flex items-center mb-3 sm:mb-4">
+            <div className="w-10 h-10 sm:w-12 sm:h-12 bg-paan-yellow rounded-full flex items-center justify-center mr-3 sm:mr-4 flex-shrink-0">
+              <Icon icon="mdi:account-star" className="w-5 h-5 sm:w-6 sm:h-6 text-paan-dark-blue" />
+            </div>
+            <p className="text-gray-600 text-sm sm:text-base md:text-lg">Join Africa's most influential creative leaders</p>
           </div>
-          
-          <div className="relative z-10">
-            <div className="flex justify-between items-start">
-              <div className="flex-1 min-w-0">
-                <div className="flex flex-col sm:flex-row sm:items-center mb-3 sm:mb-4">
-                  <div className="w-10 h-10 sm:w-12 sm:h-12 bg-paan-yellow rounded-full flex items-center justify-center mb-3 sm:mb-0 sm:mr-4 flex-shrink-0">
-                    <Icon icon="mdi:account-star" className="w-5 h-5 sm:w-6 sm:h-6 text-paan-dark-blue" />
-                  </div>
-                  <div className="min-w-0 flex-1">
-                    <h2 className="text-xl sm:text-2xl md:text-3xl font-bold leading-tight">Become a PAAN Ambassador</h2>
-                    <p className="text-blue-100 mt-1 sm:mt-2 text-sm sm:text-base md:text-lg">Join Africa's most influential creative leaders</p>
-                  </div>
-                </div>
-                <div className="flex flex-col sm:flex-row sm:items-center text-xs sm:text-sm text-blue-200 space-y-1 sm:space-y-0">
-                  <div className="flex items-center">
-                    <Icon icon="mdi:map-marker" className="w-3 h-3 sm:w-4 sm:h-4 mr-1 sm:mr-2 flex-shrink-0" />
-                    <span className="truncate">Pan-African Agency Network</span>
-                  </div>
-                  <span className="hidden sm:inline mx-2">•</span>
-                  <div className="flex items-center">
-                    <Icon icon="mdi:account-group" className="w-3 h-3 sm:w-4 sm:h-4 mr-1 sm:mr-2 flex-shrink-0" />
-                    <span className="truncate">Leadership Program</span>
-                  </div>
-                </div>
-              </div>
-              <button
-                onClick={onClose}
-                className="text-white hover:text-paan-yellow transition-colors p-1 sm:p-2 hover:bg-white hover:bg-opacity-10 rounded-full flex-shrink-0 ml-2"
-              >
-                <Icon icon="mdi:close" className="w-5 h-5 sm:w-6 sm:h-6" />
-              </button>
+          <div className="flex flex-col sm:flex-row sm:items-center text-xs sm:text-sm text-gray-500 space-y-1 sm:space-y-0 mb-2">
+            <div className="flex items-center">
+              <Icon icon="mdi:map-marker" className="w-3 h-3 sm:w-4 sm:h-4 mr-1 sm:mr-2 flex-shrink-0" />
+              <span className="truncate">Pan-African Agency Network</span>
+            </div>
+            <span className="hidden sm:inline mx-2">•</span>
+            <div className="flex items-center">
+              <Icon icon="mdi:account-group" className="w-3 h-3 sm:w-4 sm:h-4 mr-1 sm:mr-2 flex-shrink-0" />
+              <span className="truncate">Leadership Program</span>
             </div>
           </div>
         </div>
@@ -409,7 +385,6 @@ export default function BecomeAmbassadorModal({ isOpen, onClose }) {
             </form>
           )}
         </div>
-      </div>
-    </div>
+    </Modal>
   );
-} 
+}

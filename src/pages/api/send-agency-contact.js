@@ -1,5 +1,6 @@
 import nodemailer from "nodemailer";
 import { createClient } from "@supabase/supabase-js";
+import { notifyNewAgencyContactSlack } from "../../utils/slackUtils";
 
 export default async function handler(req, res) {
   if (req.method !== "POST") {
@@ -157,6 +158,8 @@ export default async function handler(req, res) {
       console.error("Error logging submission to Supabase:", error);
       // Note: Not failing the request, as emails were sent successfully
     }
+
+    await notifyNewAgencyContactSlack({ name, email, company, agency, message });
 
     return res.status(200).json({ message: "Agency contact enquiry sent successfully" });
   } catch (error) {

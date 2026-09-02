@@ -2,7 +2,7 @@ import { useState, useRef } from 'react';
 import { Icon } from '@iconify/react';
 import toast from 'react-hot-toast';
 import ReCAPTCHA from 'react-google-recaptcha';
-import { motion } from 'framer-motion';
+import Modal, { ModalHeader } from './Modal';
 
 const ExhibitionApplicationModal = ({ isOpen, onClose }) => {
   const [formData, setFormData] = useState({
@@ -209,39 +209,10 @@ const ExhibitionApplicationModal = ({ isOpen, onClose }) => {
     }
   };
 
-  if (!isOpen) return null;
-
   return (
-    <div className="fixed inset-0 z-50 overflow-y-auto">
-      <div className="flex min-h-screen items-center justify-center p-4">
-        {/* Backdrop */}
-        <div 
-          className="fixed inset-0 bg-black bg-opacity-50 transition-opacity"
-          onClick={onClose}
-        />
-        
-        {/* Modal */}
-        <motion.div
-          initial={{ opacity: 0, scale: 0.95 }}
-          animate={{ opacity: 1, scale: 1 }}
-          exit={{ opacity: 0, scale: 0.95 }}
-          className="relative bg-white rounded-2xl shadow-2xl w-full max-w-4xl max-h-[90vh] overflow-y-auto"
-        >
-          {/* Header */}
-          <div className="sticky top-0 bg-paan-dark-blue text-white p-6 rounded-t-2xl">
-            <div className="flex justify-between items-center">
-              <div>
-                <h2 className="text-2xl font-bold">Exhibition Application</h2>
-                <p className="text-white/90 mt-1">PAAN Summit 2026 - Showcase Your Brand</p>
-              </div>
-              <button
-                onClick={onClose}
-                className="text-white/80 hover:text-white transition-colors p-2"
-              >
-                <Icon icon="mdi:close" className="w-6 h-6" />
-              </button>
-            </div>
-          </div>
+    <Modal isOpen={isOpen} onClose={onClose} size="xl">
+      <ModalHeader title="Exhibition Application" onClose={onClose} />
+      <p className="text-gray-600 px-6 pt-4">PAAN Summit 2026 - Showcase Your Brand</p>
 
           {/* Form */}
           <form onSubmit={handleSubmit} className="p-6 space-y-6">
@@ -592,9 +563,7 @@ const ExhibitionApplicationModal = ({ isOpen, onClose }) => {
               </button>
             </div>
           </form>
-        </motion.div>
-      </div>
-    </div>
+    </Modal>
   );
 };
 

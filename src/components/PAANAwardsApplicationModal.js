@@ -4,8 +4,8 @@ import { useState, useRef, useEffect } from 'react';
 import { Icon } from '@iconify/react';
 import toast from 'react-hot-toast';
 import ReCAPTCHA from 'react-google-recaptcha';
-import { motion } from 'framer-motion';
 import PaystackScript from './PaystackScript';
+import Modal, { ModalHeader } from './Modal';
 
 const PAANAwardsApplicationModal = ({ isOpen, onClose }) => {
   const [formData, setFormData] = useState({
@@ -628,42 +628,23 @@ const PAANAwardsApplicationModal = ({ isOpen, onClose }) => {
     checkPaystack();
   }, []);
 
-  if (!isOpen) return null;
-
   // Categories are filtered based on applicant type
   const currentPricing = pricing[formData.applicantType];
 
   return (
-    <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50 p-4">
+    <Modal isOpen={isOpen} onClose={onClose} size="xl">
       <PaystackScript />
-      <motion.div
-        initial={{ opacity: 0, scale: 0.95 }}
-        animate={{ opacity: 1, scale: 1 }}
-        exit={{ opacity: 0, scale: 0.95 }}
-        className="bg-white rounded-2xl shadow-2xl w-full max-w-4xl max-h-[90vh] overflow-y-auto"
-      >
-        {/* Header */}
-        <div className="sticky top-0 bg-paan-dark-blue text-white p-6 rounded-t-2xl">
-          <div className="flex items-center justify-between">
-            <div>
-              <h2 className="text-2xl font-bold">PAAN Awards Application</h2>
-              <p className="text-white/80 mt-1">
-                {formData.applicantType === 'agency' ? 'Agency Application' : 'Freelancer Application'}
-              </p>
-              {!paystackReady && (
-                <div className="flex items-center gap-2 mt-2">
-                  <Icon icon="mdi:loading" className="w-4 h-4 animate-spin text-yellow-400" />
-                  <span className="text-yellow-400 text-sm">Loading payment system...</span>
-                </div>
-              )}
+        <ModalHeader title="PAAN Awards Application" onClose={onClose} />
+        <div className="px-6 pt-4">
+          <p className="text-gray-600">
+            {formData.applicantType === 'agency' ? 'Agency Application' : 'Freelancer Application'}
+          </p>
+          {!paystackReady && (
+            <div className="flex items-center gap-2 mt-2">
+              <Icon icon="mdi:loading" className="w-4 h-4 animate-spin text-paan-red" />
+              <span className="text-paan-red text-sm">Loading payment system...</span>
             </div>
-            <button
-              onClick={onClose}
-              className="text-white/80 hover:text-white transition-colors"
-            >
-              <Icon icon="mdi:close" className="w-6 h-6" />
-            </button>
-          </div>
+          )}
         </div>
 
         <div className="p-6">
@@ -1306,8 +1287,7 @@ const PAANAwardsApplicationModal = ({ isOpen, onClose }) => {
             </div>
           </form>
         </div>
-      </motion.div>
-    </div>
+    </Modal>
   );
 };
 

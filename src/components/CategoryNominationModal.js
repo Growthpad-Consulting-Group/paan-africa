@@ -4,7 +4,7 @@ import { useState, useRef } from 'react';
 import { Icon } from '@iconify/react';
 import toast from 'react-hot-toast';
 import ReCAPTCHA from 'react-google-recaptcha';
-import { motion } from 'framer-motion';
+import Modal, { ModalHeader } from './Modal';
 
 const CategoryNominationModal = ({ isOpen, onClose }) => {
   const [formData, setFormData] = useState({
@@ -214,31 +214,10 @@ const CategoryNominationModal = ({ isOpen, onClose }) => {
     }
   };
 
-  if (!isOpen) return null;
-
   return (
-    <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50 p-4">
-      <motion.div
-        initial={{ opacity: 0, scale: 0.95 }}
-        animate={{ opacity: 1, scale: 1 }}
-        exit={{ opacity: 0, scale: 0.95 }}
-        className="bg-white rounded-2xl shadow-2xl w-full max-w-4xl max-h-[90vh] overflow-y-auto"
-      >
-        {/* Header */}
-        <div className="sticky top-0 bg-paan-dark-blue text-white p-6 rounded-t-2xl">
-          <div className="flex items-center justify-between">
-            <div>
-              <h2 className="text-2xl font-bold">Nominate a New Category</h2>
-              <p className="text-white/80 mt-1">Help shape the future of PAAN Awards</p>
-            </div>
-            <button
-              onClick={onClose}
-              className="text-white/80 hover:text-white transition-colors"
-            >
-              <Icon icon="mdi:close" className="w-6 h-6" />
-            </button>
-          </div>
-        </div>
+    <Modal isOpen={isOpen} onClose={onClose} size="xl">
+        <ModalHeader title="Nominate a New Category" onClose={onClose} />
+        <p className="text-gray-600 px-6 pt-4">Help shape the future of PAAN Awards</p>
 
         <div className="p-6">
           <form onSubmit={handleSubmit} className="space-y-8">
@@ -646,8 +625,7 @@ const CategoryNominationModal = ({ isOpen, onClose }) => {
             </div>
           </form>
         </div>
-      </motion.div>
-    </div>
+    </Modal>
   );
 };
 
