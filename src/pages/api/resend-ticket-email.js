@@ -157,7 +157,7 @@ export default async function handler(req, res) {
                     <h3>Summit Information</h3>
                     <ul>
                         <li><strong>Event:</strong> PAAN Summit 2026</li>
-                        <li><strong>Date:</strong> 10-12 April 2026</li>
+                        <li><strong>Date:</strong> 28-29 October 2026</li>
                         <li><strong>Location:</strong> Nairobi, Kenya</li>
                         <li><strong>Venue:</strong> Sarit Centre, Westlands</li>
                     </ul>

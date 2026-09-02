@@ -149,7 +149,7 @@ Paid At: ${paymentData.paidAt ? new Date(paymentData.paidAt).toLocaleString() : 
 SUMMIT DETAILS
 ==============
 Event: PAAN Summit 2026
-Date: April 21-22, 2026
+Date: 28-29 October 2026
 Location: Nairobi, Kenya
 Venue: TBA (Details will be shared closer to the event)
 
@@ -284,7 +284,7 @@ PAAN Summit Team
                 <div class="summit-details">
                     <h3>Summit Details</h3>
                     <div class="field"><strong>Event:</strong> PAAN Summit 2026</div>
-                    <div class="field"><strong>Date:</strong> April 21-22, 2026</div>
+                    <div class="field"><strong>Date:</strong> 28-29 October 2026</div>
                     <div class="field"><strong>Location:</strong> Nairobi, Kenya</div>
                     <div class="field"><strong>Venue:</strong> TBA (Details will be shared closer to the event)</div>
                 </div>
@@ -381,7 +381,7 @@ Ticket Details:
 
 Summit Information:
 - Event: PAAN Summit 2026
-- Date: April 21-22, 2026
+- Date: 28-29 October 2026
 - Location: Nairobi, Kenya
 - Venue: TBA (Details will be shared closer to the event)
 
@@ -445,7 +445,7 @@ PAAN Summit Team
                       <h3>Summit Information</h3>
                       <ul>
                           <li><strong>Event:</strong> PAAN Summit 2026</li>
-                          <li><strong>Date:</strong> April 21-22, 2026</li>
+                          <li><strong>Date:</strong> 28-29 October 2026</li>
                           <li><strong>Location:</strong> Nairobi, Kenya</li>
                           <li><strong>Venue:</strong> TBA (Details will be shared closer to the event)</li>
                       </ul>

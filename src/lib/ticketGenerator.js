@@ -168,7 +168,7 @@ export async function generateTicketImage(ticketData) {
   ctx.font = `18px ${fontFamilyBold}`;
   ctx.fillText('Event Dates:', rightX, currentY);
   ctx.font = `18px ${fontFamily}`;
-  ctx.fillText('April 21-22, 2026', rightX + 150, currentY);
+  ctx.fillText('28-29 October 2026', rightX + 150, currentY);
   currentY += lineHeight;
 
   // City

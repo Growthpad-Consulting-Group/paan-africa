@@ -46,7 +46,7 @@ const PaymentSuccessPage = () => {
             'Lost your ticket? Use the "Retrieve Ticket" button to download it anytime',
             'You\'ll receive venue details closer to the event',
             'Follow us on social media for updates',
-            'Mark your calendar: April 10-12, 2026 in Nairobi, Kenya'
+            'Mark your calendar: 28-29 October 2026 in Nairobi, Kenya'
           ],
           returnLink: '/summit',
           returnText: 'Back to Summit'
