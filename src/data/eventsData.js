@@ -37,7 +37,7 @@ export const eventsData = {
       date: "2026-10-28",
       time: "09:00 AM - 06:00 PM",
       location: "Nairobi, Kenya",
-      venue: "Sarit Centre, Nairobi",
+      venue: "TBC",
       description: "Join us for the biggest creative industry gathering in Africa. Network with top agencies, freelancers, and clients. Features keynote speakers, workshops, and networking sessions.",
       image: "/assets/images/summit-image.webp",
       category: "Summit",

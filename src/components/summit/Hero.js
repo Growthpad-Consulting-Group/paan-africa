@@ -138,7 +138,7 @@ const SeminarLocationAndDate = () => {
   return (
     <div className="flex flex-col sm:flex-row gap-2 sm:gap-4">
       <div className="flex items-center gap-2 text-white text-xs sm:text-sm">
-        <span className="break-words sm:whitespace-nowrap"><span className="font-bold">Create. Connect. Commercialize.</span> &nbsp; Sarit Center, Nairobi • 28-29 Oct 2026</span>
+        <span className="break-words sm:whitespace-nowrap"><span className="font-bold">Create. Connect. Commercialize.</span> &nbsp; TBC • 28-29 Oct 2026</span>
       </div>
     </div>
   );

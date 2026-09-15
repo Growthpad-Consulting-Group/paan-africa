@@ -440,8 +440,8 @@ const SummitPage = () => {
                 eventAttendanceMode: "https://schema.org/MixedEventAttendanceMode",
                 eventStatus: "https://schema.org/EventScheduled",
                 location: {
-                  name: "Sarit Centre",
-                  streetAddress: "Sarit Centre, Westlands",
+                  name: "TBC",
+                  streetAddress: "TBC",
                   city: "Nairobi",
                   region: "Nairobi County",
                   postalCode: "00100",
@@ -1335,7 +1335,7 @@ const SummitPage = () => {
                               </div>
                       <div className="flex items-center gap-2 sm:gap-3">
                         <Icon icon="mdi:map-marker" className="text-paan-red w-5 h-5 sm:w-6 sm:h-6 flex-shrink-0" />
-                        <span className="text-sm sm:text-base font-normal text-paan-dark-blue">Sarit Centre, Nairobi, Kenya</span>
+                        <span className="text-sm sm:text-base font-normal text-paan-dark-blue">TBC</span>
                       </div>
                     </div>
 
@@ -1491,16 +1491,8 @@ const SummitPage = () => {
                    <div className="bg-white rounded-lg p-3 sm:p-4 shadow-md">
                      <div className="flex items-center gap-2 sm:gap-3 mb-2">
                        <Icon icon="mdi:map-marker" className="text-paan-red" width="16" height="16" />
-                       <h4 className="font-semibold text-paan-dark-blue text-sm sm:text-base">Sarit Centre, Nairobi</h4>
+                       <h4 className="font-semibold text-paan-dark-blue text-sm sm:text-base">TBC</h4>
                      </div>
-                     <a 
-                       href="https://www.google.com/maps/dir/?api=1&destination=Sarit+Centre+Nairobi" 
-                       target="_blank" 
-                       rel="noopener noreferrer"
-                       className="text-paan-blue hover:text-paan-red transition-colors text-xs sm:text-sm"
-                     >
-                       View Directions →
-                     </a>
                    </div>
                    
                    <div className="bg-white rounded-lg p-3 sm:p-4 shadow-md">
@@ -1680,7 +1672,7 @@ const SeminarLocationAndDate = ()=> {
     <div className="flex flex-col sm:flex-row gap-2 sm:gap-4">
       <div className="flex items-center gap-2 text-white text-xs sm:text-sm">
         <Icon icon="mdi:map-marker" className="text-red-500 flex-shrink-0" width="20" height="20" />
-        <span className="break-words sm:whitespace-nowrap">Sarit Centre, Nairobi, Kenya - <strong>28 - 29 October 2026</strong></span>
+        <span className="break-words sm:whitespace-nowrap">TBC - <strong>28 - 29 October 2026</strong></span>
       </div>
       
       <div className="flex items-center gap-2 text-white text-xs sm:text-sm">
