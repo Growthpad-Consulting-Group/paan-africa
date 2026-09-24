@@ -1,4 +1,5 @@
 import { useState, useRef } from 'react';
+import SummitCancelledBanner from "@/components/summit/SummitCancelledBanner";
 import { Icon } from '@iconify/react';
 import toast from 'react-hot-toast';
 import ReCAPTCHA from 'react-google-recaptcha';
@@ -830,6 +831,7 @@ const SpeakerApplicationPage = () => {
             </div>
           </div>
         </div>
+        <SummitCancelledBanner />
       </main>
       
       <Footer />

@@ -1,4 +1,6 @@
 import SEO from "@/components/SEO";
+import SummitCancelledBanner from "@/components/summit/SummitCancelledBanner";
+import { SUMMIT_CANCELLED } from "@/data/summit/status";
 import Header from "../layouts/summit-header";
 import Image from "next/image";
 import SummitAgenda from "@/components/SummitAgenda";
@@ -545,10 +547,11 @@ const SummitPage = () => {
                 variants={scaleIn}
               >
                 <button 
+                  disabled={SUMMIT_CANCELLED}
                   onClick={() => window.location.href = '/summit/purchase-ticket'}
-                  className="px-6 sm:px-8 py-3 sm:py-4 text-sm sm:text-base font-semibold bg-gradient-to-r from-paan-yellow to-paan-blue text-white hover:opacity-90 rounded-full shadow-lg hover:shadow-xl transform hover:-translate-y-1 transition-all duration-300 cursor-pointer relative z-20 w-full sm:w-auto"
+                  className="px-6 sm:px-8 py-3 sm:py-4 text-sm sm:text-base font-semibold bg-gradient-to-r from-paan-yellow to-paan-blue text-white hover:opacity-90 rounded-full shadow-lg hover:shadow-xl transform hover:-translate-y-1 transition-all duration-300 cursor-pointer relative z-20 w-full sm:w-auto disabled:opacity-60 disabled:pointer-events-none"
                 >
-                  Register Now
+                  {SUMMIT_CANCELLED ? 'Registration Closed' : 'Register Now'}
                 </button>
               </motion.div>
             </motion.div>
@@ -1374,15 +1377,17 @@ const SummitPage = () => {
 
                     <div className="flex flex-col gap-3 sm:gap-4 w-full max-w-xs mb-6 sm:mb-8">
                     <button 
+                      disabled={SUMMIT_CANCELLED}
                       onClick={() => window.location.href = '/summit/purchase-ticket'}
-                        className="bg-paan-dark-blue text-white px-6 sm:px-8 py-3 sm:py-4 rounded-full hover:bg-paan-dark-blue/90 transition-all duration-300 font-semibold text-sm sm:text-base md:text-lg shadow-lg flex items-center justify-center gap-2"
+                        className="bg-paan-dark-blue text-white px-6 sm:px-8 py-3 sm:py-4 rounded-full hover:bg-paan-dark-blue/90 transition-all duration-300 font-semibold text-sm sm:text-base md:text-lg shadow-lg flex items-center justify-center gap-2 disabled:opacity-60 disabled:pointer-events-none"
                     >
                       <Icon icon="mdi:ticket" width="20" height="20" />
-                        View Tickets
+                        {SUMMIT_CANCELLED ? 'Ticket Sales Closed' : 'View Tickets'}
                       </button>
                       <button 
+                        disabled={SUMMIT_CANCELLED}
                         onClick={() => window.location.href = '/summit/purchase-ticket'}
-                        className="bg-transparent border-2 border-paan-dark-blue text-paan-dark-blue px-6 sm:px-8 py-3 sm:py-4 rounded-full hover:bg-paan-dark-blue hover:text-white transition-all duration-300 font-semibold text-sm sm:text-base md:text-lg flex items-center justify-center gap-2"
+                        className="bg-transparent border-2 border-paan-dark-blue text-paan-dark-blue px-6 sm:px-8 py-3 sm:py-4 rounded-full hover:bg-paan-dark-blue hover:text-white transition-all duration-300 font-semibold text-sm sm:text-base md:text-lg flex items-center justify-center gap-2 disabled:opacity-60 disabled:pointer-events-none"
                       >
                         Learn More
                     </button>
@@ -1580,6 +1585,7 @@ const SummitPage = () => {
           isOpen={showExhibitionModal} 
           onClose={() => setShowExhibitionModal(false)} 
         />
+        <SummitCancelledBanner />
       </main>
       
       {/* Paystack Script */}
@@ -1632,10 +1638,11 @@ const Hero = ({ sectionRefs, handleScroll, isFixed, timeLeft, onPartnerClick }) 
                 variants={scaleIn}
               >
                 <button 
+                  disabled={SUMMIT_CANCELLED}
                   onClick={() => window.location.href = '/summit/purchase-ticket'}
-                  className="bg-gradient-to-r from-paan-yellow to-paan-blue text-white px-6 sm:px-8 py-3 rounded-full hover:opacity-90 transition-all duration-300 font-medium text-sm sm:text-base shadow-lg flex items-center justify-center gap-2 w-full sm:w-auto"
+                  className="bg-gradient-to-r from-paan-yellow to-paan-blue text-white px-6 sm:px-8 py-3 rounded-full hover:opacity-90 transition-all duration-300 font-medium text-sm sm:text-base shadow-lg flex items-center justify-center gap-2 w-full sm:w-auto disabled:opacity-60 disabled:pointer-events-none"
                 >
-                  Register Now
+                  {SUMMIT_CANCELLED ? 'Registration Closed' : 'Register Now'}
                 </button>
                 <button 
                   onClick={onPartnerClick}

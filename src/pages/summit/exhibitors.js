@@ -1,4 +1,5 @@
 import SEO from "@/components/SEO";
+import SummitCancelledBanner from "@/components/summit/SummitCancelledBanner";
 import TravelGuideHeader from "@/layouts/travel-guide-header";
 import Image from "next/image";
 import { Icon } from "@iconify/react";
@@ -1382,6 +1383,7 @@ const Exhibitors = () => {
             onClose={closeModal} 
           />
         )}
+        <SummitCancelledBanner />
       </main>
     </>
   );

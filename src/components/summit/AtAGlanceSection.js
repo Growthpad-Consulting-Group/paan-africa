@@ -1,4 +1,5 @@
 import { Icon } from "@iconify/react";
+import { SUMMIT_CANCELLED } from "@/data/summit/status";
 
 const AtAGlanceSection = ({ onPartnerClick }) => {
   return (
@@ -120,10 +121,11 @@ const AtAGlanceSection = ({ onPartnerClick }) => {
         </div>
         <div className="flex flex-col sm:flex-row gap-3 sm:gap-2 pt-4">
           <button 
+            disabled={SUMMIT_CANCELLED}
             onClick={() => window.location.href = '/summit/purchase-ticket'}
-            className="bg-gradient-to-r from-[#172840] to-[#F25849] text-white px-6 sm:px-8 py-3 text-sm sm:text-base font-medium w-full sm:w-auto rounded-full hover:opacity-90 transition-all duration-300 shadow-lg flex items-center justify-center gap-2"
+            className="bg-gradient-to-r from-[#172840] to-[#F25849] text-white px-6 sm:px-8 py-3 text-sm sm:text-base font-medium w-full sm:w-auto rounded-full hover:opacity-90 transition-all duration-300 shadow-lg flex items-center justify-center gap-2 disabled:opacity-60 disabled:pointer-events-none"
           >
-            Register Now
+            {SUMMIT_CANCELLED ? 'Registration Closed' : 'Register Now'}
           </button>
           <button 
             onClick={onPartnerClick}

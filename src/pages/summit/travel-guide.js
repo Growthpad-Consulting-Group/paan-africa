@@ -1,4 +1,6 @@
 import SEO from "@/components/SEO";
+import SummitCancelledBanner from "@/components/summit/SummitCancelledBanner";
+import { SUMMIT_CANCELLED } from "@/data/summit/status";
 import TravelGuideHeader from "@/layouts/travel-guide-header";
 import Image from "next/image";
 import { Icon } from "@iconify/react";
@@ -1152,6 +1154,7 @@ const TravelGuide = () => {
          </div>
         <SummitFooter />
         <ScrollToTop />
+        <SummitCancelledBanner />
       </main>
     </>
   );
@@ -1208,10 +1211,11 @@ const Hero = ({ sectionRefs, handleScroll, isFixed, timeLeft }) => {
                 variants={scaleIn}
               >
                 <button 
+                  disabled={SUMMIT_CANCELLED}
                   onClick={() => window.location.href = '/summit'}
-                  className="bg-paan-red text-white px-6 sm:px-8 py-3 rounded-full hover:bg-paan-red/90 transition-all duration-300 font-medium text-sm sm:text-base shadow-lg flex items-center justify-center gap-2 w-full sm:w-auto"
+                  className="bg-paan-red text-white px-6 sm:px-8 py-3 rounded-full hover:bg-paan-red/90 transition-all duration-300 font-medium text-sm sm:text-base shadow-lg flex items-center justify-center gap-2 w-full sm:w-auto disabled:opacity-60 disabled:pointer-events-none"
                 >
-                  Register Now
+                  {SUMMIT_CANCELLED ? 'Registration Closed' : 'Register Now'}
                 </button>
                 <button 
                   onClick={() => window.location.href = '/summit/travel-guide#visa-requirements'}

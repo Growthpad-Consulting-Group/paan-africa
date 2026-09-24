@@ -1,4 +1,5 @@
 import { useState, useRef, useEffect } from 'react';
+import SummitCancelledBanner from "@/components/summit/SummitCancelledBanner";
 import { useRouter } from 'next/router';
 import Header from "@/layouts/ticket-purchase-header";
 import { Icon } from '@iconify/react';
@@ -854,6 +855,7 @@ const ExhibitionApplication = () => {
 
         <SummitFooter />
         <ScrollToTop />
+        <SummitCancelledBanner />
       </main>
     </>
   );
