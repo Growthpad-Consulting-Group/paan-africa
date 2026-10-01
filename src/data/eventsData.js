@@ -16,36 +16,6 @@ export const eventsData = {
     //   status: "upcoming",
     //   featured: true
     // },
-    {
-      id: 15,
-      title: "Culture, Data & Behaviour: Understanding Today's African Consumer",
-      date: "2026-05-27",
-      time: "12:00 PM EAT",
-      location: "Virtual Event",
-      venue: "Zoom",
-      description: "African consumers are evolving rapidly, shaped by shifting cultural identities, digital adoption, economic realities, and global influences. For agencies and brands, understanding these nuances is critical to building relevance, trust, and long-term growth across diverse African markets. This session brings together strategy, creative, and leadership perspectives from Media Seal WPI to unpack how culture, data, and behaviour intersect, and what that means for brands navigating today's African consumer landscape.",
-      image: "https://ik.imagekit.io/nkmvdjnna/PAAN/webinars/culture-data-behaviour.jpg",
-      category: "Webinar",
-      price: "Free",
-      registrationUrl: "https://tinyurl.com/3jxfajja",
-      status: "upcoming",
-      featured: true
-    },
-    {
-      id: 2,
-      title: "PAAN Creative Summit 2026",
-      date: "2026-10-28",
-      time: "09:00 AM - 06:00 PM",
-      location: "Nairobi, Kenya",
-      venue: "TBC",
-      description: "Join us for the biggest creative industry gathering in Africa. Network with top agencies, freelancers, and clients. Features keynote speakers, workshops, and networking sessions.",
-      image: "/assets/images/summit-image.webp",
-      category: "Summit",
-      price: "Free for Full Members",
-      registrationUrl: "/summit",
-      status: "upcoming",
-      featured: true
-    },
   ],
   past: [
     {
@@ -271,7 +241,6 @@ export const eventsData = {
 
 export const eventCategories = [
   "All Events",
-  "Summit",
   "Webinar"
 ];
 

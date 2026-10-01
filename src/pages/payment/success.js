@@ -94,8 +94,8 @@ const PaymentSuccessPage = () => {
             'Follow us on social media for updates',
             'Mark your calendar: 28-29 October 2026 in Nairobi, Kenya'
           ],
-          returnLink: '/summit',
-          returnText: 'Back to Summit'
+          returnLink: '/',
+          returnText: 'Back to Home'
         };
       default:
         return {

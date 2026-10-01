@@ -217,12 +217,6 @@ const EventsPage = () => {
             >
               {t('events.cta.joinNetwork')}
             </a>
-            <a
-              href="/summit"
-              className="bg-transparent border-2 border-paan-dark-blue text-paan-dark-blue hover:border-white hover:text-white px-6 sm:px-8 py-3 sm:py-4 rounded-full font-semibold text-base sm:text-lg transition-all duration-300 w-full sm:w-auto text-center"
-            >
-              {t('events.cta.learnAboutSummit')}
-            </a>
           </div>
         </div>
       </section>

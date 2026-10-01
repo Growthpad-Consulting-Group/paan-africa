@@ -160,6 +160,17 @@ const withBundleAnalyzer = initializeBundleAnalyzer({
   enabled: process.env.BUNDLE_ANALYZER_ENABLED === "true",
 });
 
+// PAAN Summit 2026 (and its awards) was cancelled: these pages redirect to the
+// homepage and are excluded from the sitemap so search engines drop them.
+const HIDDEN_PATHS = [
+  "/summit",
+  "/summit/:path*",
+  "/summit-old-backup",
+  "/paan-awards",
+  "/paan-awards/:path*",
+  "/paan-awards-terms",
+];
+
 /** @type {import('next').NextConfig} */
 const nextConfig = {
   // Don't use standalone output - it causes issues with static assets
@@ -215,6 +226,11 @@ const nextConfig = {
 
   async redirects() {
     return [
+      ...HIDDEN_PATHS.map((source) => ({
+        source,
+        destination: "/",
+        permanent: false,
+      })),
       {
         source: "/:path*",
         has: [

@@ -716,42 +716,8 @@ const HomePage = () => {
             </p>
           </section>
           
-          <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 items-center mb-16">
-            <div className="relative group">
-              <div className="absolute inset-0 bg-gradient-to-r from-[#F25849] to-[#F2B706] rounded-2xl transform rotate-1 group-hover:rotate-0 transition-transform duration-300"></div>
-              <div className="relative bg-white rounded-2xl p-8 shadow-2xl transform -rotate-1 group-hover:rotate-0 transition-transform duration-300">
-                <div className="mb-6">
-                  <span className="inline-block bg-[#F25849] text-white text-xs font-bold px-4 py-2 rounded-full tracking-wider uppercase mb-4">
-                    {t('homepage.events.featuredEvent.badge')}
-                  </span>
-                  <h3 className="text-2xl md:text-3xl font-bold text-[#172840] mb-4">
-                    {t('homepage.events.featuredEvent.title')}
-                  </h3>
-                  <p className="text-gray-600 text-lg leading-relaxed">
-                    {t('homepage.events.featuredEvent.description')}
-                  </p>
-                </div>
-                <div className="flex items-center gap-4 mb-6">
-                  <div className="flex items-center gap-2 text-[#F25849]">
-                    <Icon icon="mdi:calendar" className="w-5 h-5" />
-                    <span className="font-semibold">28-29 October</span>
-                  </div>
-                  <div className="flex items-center gap-2 text-[#172840]">
-                    <Icon icon="mdi:map-marker" className="w-5 h-5" />
-                    <span className="font-semibold">{t('homepage.events.featuredEvent.location')}</span>
-                  </div>
-                </div>
-                <Link
-                  href="summit"
-                  className="inline-flex items-center gap-2 bg-[#172840] text-white px-8 py-3 rounded-full font-semibold hover:bg-[#F25849] transition-all duration-300 shadow-lg hover:shadow-xl"
-                >
-                  <span>{t('homepage.events.featuredEvent.cta')}</span>
-                  <Icon icon="mdi:arrow-right" className="w-5 h-5" />
-                </Link>
-              </div>
-            </div>
-            
-            <div className="space-y-8">
+          <div className="mb-16">
+            <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
               <div className="bg-gradient-to-br from-gray-50 to-white rounded-xl p-8 border border-gray-100 shadow-lg">
                 <div className="flex items-start gap-4">
                   <div className="flex-shrink-0">

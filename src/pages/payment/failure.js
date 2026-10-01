@@ -48,8 +48,8 @@ const PaymentFailurePage = () => {
             'Try using a different payment method',
             'Contact your bank if the issue persists'
           ],
-          returnLink: '/summit',
-          returnText: 'Back to Summit',
+          returnLink: '/',
+          returnText: 'Back to Home',
           retryText: 'Try Again'
         };
       default:

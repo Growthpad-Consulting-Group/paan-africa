@@ -63,8 +63,6 @@ const Header = () => {
       { label: 'M&A', href: '/paan-ma-program' },
     ],
     'Events': [
-      { label: '2026 Summit', href: '/summit' },
-      { label: 'PAAN Awards', href: '/paan-awards' },
       { label: 'Webinars', href: '/events' },
     ],
     'Resources': [
@@ -287,14 +285,6 @@ const Header = () => {
                 );
               })}
 
-              {/* Awards */}
-              <a 
-                href="/summit" 
-                className={getMenuItemClasses('/summit')}
-              >
-                2026 Summit
-              </a>
-
               {/* Contact Us */}
               <a 
                 href="/contact-us" 
@@ -425,19 +415,6 @@ const Header = () => {
                 );
               })}
               
-              <a 
-                href="/paan-awards" 
-                onClick={closeMobileMenu}
-                className={`flex items-center justify-between px-4 py-4 text-lg font-medium transition-colors duration-200 rounded-xl border-b border-gray-100 ${
-                  isMenuActive('/paan-awards')
-                    ? 'bg-yellow-400 text-slate-900'
-                    : 'text-slate-700 hover:bg-gray-50'
-                }`}
-              >
-                <span>Awards</span>
-                {isMenuActive('/paan-awards') && <div className="w-2 h-2 bg-slate-900 rounded-full" />}
-              </a>
-
               <a 
                 href="/contact-us" 
                 onClick={closeMobileMenu}
