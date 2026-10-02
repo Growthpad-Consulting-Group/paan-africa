@@ -51,6 +51,11 @@ const AgencyLogosMarquee = () => {
       name: 'Talking Drum Comms',
       logo: '/assets/images/agencies/TDC_Logo.webp',
     },
+    {
+      id: 10,
+      name: 'Growthpad Consulting Group',
+      logo: '/assets/images/agencies/gcg.png',
+    },
   ];
 
   // Agency logos array for right-sliding marquee
