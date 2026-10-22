@@ -1,6 +1,21 @@
 // data/eventsData.js
 export const eventsData = {
   upcoming: [
+    {
+      id: 18,
+      title: "AI in Strategic Communication",
+      date: "2026-11-03",
+      time: "12:00 PM EAT",
+      location: "Virtual Event",
+      venue: "Zoom",
+      description: "AI is changing how communication professionals research, create, analyse information and make decisions. But using AI strategically requires more than learning how to use new tools. It requires an understanding of communication objectives, audiences, context, data and the role human judgement continues to play. This webinar brings together experienced strategic communication practitioners and AI and data expertise to explore how communication professionals can apply AI more effectively in their work.",
+      image: "https://ik.imagekit.io/nkmvdjnna/PAAN/webinars/paanxapn.jpg",
+      category: "Webinar",
+      price: "Free",
+      registrationUrl: "https://us06web.zoom.us/meeting/register/6EU_7z3ARS-DFeatkgzF6Q",
+      status: "upcoming",
+      featured: true
+    },
     // {
     //   id: 14,
     //   title: "How Fintech Brands Can Succeed in Cross-Regional Campaigns",
