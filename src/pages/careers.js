@@ -10,8 +10,23 @@ import CareerApplicationModal from "@/components/CareerApplicationModal";
 import { useAppTranslations } from "../hooks/useTranslations";
 import { useCountUp } from "../hooks/useCountUp";
 import enMessages from "../messages/en.json";
+import { PortableText } from "@portabletext/react";
+import { getOpenPositions } from "@/lib/careerService";
 
-const CareersPage = ({ pageH1 = enMessages.careers.hero.title, pageSubtitle = enMessages.careers.hero.subtitle }) => {
+// How the long role description (Portable Text) is styled; matches the previous hand-written HTML.
+const roleDescriptionComponents = {
+  block: {
+    normal: ({ children }) => <p className="text-gray-600 mb-4">{children}</p>,
+    h3: ({ children }) => <h4 className="font-semibold text-[#172840] mb-3 mt-4 first:mt-0">{children}</h4>,
+    h4: ({ children }) => <h5 className="font-medium text-[#172840] mb-1 mt-3">{children}</h5>,
+  },
+  list: {
+    bullet: ({ children }) => <ul className="text-gray-600 text-sm space-y-1 mb-4 ml-4 list-disc">{children}</ul>,
+    number: ({ children }) => <ol className="text-gray-600 text-sm space-y-1 mb-4 ml-4 list-decimal">{children}</ol>,
+  },
+};
+
+const CareersPage = ({ pageH1 = enMessages.careers.hero.title, pageSubtitle = enMessages.careers.hero.subtitle, positions = [] }) => {
   const { t } = useAppTranslations();
   const [isClient, setIsClient] = useState(false);
   const sectionRefs = {
@@ -39,6 +54,7 @@ const CareersPage = ({ pageH1 = enMessages.careers.hero.title, pageSubtitle = en
     return () => window.removeEventListener('scroll', handleScrollEvent);
   }, []);
   const [isModalOpen, setIsModalOpen] = useState(false);
+  const [modalPosition, setModalPosition] = useState('');
   const [expandedJob, setExpandedJob] = useState(null);
 
   // Restore IntersectionObserver for section transitions
@@ -74,7 +90,11 @@ const CareersPage = ({ pageH1 = enMessages.careers.hero.title, pageSubtitle = en
     };
   }, []);
 
-  const openModal = () => setIsModalOpen(true);
+  // Called with a position slug from a card's Apply button (preselects it), or with a click event from the generic buttons
+  const openModal = (slug) => {
+    setModalPosition(typeof slug === 'string' ? slug : '');
+    setIsModalOpen(true);
+  };
   const closeModal = () => setIsModalOpen(false);
 
   // Hero component
@@ -254,138 +274,8 @@ const CareersPage = ({ pageH1 = enMessages.careers.hero.title, pageSubtitle = en
 
   // Open Positions component
   const OpenPositions = () => {
-    const positions = [
-      {
-        title: "Commercial Manager",
-        location: "Accra, Ghana (Pan-African/International Scope)",
-        type: t('careers.openPositions.fullTime'),
-        department: "Commercial",
-        description: "Spearhead the commercialization of PAAN across its verticals — from membership and partnerships to events, knowledge products, training, and new ventures.",
-        requirements: [
-          "Bachelor's degree in Business, Marketing, Economics (Master's preferred)",
-          "7+ years commercial management/business development experience",
-          "Strong Pan-African and/or international business exposure",
-          "Exceptional commercial acumen with negotiation skills",
-          "Deep understanding of Africa's creative economy landscape"
-        ],
-        detailedDescription: `
-          <h4 class="font-semibold text-[#172840] mb-3">Role Overview</h4>
-          <p class="text-gray-600 mb-4">The Commercial Manager will be responsible for developing and executing PAAN's commercial strategy, identifying new revenue streams, strengthening client and partner relationships, and ensuring sustainable financial growth. This is a high-impact role that requires a mix of strategic vision, business development expertise, and operational execution.</p>
-          
-          <h4 class="font-semibold text-[#172840] mb-3">Key Responsibilities</h4>
-          <div class="space-y-3 mb-4">
-            <div>
-              <h5 class="font-medium text-[#172840] mb-1">1. Commercial Strategy & Business Development</h5>
-              <ul class="text-gray-600 text-sm space-y-1 ml-4 list-disc">
-                <li>Design and implement a Pan-African and global commercialization strategy for PAAN</li>
-                <li>Identify and develop revenue streams across PAAN's verticals: memberships, partnerships, sponsorships, training programs, consultancy services, events, and digital platforms</li>
-                <li>Develop new business models to scale PAAN's offerings regionally and internationally</li>
-                <li>Build a strong sales pipeline and close high-value deals</li>
-              </ul>
-            </div>
-            <div>
-              <h5 class="font-medium text-[#172840] mb-1">2. Partnerships & Client Relations</h5>
-              <ul class="text-gray-600 text-sm space-y-1 ml-4 list-disc">
-                <li>Cultivate and manage relationships with agencies, brands, international partners, and institutional stakeholders</li>
-                <li>Develop value propositions and partnership packages tailored to different markets and sectors</li>
-                <li>Represent PAAN in high-level negotiations, forums, and industry platforms</li>
-              </ul>
-            </div>
-            <div>
-              <h5 class="font-medium text-[#172840] mb-1">3. Commercial Operations & Delivery</h5>
-              <ul class="text-gray-600 text-sm space-y-1 ml-4 list-disc">
-                <li>Oversee commercial operations and ensure contractual obligations are met</li>
-                <li>Collaborate with the programs, events, and marketing teams to deliver on commercial partnerships</li>
-                <li>Develop financial projections, track performance against targets, and report on ROI</li>
-                <li>Ensure compliance with commercial agreements and risk management policies</li>
-              </ul>
-            </div>
-          </div>
-          
-          <h4 class="font-semibold text-[#172840] mb-3">What We Offer</h4>
-          <ul class="text-gray-600 text-sm space-y-1 mb-4 list-disc ml-4">
-            <li>An opportunity to shape the future of Africa's creative economy</li>
-            <li>A Pan-African platform with global reach and influence</li>
-            <li>Dynamic, purpose-driven work environment</li>
-            <li>Competitive compensation package with performance incentives</li>
-            <li>Opportunities for growth, international exposure, and leadership</li>
-          </ul>
-        `
-      },
-      {
-        title: "Business Development Intern",
-        location: "South Africa (Pan-African Scope)",
-        type: "Internship",
-        department: "Business Development",
-        description: "Support the growth of PAAN by assisting in membership recruitment, partner onboarding, research, and relationship management in a Pan-African creative economy platform.",
-        requirements: [
-          "Bachelor's degree (completed or ongoing) in Business, Marketing, Communications, or related field",
-          "Strong interest in business development and African creative industry",
-          "Excellent communication and interpersonal skills",
-          "Strong research and analytical abilities",
-          "Tech-savvy with MS Office/Google Workspace knowledge"
-        ],
-        duration: "6 months (with possibility of extension)",
-        detailedDescription: `
-          <h4 class="font-semibold text-[#172840] mb-3">Role Overview</h4>
-          <p class="text-gray-600 mb-4">The Business Development Intern will support the growth of PAAN by assisting in membership recruitment, partner onboarding, research, and relationship management. This is a learning role designed for a dynamic and ambitious individual interested in business development, partnerships, and the African creative industry.</p>
-          
-          <h4 class="font-semibold text-[#172840] mb-3">Key Responsibilities</h4>
-          <div class="space-y-3 mb-4">
-            <div>
-              <h5 class="font-medium text-[#172840] mb-1">1. Membership Recruitment & Onboarding</h5>
-              <ul class="text-gray-600 text-sm space-y-1 ml-4 list-disc">
-                <li>Assist in identifying and reaching out to potential new members and partners</li>
-                <li>Support the onboarding process by preparing documentation, presentations, and follow-up communication</li>
-                <li>Maintain accurate member and partner records in the CRM system</li>
-              </ul>
-            </div>
-            <div>
-              <h5 class="font-medium text-[#172840] mb-1">2. Business Development Support</h5>
-              <ul class="text-gray-600 text-sm space-y-1 ml-4 list-disc">
-                <li>Research and map potential opportunities across African and global markets</li>
-                <li>Assist in preparing business proposals, pitch decks, and partnership packages</li>
-                <li>Track leads, opportunities, and support pipeline reporting</li>
-              </ul>
-            </div>
-            <div>
-              <h5 class="font-medium text-[#172840] mb-1">3. Client & Partner Engagement</h5>
-              <ul class="text-gray-600 text-sm space-y-1 ml-4 list-disc">
-                <li>Support relationship management with existing members and partners</li>
-                <li>Assist in organizing and coordinating onboarding sessions, webinars, and networking events</li>
-                <li>Handle basic queries from members and partners, escalating where necessary</li>
-              </ul>
-            </div>
-            <div>
-              <h5 class="font-medium text-[#172840] mb-1">4. Market Research & Intelligence</h5>
-              <ul class="text-gray-600 text-sm space-y-1 ml-4 list-disc">
-                <li>Conduct research on industry trends, competitive landscapes, and potential growth markets</li>
-                <li>Generate insights to support strategic decision-making and partnership development</li>
-              </ul>
-            </div>
-          </div>
-          
-          <h4 class="font-semibold text-[#172840] mb-3">Learning Outcomes</h4>
-          <p class="text-gray-600 mb-3">By the end of the internship, the Business Development Intern will have gained:</p>
-          <ul class="text-gray-600 text-sm space-y-1 mb-4 list-disc ml-4">
-            <li>Practical experience in business development, membership growth, and client relations</li>
-            <li>Skills in proposal writing, partner engagement, and CRM tools</li>
-            <li>Exposure to Africa's dynamic creative and communications industry</li>
-            <li>Networking opportunities with top agencies and brands across Africa and beyond</li>
-          </ul>
-          
-          <h4 class="font-semibold text-[#172840] mb-3">What We Offer</h4>
-          <ul class="text-gray-600 text-sm space-y-1 mb-4 list-disc ml-4">
-            <li>A structured, mentorship-driven internship experience</li>
-            <li>Hands-on exposure to business development and partnerships in a Pan-African context</li>
-            <li>Networking opportunities across Africa's top creative agencies and global partners</li>
-            <li>A dynamic, collaborative, and inclusive work environment</li>
-            <li>Stipend/allowance</li>
-          </ul>
-        `
-      }
-    ];
-
+    // Positions come from Sanity (Job Posting documents); see getStaticProps below.
+    const typeLabel = (position) => (position.employmentType === 'Full-time' ? t('careers.openPositions.fullTime') : position.employmentType);
     return (
       <section className="py-16 sm:py-20 bg-white" id="open-positions" ref={sectionRefs.openPositions}>
         <div className="max-w-6xl mx-auto px-4 sm:px-6">
@@ -419,9 +309,9 @@ const CareersPage = ({ pageH1 = enMessages.careers.hero.title, pageSubtitle = en
                       </h3>
                       <div className="flex flex-wrap gap-2">
                         <span className="bg-[#84C1D9] text-[#172840] px-4 py-2 rounded-full text-sm font-semibold shadow-sm">
-                          {position.location.includes('Ghana') ? (
+                          {(position.location || '').includes('Ghana') ? (
                             <Icon icon="flag:gh-4x3" className="w-4 h-4 inline mr-2" />
-                          ) : position.location.includes('South Africa') ? (
+                          ) : (position.location || '').includes('South Africa') ? (
                             <Icon icon="flag:za-4x3" className="w-4 h-4 inline mr-2" />
                           ) : (
                             <Icon icon="ic:baseline-location-on" className="w-4 h-4 inline mr-1" />
@@ -430,7 +320,7 @@ const CareersPage = ({ pageH1 = enMessages.careers.hero.title, pageSubtitle = en
                         </span>
                         <span className="bg-[#F2B706] text-[#172840] px-4 py-2 rounded-full text-sm font-semibold shadow-sm">
                           <Icon icon="ic:baseline-work" className="w-4 h-4 inline mr-1" />
-                          {position.type}
+                          {typeLabel(position)}
                         </span>
                         <span className="bg-[#F25849] text-white px-4 py-2 rounded-full text-sm font-semibold shadow-sm">
                           <Icon icon="ic:baseline-business" className="w-4 h-4 inline mr-1" />
@@ -449,7 +339,7 @@ const CareersPage = ({ pageH1 = enMessages.careers.hero.title, pageSubtitle = en
                   {/* Description Section */}
                   <div className="mb-6">
                     <p className="text-gray-700 text-base leading-relaxed bg-gray-50 p-4 rounded-lg border-l-4 border-[#84C1D9]">
-                      {position.description}
+                      {position.summary}
                     </p>
                   </div>
 
@@ -496,10 +386,9 @@ const CareersPage = ({ pageH1 = enMessages.careers.hero.title, pageSubtitle = en
                         transition={{ duration: 0.3 }}
                         className="mt-4 p-6 bg-gradient-to-br from-gray-50 to-white rounded-xl border border-gray-200 shadow-sm"
                       >
-                        <div 
-                          dangerouslySetInnerHTML={{ __html: position.detailedDescription }}
-                          className="prose prose-sm max-w-none"
-                        />
+                        <div className="prose prose-sm max-w-none">
+                          <PortableText value={position.details} components={roleDescriptionComponents} />
+                        </div>
                       </motion.div>
                     )}
                   </div>
@@ -507,7 +396,7 @@ const CareersPage = ({ pageH1 = enMessages.careers.hero.title, pageSubtitle = en
                   {/* Apply Button */}
                   <div className="pt-4 border-t border-gray-100">
                     <button 
-                      onClick={openModal}
+                      onClick={() => openModal(position.slug)}
                       className="w-full bg-gradient-to-r from-[#172840] to-[#0F1A2E] text-white py-4 px-6 rounded-xl hover:from-[#F25849] hover:to-[#D6473C] transition-all duration-300 font-bold text-base shadow-lg hover:shadow-xl transform hover:-translate-y-1 flex items-center justify-center group"
                     >
                       <Icon icon="ic:baseline-send" className="w-5 h-5 mr-2 group-hover:translate-x-1 transition-transform duration-300" />
@@ -520,39 +409,30 @@ const CareersPage = ({ pageH1 = enMessages.careers.hero.title, pageSubtitle = en
           </div>
 
           <div className="text-center mt-12">
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-6 mb-6">
-              <div className="bg-[#F2B706] bg-opacity-10 border border-[#F2B706] rounded-lg p-6">
-                <h4 className="font-semibold text-[#172840] mb-2">Commercial Manager - Direct Application</h4>
-                <p className="text-gray-600 text-sm mb-3">
-                  For the Commercial Manager position, please send your CV and Cover Letter directly to:
-                </p>
-                <a 
-                  href="mailto:careers@paanetwork.org?subject=Commercial Manager – PAAN"
-                  className="text-[#F25849] font-semibold hover:underline"
-                >
-                  careers@paan.africa
-                </a>
-                <p className="text-gray-500 text-xs mt-2">
-                  Subject line: "Commercial Manager – PAAN"
-                </p>
+            {positions.length === 0 && (
+              <p className="text-gray-600 mb-8">We don&apos;t have any open positions right now, but we&apos;re always looking for exceptional talent.</p>
+            )}
+            {positions.some((p) => p.applyByEmail) && (
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-6 mb-6">
+                {positions.filter((p) => p.applyByEmail).map((position, i) => (
+                  <div key={position.slug} className={i % 2 === 0 ? 'bg-[#F2B706] bg-opacity-10 border border-[#F2B706] rounded-lg p-6' : 'bg-[#34B6A7] bg-opacity-10 border border-[#34B6A7] rounded-lg p-6'}>
+                    <h4 className="font-semibold text-[#172840] mb-2">{position.title} - Direct Application</h4>
+                    <p className="text-gray-600 text-sm mb-3">
+                      For the {position.title} position, please send your CV and Cover Letter directly to:
+                    </p>
+                    <a
+                      href={`mailto:${position.applyEmail}?subject=${encodeURIComponent(position.applyEmailSubject)}`}
+                      className="text-[#F25849] font-semibold hover:underline"
+                    >
+                      {position.applyEmail}
+                    </a>
+                    <p className="text-gray-500 text-xs mt-2">
+                      Subject line: &quot;{position.applyEmailSubject}&quot;
+                    </p>
+                  </div>
+                ))}
               </div>
-              
-              <div className="bg-[#34B6A7] bg-opacity-10 border border-[#34B6A7] rounded-lg p-6">
-                <h4 className="font-semibold text-[#172840] mb-2">Business Development Intern - Direct Application</h4>
-                <p className="text-gray-600 text-sm mb-3">
-                  For the Business Development Intern position, please send your CV and Cover Letter directly to:
-                </p>
-                <a 
-                  href="mailto:careers@paan.africa?subject=Business Development Intern – PAAN"
-                  className="text-[#F25849] font-semibold hover:underline"
-                >
-                  careers@paan.africa
-                </a>
-                <p className="text-gray-500 text-xs mt-2">
-                  Subject line: "Business Development Intern – PAAN"
-                </p>
-              </div>
-            </div>
+            )}
             
             <p className="text-gray-600 mb-4">
               Don't see a position that matches your skills? We're always looking for exceptional talent.
@@ -799,19 +679,27 @@ const CareersPage = ({ pageH1 = enMessages.careers.hero.title, pageSubtitle = en
         <Culture />
         <ApplicationProcess />
         <Footer />
-        <CareerApplicationModal isOpen={isModalOpen} onClose={closeModal} />
+        <CareerApplicationModal isOpen={isModalOpen} onClose={closeModal} positions={positions} defaultPosition={modalPosition} />
         <ScrollToTop />
       </main>
     </>
   );
 };
 
-export async function getServerSideProps() {
+export async function getStaticProps() {
+  let positions = [];
+  try {
+    positions = await getOpenPositions();
+  } catch (error) {
+    console.error('Error loading job postings from Sanity:', error);
+  }
   return {
     props: {
       pageH1: enMessages.careers.hero.title,
       pageSubtitle: enMessages.careers.hero.subtitle,
+      positions,
     },
+    revalidate: positions.length ? 3600 : 60,
   };
 }
 

@@ -32,10 +32,10 @@ Modelled on the CCSA tracker (`call-center-solutions-africa/docs/MIGRATION.md`).
 | Events / webinars | `summit_leads`, `eoi_submissions`, `enquiry_submissions`, `agency_enquiries`, `agency_contacts`, `partner_enquiries`, `newsletter_subscriptions` |
 | ~~Summit content~~ (deferred: cancelled) | Talent discovery (`profiles`, `skills`, `portfolio_items`, `profile_badges`, countries/cities) |
 | ~~Awards categories~~ (deferred: cancelled) | Trends dashboard data + cron aggregation |
-| Clients, partners, FAQs, testimonials | `blog_comments` (user-generated; keep, key by Sanity post `_id`/slug) |
+| ~~Clients, partners, FAQs, testimonials~~ → `src/data` (decision 2026-11-15) | `blog_comments` (user-generated; keep, key by Sanity post `_id`/slug) |
 | Careers / job postings (currently i18n JSON) | |
-| Academy programs, membership tiers, pricing | |
-| Site settings (nav, footer, banners/popup, CTA links e.g. demo/contact, hidden-pages list, social, SEO defaults) | |
+| ~~Academy programs, membership tiers, pricing~~ → `src/data` (decision 2026-11-15) | |
+| ~~Site settings (nav, footer, banners/popup, CTA links, hidden-pages list)~~ → `src/data/site.ts` (decision 2026-11-15) | |
 
 **Consequence vs. CCSA:** Supabase can *not* be fully removed here. Target is "Supabase for data, Sanity for content". `hr_users` (blog authors) is replaced by Sanity `author` documents.
 
@@ -92,10 +92,10 @@ Seven near-identical ~850-line pages (6,000 lines) → one Sanity schema + one t
 | 1 | Events & webinars | ✅ | Done 2026-11-15. Schema `event`, `scripts/migrate-events-to-sanity.mjs` (14 events + images → Sanity), `lib/eventService.ts`, `/events` + `/events/[slug]` on ISR. **Upcoming/Past is now derived from the event date (East Africa time)**, no hand-edited lists. Old `/events/<number>` URLs 308-redirect to `/events/<slug>`. Fixed: detail pages were server-rendered as "Event Not Found" (client-only ID lookup). Old data kept at `scripts/data/eventsData.source.js` for the seed script |
 | 2 | Masterclasses | ✅ | Done 2026-11-15. Schemas `masterclass` + `masterclassSeries`, `scripts/migrate-masterclasses-to-sanity.mjs` (16 masterclasses + 2 series, images → Sanity), `lib/masterclassService.ts`; `/masterclasses` + `/masterclasses/[slug]` on ISR (4,000 → ~1,800 lines). **The numeric ID is kept as required, unique `masterclassId`** because it is part of the Paystack reference and the key for `masterclass_promo_codes.applicable_masterclass_ids`; purchase flow code is untouched. Old `/masterclasses/<number>` URLs 308-redirect to slug URLs; `/masterclasses/10` is now a real 404 (was a blank "Loading…" 200). Listing and detail pages each had their own copy of the data and had drifted; detail data (what checkout charges) is canonical. Verified: all 16 detail pages render identically to before except the status badge |
 | 3 | Summit / Awards | `data/summit/*`, `summit/*`, `paan-awards/*` | **Deferred**: cancelled and redirected. Leave code as-is behind `SUMMIT_CANCELLED`; decide later whether to delete or model per edition | ⏸ |
-| 4 | Careers | `src/messages` JSON + `careers.js` | Same as CCSA careers; application form already has `send-career-application` API | ⏳ |
-| 5 | Clients, partners, FAQs, testimonials | `clients.js`, `partners.js`, `StrategicPartners`, `FAQs`, `VoicesFromNetwork` | Small, reusable | ⏳ |
-| 6 | Academy / membership tiers / pricing | `academy/index.js`, `Tier1-3`, `MemberTiers`, `pricing.js` | Marketing copy changes | ⏳ |
-| 7 | Site settings | `menuData.js`, `summitMenu.js`, `usePopupBanner`, footer, `ChristmasContext` | Seasonal banners/popups without deploy | ⏳ |
+| 4 | Careers | ✅ | Done 2026-11-15. Schema `jobPosting`, `scripts/migrate-careers-to-sanity.mjs` (2 positions; long descriptions converted HTML → Portable Text and verified: text, headings, list items AND bullet-list grouping), `lib/careerService.ts`; `/careers` on ISR. Positions hide automatically after an optional closing date or via the "Show on the Careers page" switch. The Apply-now form's position dropdown is built from the open positions (same values as before, so `/api/send-career-application` is unchanged) and the card's Apply button now preselects its role. Direct-application email boxes are data-driven. Careers hero/culture/process copy stays in `messages` |
+| 5 | Clients, partners, FAQs, testimonials | ➡ `src/data` | **Decision (2026-11-15): keep as typed data files in `src/data`, not Sanity.** Still to do: move the hardcoded arrays out of `clients.js`, `partners.js`, `StrategicPartners`, `FAQs`, `VoicesFromNetwork`, the free-members strip in `AgencyLogosMarquee` into `src/data/*.ts` |
+| 6 | Academy / membership tiers / pricing | ➡ `src/data` | Same decision: `academy/index.js`, `Tier1-3`, `MemberTiers`, `pricing.js` content to `src/data/*.ts` |
+| 7 | Site settings | ➡ `src/data` | Same decision: `menuData.js`, `summitMenu.js`, popup banner, CTA links, hidden-pages list (`HIDDEN_PATHS`) as `src/data/site.ts` (no Sanity singleton) |
 
 ### Do NOT migrate to Sanity
 Ticket types & prices (payments depend on DB integrity), promo codes, talent profiles, trends data, form submissions. Sanity may *reference* ticket type IDs but Supabase stays source of truth.

@@ -1,11 +1,11 @@
 "use client";
 
-import { useState, useRef } from "react";
+import { useState, useRef, useEffect } from "react";
 import { Icon } from "@iconify/react";
 import ReCAPTCHA from "react-google-recaptcha";
 import Modal, { ModalHeader } from "./Modal";
 
-const CareerApplicationModal = ({ isOpen, onClose }) => {
+const CareerApplicationModal = ({ isOpen, onClose, positions = [], defaultPosition = "" }) => {
   const [formData, setFormData] = useState({
     firstName: "",
     lastName: "",
@@ -17,6 +17,12 @@ const CareerApplicationModal = ({ isOpen, onClose }) => {
     coverLetter: "",
     resume: null
   });
+  // Preselect the role when the visitor opens the form from a position's Apply button
+  useEffect(() => {
+    if (isOpen && defaultPosition) {
+      setFormData((prev) => ({ ...prev, position: defaultPosition }));
+    }
+  }, [isOpen, defaultPosition]);
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [submitStatus, setSubmitStatus] = useState(null);
   const [error, setError] = useState(null);
@@ -236,8 +242,11 @@ const CareerApplicationModal = ({ isOpen, onClose }) => {
                       className="w-full px-3 sm:px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-[#84C1D9] focus:border-transparent transition-colors duration-200 text-sm sm:text-base min-h-[44px]"
                     >
                       <option value="">Select a position</option>
-                      <option value="commercial-manager">Commercial Manager (Accra, Ghana)</option>
-                      <option value="business-development-intern">Business Development Intern (South Africa)</option>
+                      {positions.map((position) => (
+                        <option key={position.slug} value={position.slug}>
+                          {position.title}{position.location ? ` (${position.location.split(' (')[0]})` : ''}
+                        </option>
+                      ))}
                       <option value="other">Other</option>
                     </select>
                   </div>
