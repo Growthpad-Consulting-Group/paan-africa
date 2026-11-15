@@ -9,6 +9,8 @@ import ScrollToTop from "@/components/ScrollToTop";
 import ConnectingDots from "@/components/ConnectingDots";
 import AcademyEnquiryModal from "@/components/AcademyEnquiryModal";
 import Head from "next/head";
+import { academyBenefits, academySkills, academyTrainingFormats, freelancerPerks, agencyPerks } from '@/data/academy';
+import { bookingLinks } from '@/data/site';
 
 
 const HomePage = () => {
@@ -249,7 +251,7 @@ const HomePage = () => {
                     <button
                     className="bg-paan-green text-white px-6 sm:px-8 py-2.5 sm:py-3 rounded-full font-medium text-sm transition duration-300 hover:bg-[#6FA1B7] text-center w-full sm:w-auto nunito-regular"
                     onClick={() => {
-                        gtag_report_conversion('https://calendly.com/njue-duncan-growthpad/paan-partners-introduction');
+                        gtag_report_conversion(bookingLinks.academyPartnersIntro);
                     }}
                     >
                     Schedule a Free Consultation
@@ -305,50 +307,17 @@ const HomePage = () => {
                 <div className="space-y-4 sm:space-y-6 nunito-regular">              
                   <div className="mt-6 sm:mt-8">
                     <ul className="space-y-3 sm:space-y-4">
-                      <li className="flex items-start">
+                      {academyBenefits.map((item, i) => (
+<li key={i} className="flex items-start">
                         <span className="mr-3 mt-1 flex-shrink-0">
                         <svg xmlns="http://www.w3.org/2000/svg" className="text-paan-red" width="24" height="24" viewBox="0 0 24 24"><path fill="currentColor" d="m10.6 13.8l-2.15-2.15q-.275-.275-.7-.275t-.7.275t-.275.7t.275.7L9.9 15.9q.3.3.7.3t.7-.3l5.65-5.65q.275-.275.275-.7t-.275-.7t-.7-.275t-.7.275zM12 22q-2.075 0-3.9-.788t-3.175-2.137T2.788 15.9T2 12t.788-3.9t2.137-3.175T8.1 2.788T12 2t3.9.788t3.175 2.137T21.213 8.1T22 12t-.788 3.9t-2.137 3.175t-3.175 2.138T12 22"/></svg>            
                         </span>
                         <div className="flex flex-col">
-                            <h3 className="font-bold nunito-bold">Pan-African Expertise</h3>
-                            <span className="text-gray-700 leading-relaxed text-sm sm:text-base nunito-regular">
-                                Led by top-tier strategists, creatives, and media specialists from 200+ agencies across 20+ countries
-                            </span>
+                            <h3 className="font-bold nunito-bold">{item.title}</h3>
+                            <span className="text-gray-700 leading-relaxed text-sm sm:text-base nunito-regular">{item.description}</span>
                         </div>
                       </li>
-                      <li className="flex items-start">
-                        <span className="mr-3 mt-1 flex-shrink-0">
-                        <svg xmlns="http://www.w3.org/2000/svg" className="text-paan-red" width="24" height="24" viewBox="0 0 24 24"><path fill="currentColor" d="m10.6 13.8l-2.15-2.15q-.275-.275-.7-.275t-.7.275t-.275.7t.275.7L9.9 15.9q.3.3.7.3t.7-.3l5.65-5.65q.275-.275.275-.7t-.275-.7t-.7-.275t-.7.275zM12 22q-2.075 0-3.9-.788t-3.175-2.137T2.788 15.9T2 12t.788-3.9t2.137-3.175T8.1 2.788T12 2t3.9.788t3.175 2.137T21.213 8.1T22 12t-.788 3.9t-2.137 3.175t-3.175 2.138T12 22"/></svg> 
-                        </span>
-                        <div className="flex flex-col">
-                            <h3 className="font-bold nunito-bold">Custom Curriculum</h3>
-                            <span className="text-gray-700 leading-relaxed text-sm sm:text-base nunito-regular">
-                                 Tailored training modules for your brand’s goals — from campaign development to media execution
-                            </span>
-                        </div>
-                        </li>
-                      <li className="flex items-start">
-                        <span className="mr-3 mt-1 flex-shrink-0">
-                        <svg xmlns="http://www.w3.org/2000/svg" className="text-paan-red" width="24" height="24" viewBox="0 0 24 24"><path fill="currentColor" d="m10.6 13.8l-2.15-2.15q-.275-.275-.7-.275t-.7.275t-.275.7t.275.7L9.9 15.9q.3.3.7.3t.7-.3l5.65-5.65q.275-.275.275-.7t-.275-.7t-.7-.275t-.7.275zM12 22q-2.075 0-3.9-.788t-3.175-2.137T2.788 15.9T2 12t.788-3.9t2.137-3.175T8.1 2.788T12 2t3.9.788t3.175 2.137T21.213 8.1T22 12t-.788 3.9t-2.137 3.175t-3.175 2.138T12 22"/></svg>  
-                        </span>
-                        <div className="flex flex-col">
-                            <h3 className="font-bold nunito-bold">Real-World Learning</h3>
-                            <span className="text-gray-700 leading-relaxed text-sm sm:text-base nunito-regular">
-                                Hands-on workshops, case studies, and toolkits your team can apply immediately
-                            </span>
-                        </div>
-                        </li>
-                      <li className="flex items-start">
-                        <span className="mr-3 mt-1 flex-shrink-0">
-                        <svg xmlns="http://www.w3.org/2000/svg" className="text-paan-red" width="24" height="24" viewBox="0 0 24 24"><path fill="currentColor" d="m10.6 13.8l-2.15-2.15q-.275-.275-.7-.275t-.7.275t-.275.7t.275.7L9.9 15.9q.3.3.7.3t.7-.3l5.65-5.65q.275-.275.275-.7t-.275-.7t-.7-.275t-.7.275zM12 22q-2.075 0-3.9-.788t-3.175-2.137T2.788 15.9T2 12t.788-3.9t2.137-3.175T8.1 2.788T12 2t3.9.788t3.175 2.137T21.213 8.1T22 12t-.788 3.9t-2.137 3.175t-3.175 2.138T12 22"/></svg>  
-                        </span>
-                        <div className="flex flex-col">
-                            <h3 className="font-bold nunito-bold">Stronger Results</h3>
-                            <span className="text-gray-700 leading-relaxed text-sm sm:text-base nunito-regular">
-                                Boost ROI from your marketing spend by empowering internal teams to brief better, manage agencies, and build strategic campaigns
-                            </span>
-                        </div>
-                        </li>
+                      ))}
                     </ul>
                   </div>
                 </div>
@@ -423,82 +392,16 @@ const HomePage = () => {
 
                     {/* Skills List */}
                     <ul className="space-y-4 lg:space-y-5 text-white mt-8 nunito-regular">
-                        <li className="flex items-start gap-4">
+                      {academySkills.map((item, i) => (
+<li key={i} className="flex items-start gap-4">
                         <span className="flex-shrink-0 mt-1">
                             <svg xmlns="http://www.w3.org/2000/svg" className="text-white" width="20" height="20" viewBox="0 0 24 24">
                             <path fill="currentColor" d="m10.6 13.8l-2.15-2.15q-.275-.275-.7-.275t-.7.275t-.275.7t.275.7L9.9 15.9q.3.3.7.3t.7-.3l5.65-5.65q.275-.275.275-.7t-.275-.7t-.7-.275t-.7.275zM12 22q-2.075 0-3.9-.788t-3.175-2.137T2.788 15.9T2 12t.788-3.9t2.137-3.175T8.1 2.788T12 2t3.9.788t3.175 2.137T21.213 8.1T22 12t-.788 3.9t-2.137 3.175t-3.175 2.138T12 22"/>
                             </svg>            
                         </span>
-                        <h4 className="text-base lg:text-lg font-medium leading-relaxed nunito-regular">
-                            Strategic Brand Thinking
-                        </h4>
+                        <h4 className="text-base lg:text-lg font-medium leading-relaxed nunito-regular">{item}</h4>
                         </li>
-                        
-                        <li className="flex items-start gap-4">
-                        <span className="flex-shrink-0 mt-1">
-                            <svg xmlns="http://www.w3.org/2000/svg" className="text-white" width="20" height="20" viewBox="0 0 24 24">
-                            <path fill="currentColor" d="m10.6 13.8l-2.15-2.15q-.275-.275-.7-.275t-.7.275t-.275.7t.275.7L9.9 15.9q.3.3.7.3t.7-.3l5.65-5.65q.275-.275.275-.7t-.275-.7t-.7-.275t-.7.275zM12 22q-2.075 0-3.9-.788t-3.175-2.137T2.788 15.9T2 12t.788-3.9t2.137-3.175T8.1 2.788T12 2t3.9.788t3.175 2.137T21.213 8.1T22 12t-.788 3.9t-2.137 3.175t-3.175 2.138T12 22"/>
-                            </svg>            
-                        </span>
-                        <h4 className="text-base lg:text-lg font-medium leading-relaxed nunito-regular">
-                            Mastering the Marketing Brief
-                        </h4>
-                        </li>
-
-                        <li className="flex items-start gap-4">
-                        <span className="flex-shrink-0 mt-1">
-                            <svg xmlns="http://www.w3.org/2000/svg" className="text-white" width="20" height="20" viewBox="0 0 24 24">
-                            <path fill="currentColor" d="m10.6 13.8l-2.15-2.15q-.275-.275-.7-.275t-.7.275t-.275.7t.275.7L9.9 15.9q.3.3.7.3t.7-.3l5.65-5.65q.275-.275.275-.7t-.275-.7t-.7-.275t-.7.275zM12 22q-2.075 0-3.9-.788t-3.175-2.137T2.788 15.9T2 12t.788-3.9t2.137-3.175T8.1 2.788T12 2t3.9.788t3.175 2.137T21.213 8.1T22 12t-.788 3.9t-2.137 3.175t-3.175 2.138T12 22"/>
-                            </svg>            
-                        </span>
-                        <h4 className="text-base lg:text-lg font-medium leading-relaxed nunito-regular">
-                            AI in Content & Creative Production
-                        </h4>
-                        </li>
-
-                        <li className="flex items-start gap-4">
-                        <span className="flex-shrink-0 mt-1">
-                            <svg xmlns="http://www.w3.org/2000/svg" className="text-white" width="20" height="20" viewBox="0 0 24 24">
-                            <path fill="currentColor" d="m10.6 13.8l-2.15-2.15q-.275-.275-.7-.275t-.7.275t-.275.7t.275.7L9.9 15.9q.3.3.7.3t.7-.3l5.65-5.65q.275-.275.275-.7t-.275-.7t-.7-.275t-.7.275zM12 22q-2.075 0-3.9-.788t-3.175-2.137T2.788 15.9T2 12t.788-3.9t2.137-3.175T8.1 2.788T12 2t3.9.788t3.175 2.137T21.213 8.1T22 12t-.788 3.9t-2.137 3.175t-3.175 2.138T12 22"/>
-                            </svg>            
-                        </span>
-                        <h4 className="text-base lg:text-lg font-medium leading-relaxed nunito-regular">
-                            Performance Marketing
-                        </h4>
-                        </li>
-
-                        <li className="flex items-start gap-4">
-                        <span className="flex-shrink-0 mt-1">
-                            <svg xmlns="http://www.w3.org/2000/svg" className="text-white" width="20" height="20" viewBox="0 0 24 24">
-                            <path fill="currentColor" d="m10.6 13.8l-2.15-2.15q-.275-.275-.7-.275t-.7.275t-.275.7t.275.7L9.9 15.9q.3.3.7.3t.7-.3l5.65-5.65q.275-.275.275-.7t-.275-.7t-.7-.275t-.7.275zM12 22q-2.075 0-3.9-.788t-3.175-2.137T2.788 15.9T2 12t.788-3.9t2.137-3.175T8.1 2.788T12 2t3.9.788t3.175 2.137T21.213 8.1T22 12t-.788 3.9t-2.137 3.175t-3.175 2.138T12 22"/>
-                            </svg>            
-                        </span>
-                        <h4 className="text-base lg:text-lg font-medium leading-relaxed nunito-regular">
-                            Cross-Channel Campaign Management
-                        </h4>
-                        </li>
-
-                        <li className="flex items-start gap-4">
-                        <span className="flex-shrink-0 mt-1">
-                            <svg xmlns="http://www.w3.org/2000/svg" className="text-white" width="20" height="20" viewBox="0 0 24 24">
-                            <path fill="currentColor" d="m10.6 13.8l-2.15-2.15q-.275-.275-.7-.275t-.7.275t-.275.7t.275.7L9.9 15.9q.3.3.7.3t.7-.3l5.65-5.65q.275-.275.275-.7t-.275-.7t-.7-.275t-.7.275zM12 22q-2.075 0-3.9-.788t-3.175-2.137T2.788 15.9T2 12t.788-3.9t2.137-3.175T8.1 2.788T12 2t3.9.788t3.175 2.137T21.213 8.1T22 12t-.788 3.9t-2.137 3.175t-3.175 2.138T12 22"/>
-                            </svg>            
-                        </span>
-                        <h4 className="text-base lg:text-lg font-medium leading-relaxed nunito-regular">
-                            Internal Creative Capacity Building
-                        </h4>
-                        </li>
-
-                        <li className="flex items-start gap-4">
-                        <span className="flex-shrink-0 mt-1">
-                            <svg xmlns="http://www.w3.org/2000/svg" className="text-white" width="20" height="20" viewBox="0 0 24 24">
-                            <path fill="currentColor" d="m10.6 13.8l-2.15-2.15q-.275-.275-.7-.275t-.7.275t-.275.7t.275.7L9.9 15.9q.3.3.7.3t.7-.3l5.65-5.65q.275-.275.275-.7t-.275-.7t-.7-.275t-.7.275zM12 22q-2.075 0-3.9-.788t-3.175-2.137T2.788 15.9T2 12t.788-3.9t2.137-3.175T8.1 2.788T12 2t3.9.788t3.175 2.137T21.213 8.1T22 12t-.788 3.9t-2.137 3.175t-3.175 2.138T12 22"/>
-                            </svg>            
-                        </span>
-                        <h4 className="text-base lg:text-lg font-medium leading-relaxed nunito-regular">
-                            Collaborating with Agencies & Freelancers
-                        </h4>
-                        </li>
+                      ))}
                     </ul>
                     </div>
                 </div>
@@ -577,50 +480,19 @@ const HomePage = () => {
                         </h3>
                         
                         <ul className="space-y-5 nunito-regular">
-                        <li className="flex items-start group">
+                      {academyTrainingFormats.map((item, i) => (
+<li key={i} className="flex items-start group">
                             <span className="mr-4 mt-1 flex-shrink-0">
                             <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24">
                                 <path fill="currentColor" d="m10.6 13.8l-2.15-2.15q-.275-.275-.7-.275t-.7.275t-.275.7t.275.7L9.9 15.9q.3.3.7.3t.7-.3l5.65-5.65q.275-.275.275-.7t-.275-.7t-.7-.275t-.7.275zM12 22q-2.075 0-3.9-.788t-3.175-2.137T2.788 15.9T2 12t.788-3.9t2.137-3.175T8.1 2.788T12 2t3.9.788t3.175 2.137T21.213 8.1T22 12t-.788 3.9t-2.137 3.175t-3.175 2.138T12 22"/>
                             </svg>            
                             </span>
                             <div>
-                            <h4 className="font-normal text-lg text-gray-900 mb-1 nunito-regular">Onsite or Virtual Team Workshops</h4>
+                            <h4 className="font-normal text-lg text-gray-900 mb-1 nunito-regular">{item}</h4>
                             </div>
                         </li>
-                        
-                        <li className="flex items-start group">
-                            <span className="mr-4 mt-1 flex-shrink-0">
-                            <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24">
-                                <path fill="currentColor" d="m10.6 13.8l-2.15-2.15q-.275-.275-.7-.275t-.7.275t-.275.7t.275.7L9.9 15.9q.3.3.7.3t.7-.3l5.65-5.65q.275-.275.275-.7t-.275-.7t-.7-.275t-.7.275zM12 22q-2.075 0-3.9-.788t-3.175-2.137T2.788 15.9T2 12t.788-3.9t2.137-3.175T8.1 2.788T12 2t3.9.788t3.175 2.137T21.213 8.1T22 12t-.788 3.9t-2.137 3.175t-3.175 2.138T12 22"/>
-                            </svg> 
-                            </span>
-                            <div>
-                            <h4 className="font-normal text-lg text-gray-900 mb-1 nunito-regular">Half-Day, Full-Day or 3-Week Sprints</h4>
-                            </div>
-                        </li>
-                        
-                        <li className="flex items-start group">
-                            <span className="mr-4 mt-1 flex-shrink-0">
-                            <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24">
-                                <path fill="currentColor" d="m10.6 13.8l-2.15-2.15q-.275-.275-.7-.275t-.7.275t-.275.7t.275.7L9.9 15.9q.3.3.7.3t.7-.3l5.65-5.65q.275-.275.275-.7t-.275-.7t-.7-.275t-.7.275zM12 22q-2.075 0-3.9-.788t-3.175-2.137T2.788 15.9T2 12t.788-3.9t2.137-3.175T8.1 2.788T12 2t3.9.788t3.175 2.137T21.213 8.1T22 12t-.788 3.9t-2.137 3.175t-3.175 2.138T12 22"/>
-                            </svg>  
-                            </span>
-                            <div>
-                            <h4 className="font-normal text-lg text-gray-900 mb-1 nunito-regular">Executive Bootcamps for CMOs and Marketing Leads</h4>
-                            </div>
-                        </li>
-                        
-                        <li className="flex items-start group">
-                            <span className="mr-4 mt-1 flex-shrink-0">
-                            <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24">
-                                <path fill="currentColor" d="m10.6 13.8l-2.15-2.15q-.275-.275-.7-.275t-.7.275t-.275.7t.275.7L9.9 15.9q.3.3.7.3t.7-.3l5.65-5.65q.275-.275.275-.7t-.275-.7t-.7-.275t-.7.275zM12 22q-2.075 0-3.9-.788t-3.175-2.137T2.788 15.9T2 12t.788-3.9t2.137-3.175T8.1 2.788T12 2t3.9.788t3.175 2.137T21.213 8.1T22 12t-.788 3.9t-2.137 3.175t-3.175 2.138T12 22"/>
-                            </svg>  
-                            </span>
-                            <div>
-                            <h4 className="font-normal text-lg text-gray-900 mb-1 nunito-regular">Ongoing Learning Subscriptions</h4>
-                            </div>
-                        </li>
-                        </ul>
+                      ))}
+                    </ul>
                     </div>
                     
                     {/* Call to Action */}
@@ -631,7 +503,7 @@ const HomePage = () => {
                         <button
                         className="bg-paan-red hover:bg-red-700 text-white px-8 py-4 rounded-full font-semibold text-base transition-all duration-300 shadow-lg hover:shadow-xl transform hover:-translate-y-0.5 w-full sm:w-auto nunito-bold"
                         onClick={() => {
-                            gtag_report_conversion('https://calendly.com/njue-duncan-growthpad/paan-partners-introduction');
+                            gtag_report_conversion(bookingLinks.academyPartnersIntro);
                         }}
                         >
                         Schedule a Free Training Consultation
@@ -697,58 +569,19 @@ const HomePage = () => {
                             {/* Features List */}
                             <div className="mb-8">
                                 <ul className="space-y-4 nunito-regular">
-                                    <li className="flex items-start group cursor-pointer">
+                      {freelancerPerks.map((item, i) => (
+<li key={i} className="flex items-start group cursor-pointer">
                                         <span className="mr-4 mt-0.5 flex-shrink-0 text-paan-maroon">
                                             <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24">
                                                 <path fill="currentColor" d="m10.6 13.8l-2.15-2.15q-.275-.275-.7-.275t-.7.275t-.275.7t.275.7L9.9 15.9q.3.3.7.3t.7-.3l5.65-5.65q.275-.275.275-.7t-.275-.7t-.7-.275t-.7.275zM12 22q-2.075 0-3.9-.788t-3.175-2.137T2.788 15.9T2 12t.788-3.9t2.137-3.175T8.1 2.788T12 2t3.9.788t3.175 2.137T21.213 8.1T22 12t-.788 3.9t-2.137 3.175t-3.175 2.138T12 22"/>
                                             </svg>            
                                         </span>
                                         <div className="flex-1">
-                                            <h4 className="font-semibold text-gray-900 text-base group-hover:text-paan-maroon transition-colors duration-200 nunito-bold">
-                                                Courses starting from $29
-                                            </h4>
+                                            <h4 className="font-semibold text-gray-900 text-base group-hover:text-paan-maroon transition-colors duration-200 nunito-bold">{item}</h4>
                                         </div>
                                     </li>
-                                    
-                                    <li className="flex items-start group cursor-pointer">
-                                        <span className="mr-4 mt-0.5 flex-shrink-0 text-paan-maroon">
-                                            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24">
-                                                <path fill="currentColor" d="m10.6 13.8l-2.15-2.15q-.275-.275-.7-.275t-.7.275t-.275.7t.275.7L9.9 15.9q.3.3.7.3t.7-.3l5.65-5.65q.275-.275.275-.7t-.275-.7t-.7-.275t-.7.275zM12 22q-2.075 0-3.9-.788t-3.175-2.137T2.788 15.9T2 12t.788-3.9t2.137-3.175T8.1 2.788T12 2t3.9.788t3.175 2.137T21.213 8.1T22 12t-.788 3.9t-2.137 3.175t-3.175 2.138T12 22"/>
-                                            </svg> 
-                                        </span>
-                                        <div className="flex-1">
-                                            <h4 className="font-semibold text-gray-900 text-base group-hover:text-paan-maroon transition-colors duration-200 nunito-bold">
-                                                 Learn AI tools, digital media, branding
-                                            </h4>
-                                        </div>
-                                    </li>
-                                    
-                                    <li className="flex items-start group cursor-pointer">
-                                        <span className="mr-4 mt-0.5 flex-shrink-0 text-paan-maroon">
-                                            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24">
-                                                <path fill="currentColor" d="m10.6 13.8l-2.15-2.15q-.275-.275-.7-.275t-.7.275t-.275.7t.275.7L9.9 15.9q.3.3.7.3t.7-.3l5.65-5.65q.275-.275.275-.7t-.275-.7t-.7-.275t-.7.275zM12 22q-2.075 0-3.9-.788t-3.175-2.137T2.788 15.9T2 12t.788-3.9t2.137-3.175T8.1 2.788T12 2t3.9.788t3.175 2.137T21.213 8.1T22 12t-.788 3.9t-2.137 3.175t-3.175 2.138T12 22"/>
-                                            </svg>  
-                                        </span>
-                                        <div className="flex-1">
-                                            <h4 className="font-semibold text-gray-900 text-base group-hover:text-paan-maroon transition-colors duration-200 nunito-bold">
-                                                PAAN Certification recognized continent-wide
-                                            </h4>
-                                        </div>
-                                    </li>
-                                    
-                                    <li className="flex items-start group cursor-pointer">
-                                        <span className="mr-4 mt-0.5 flex-shrink-0 text-paan-maroon">
-                                            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24">
-                                                <path fill="currentColor" d="m10.6 13.8l-2.15-2.15q-.275-.275-.7-.275t-.7.275t-.275.7t.275.7L9.9 15.9q.3.3.7.3t.7-.3l5.65-5.65q.275-.275.275-.7t-.275-.7t-.7-.275t-.7.275zM12 22q-2.075 0-3.9-.788t-3.175-2.137T2.788 15.9T2 12t.788-3.9t2.137-3.175T8.1 2.788T12 2t3.9.788t3.175 2.137T21.213 8.1T22 12t-.788 3.9t-2.137 3.175t-3.175 2.138T12 22"/>
-                                            </svg>  
-                                        </span>
-                                        <div className="flex-1">
-                                            <h4 className="font-semibold text-gray-900 text-base group-hover:text-paan-maroon transition-colors duration-200 nunito-bold">
-                                                Join our Africa-wide freelance hiring network
-                                            </h4>
-                                        </div>
-                                    </li>
-                                </ul>
+                      ))}
+                    </ul>
                             </div>
                             
                             {/* CTA Button */}
@@ -792,58 +625,19 @@ const HomePage = () => {
                             {/* Features List */}
                             <div className="mb-8">
                                 <ul className="space-y-4 nunito-regular">
-                                    <li className="flex items-start group cursor-pointer">
+                      {agencyPerks.map((item, i) => (
+<li key={i} className="flex items-start group cursor-pointer">
                                         <span className="mr-4 mt-0.5 flex-shrink-0 text-paan-yellow">
                                             <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24">
                                                 <path fill="currentColor" d="m10.6 13.8l-2.15-2.15q-.275-.275-.7-.275t-.7.275t-.275.7t.275.7L9.9 15.9q.3.3.7.3t.7-.3l5.65-5.65q.275-.275.275-.7t-.275-.7t-.7-.275t-.7.275zM12 22q-2.075 0-3.9-.788t-3.175-2.137T2.788 15.9T2 12t.788-3.9t2.137-3.175T8.1 2.788T12 2t3.9.788t3.175 2.137T21.213 8.1T22 12t-.788 3.9t-2.137 3.175t-3.175 2.138T12 22"/>
                                             </svg>            
                                         </span>
                                         <div className="flex-1">
-                                            <h4 className="font-semibold text-base group-hover:text-paan-blue transition-colors duration-200 nunito-bold">
-                                                Custom training for agency staff
-                                            </h4>
+                                            <h4 className="font-semibold text-base group-hover:text-paan-blue transition-colors duration-200 nunito-bold">{item}</h4>
                                         </div>
                                     </li>
-                                    
-                                    <li className="flex items-start group cursor-pointer">
-                                        <span className="mr-4 mt-0.5 flex-shrink-0 text-paan-yellow">
-                                            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24">
-                                                <path fill="currentColor" d="m10.6 13.8l-2.15-2.15q-.275-.275-.7-.275t-.7.275t-.275.7t.275.7L9.9 15.9q.3.3.7.3t.7-.3l5.65-5.65q.275-.275.275-.7t-.275-.7t-.7-.275t-.7.275zM12 22q-2.075 0-3.9-.788t-3.175-2.137T2.788 15.9T2 12t.788-3.9t2.137-3.175T8.1 2.788T12 2t3.9.788t3.175 2.137T21.213 8.1T22 12t-.788 3.9t-2.137 3.175t-3.175 2.138T12 22"/>
-                                            </svg> 
-                                        </span>
-                                        <div className="flex-1">
-                                            <h4 className="font-semibold text-base group-hover:text-paan-blue transition-colors duration-200 nunito-bold">
-                                                Improve client service, pitching, execution
-                                            </h4>
-                                        </div>
-                                    </li>
-                                    
-                                    <li className="flex items-start group cursor-pointer">
-                                        <span className="mr-4 mt-0.5 flex-shrink-0 text-paan-yellow">
-                                            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24">
-                                                <path fill="currentColor" d="m10.6 13.8l-2.15-2.15q-.275-.275-.7-.275t-.7.275t-.275.7t.275.7L9.9 15.9q.3.3.7.3t.7-.3l5.65-5.65q.275-.275.275-.7t-.275-.7t-.7-.275t-.7.275zM12 22q-2.075 0-3.9-.788t-3.175-2.137T2.788 15.9T2 12t.788-3.9t2.137-3.175T8.1 2.788T12 2t3.9.788t3.175 2.137T21.213 8.1T22 12t-.788 3.9t-2.137 3.175t-3.175 2.138T12 22"/>
-                                            </svg>  
-                                        </span>
-                                        <div className="flex-1">
-                                            <h4 className="font-semibold text-base group-hover:text-paan-blue transition-colors duration-200 nunito-bold">
-                                                Get prioritized for cross-border campaigns
-                                            </h4>
-                                        </div>
-                                    </li>
-                                    
-                                    <li className="flex items-start group cursor-pointer">
-                                        <span className="mr-4 mt-0.5 flex-shrink-0 text-paan-yellow">
-                                            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24">
-                                                <path fill="currentColor" d="m10.6 13.8l-2.15-2.15q-.275-.275-.7-.275t-.7.275t-.275.7t.275.7L9.9 15.9q.3.3.7.3t.7-.3l5.65-5.65q.275-.275.275-.7t-.275-.7t-.7-.275t-.7.275zM12 22q-2.075 0-3.9-.788t-3.175-2.137T2.788 15.9T2 12t.788-3.9t2.137-3.175T8.1 2.788T12 2t3.9.788t3.175 2.137T21.213 8.1T22 12t-.788 3.9t-2.137 3.175t-3.175 2.138T12 22"/>
-                                            </svg>  
-                                        </span>
-                                        <div className="flex-1">
-                                            <h4 className="font-semibold text-base group-hover:text-paan-blue transition-colors duration-200 nunito-bold">
-                                                Learn from Africa's top independent agencies
-                                            </h4>
-                                        </div>
-                                    </li>
-                                </ul>
+                      ))}
+                    </ul>
                             </div>
                             
                             {/* CTA Button */}
@@ -851,7 +645,7 @@ const HomePage = () => {
                                 <button
                                     className="w-full bg-paan-yellow text-paan-dark-blue px-8 py-3.5 rounded-full font-semibold text-sm transition-all duration-300 hover:shadow-lg hover:scale-[1.02] active:scale-[0.98] focus:outline-none focus:ring-2 focus:ring-blue-600/50 focus:ring-offset-2 nunito-bold"
                                     onClick={() => {
-                                        gtag_report_conversion('https://calendly.com/njue-duncan-growthpad/paan-partners-introduction');
+                                        gtag_report_conversion(bookingLinks.academyPartnersIntro);
                                     }}
                                 >
                                     <span className="flex items-center justify-center gap-2">

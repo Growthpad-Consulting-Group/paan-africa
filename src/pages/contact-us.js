@@ -8,6 +8,7 @@ import { motion } from "framer-motion";
 import ReCAPTCHA from "react-google-recaptcha";
 import { useRouter } from "next/router";
 import { toast } from "react-hot-toast";
+import { socialLinks as siteSocialLinks } from '@/data/site';
 
 
 const contact = () => {
@@ -305,33 +306,8 @@ const contact = () => {
         setIsProfileModalOpen(false);
     };
 
-    // FIXED: Social media links using Lucide React icons
-    const socialLinks = [
-        {
-            href: "https://www.facebook.com/panafricanagencynetwork",
-            icon: "Facebook",
-            label: "Facebook",
-            hoverColor: "#1877F2"
-        },
-        {
-            href: "https://www.linkedin.com/company/pan-african-agency-network",
-            icon: "Linkedin",
-            label: "LinkedIn",
-            hoverColor: "#0077B5"
-        },
-        {
-            href: "https://instagram.com/pan_african_agency_network",
-            icon: "Instagram",
-            label: "Instagram",
-            hoverColor: "#E4405F"
-        },
-        {
-            href: "https://x.com/paan_network",
-            icon: "Twitter",
-            label: "X",
-            hoverColor: "#000000"
-        }
-    ];
+    // Social links live in src/data/site.ts; this page uses the Lucide icon names
+    const socialLinks = siteSocialLinks.map(({ lucideIcon, ...link }) => ({ ...link, icon: lucideIcon }));
 
     return (
         <>

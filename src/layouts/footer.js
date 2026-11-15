@@ -8,6 +8,7 @@ import Link from "next/link";
 import { menuItems } from "../data/menuData";
 import { useState, useEffect, useMemo } from "react";
 import { useAppTranslations } from '../hooks/useTranslations';
+import { socialLinks as siteSocialLinks } from '@/data/site';
 
 const Footer = () => {
   const { t } = useAppTranslations();
@@ -77,32 +78,7 @@ const Footer = () => {
   };
 
   // Social media links with lazy loading consideration
-  const socialLinks = useMemo(() => [
-    {
-      href: "https://www.facebook.com/panafricanagencynetwork",
-      icon: "ic:baseline-facebook",
-      label: "Facebook",
-      hoverColor: "#1877F2"
-    },
-    {
-      href: "https://www.linkedin.com/company/pan-african-agency-network",
-      icon: "mdi:linkedin",
-      label: "LinkedIn",
-      hoverColor: "#0077B5"
-    },
-    {
-      href: "https://instagram.com/pan_african_agency_network",
-      icon: "mingcute:instagram-fill",
-      label: "Instagram",
-      hoverColor: "#E4405F"
-    },
-    {
-      href: "https://x.com/paan_network",
-      icon: "iconoir:x",
-      label: "X",
-      hoverColor: "#000000"
-    }
-  ], []);
+  const socialLinks = siteSocialLinks;
 
   return (
     <section className="bg-[#172840] pt-28 pb-8 text-white">

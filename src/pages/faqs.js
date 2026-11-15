@@ -6,6 +6,7 @@ import { useFixedHeader } from '../../utils/scrollUtils';
 import FAQs from "@/components/FAQs";
 import Link from "next/link";
 import { useAppTranslations } from '../hooks/useTranslations';
+import { bookingLinks } from '@/data/site';
 
 
 const FAQsPage = () => {
@@ -137,7 +138,7 @@ const FAQsPage = () => {
                   {t('faqs.contactSection.scheduleCall')}
                 </p>
                 <Link 
-                  href="https://calendly.com/antony-paan/45min"
+                  href={bookingLinks.faqCall}
                   className="inline-block bg-[#F25849] text-[#172840] px-6 py-3 rounded-full font-semibold text-sm transition-all duration-300 hover:bg-[#6FA1B7] hover:shadow-lg transform hover:-translate-y-0.5 text-center w-full sm:w-auto"
                 >
                   {t('faqs.contactSection.bookCallButton')}

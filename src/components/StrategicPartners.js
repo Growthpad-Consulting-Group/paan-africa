@@ -3,33 +3,11 @@ import Image from 'next/image';
 import { Icon } from '@iconify/react';
 import { useAppTranslations } from '../hooks/useTranslations';
 import styles from './StrategicPartnersMarquee.module.css';
+import { strategicPartners as partners } from '@/data/partners';
 
 const StrategicPartners = () => {
   const { t } = useAppTranslations();
 
-  const partners = [
-    {
-      name: "AIA",
-      logo: "/assets/images/partners/aia.svg",
-      alt: "AIA Logo",
-      hasWhiteLogo: true
-    },
-    {
-      name: "IAN",
-      logo: "/assets/images/partners/IAN.png",
-      alt: "IAN Logo"
-    },
-    {
-      name: "ICCO",
-      logo: "/assets/images/partners/ICCO.png",
-      alt: "ICCO Logo"
-    },
-    {
-      name: "PRCA",
-      logo: "/assets/images/partners/PRCA.png",
-      alt: "PRCA Logo"
-    }
-  ];
 
   // Create a single array with logos for rendering
   const renderItems = partners.map((partner, index) => (

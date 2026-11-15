@@ -8,32 +8,11 @@ import { Navigation, EffectCoverflow } from 'swiper/modules';
 import 'swiper/css';
 import 'swiper/css/navigation';
 import 'swiper/css/effect-coverflow';
+import { clientBenefitCards as cards } from '@/data/clients';
 
 export default function ClientsSlider({ openModal }) {
   const swiperRef = useRef(null);
 
-  const cards = [
-    {
-      description:
-        "Certified agencies and vetted freelancers",
-      image: "/assets/images/client-slider-img-1.webp",
-    },
-    {
-      description:
-        "Strategic coordination across borders",
-      image: "/assets/images/client-slider-img-2.webp",
-    },
-    {
-      description:
-        "A centralized support team to manage rollout",
-      image: "/assets/images/client-slider-img-3.webp",
-    },
-    {
-      description:
-        "Local insight from creatives on the ground",
-      image: "/assets/images/client-slider-img-4.webp",
-    },
-  ];
 
   return (
     <>

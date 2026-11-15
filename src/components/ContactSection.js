@@ -2,6 +2,7 @@ import { Icon } from "@iconify/react";
 import Link from "next/link";
 import ContactForm from "./ContactForm";
 import { useAppTranslations } from '../hooks/useTranslations';
+import { contactEmail } from '@/data/site';
 
 export default function ContactSection() {
   const { t } = useAppTranslations();
@@ -22,7 +23,7 @@ export default function ContactSection() {
             <h2 className="text-lg font-medium mb-4">{t('homepage.contact.directContact')}</h2>
             <div className="flex items-center gap-2 pb-4">
               <Link
-                href="mailto:secretariat@paan.africa"
+                href={`mailto:${contactEmail}`}
                 className="flex items-center gap-2 transform translate-y-[-5px] hover:translate-y-[-5px] transition-transform duration-200"
               >
                 <Icon

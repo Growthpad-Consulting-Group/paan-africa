@@ -2,12 +2,8 @@
 
 import { useCallback, useEffect, useState } from "react";
 import { Icon } from "@iconify/react";
+import { networkVoices as VIDEOS } from "@/data/testimonials";
 
-const VIDEOS = [
-  { id: "hVyO0Rtzql8", title: "PAAN Network Voice 1" },
-  { id: "efXMBeAW6Tc", title: "PAAN Network Voice 2" },
-  { id: "zJd1akSivAw", title: "PAAN Network Voice 3" },
-];
 
 const VIDEOS_PER_VIEW = 3;
 

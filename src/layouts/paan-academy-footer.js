@@ -4,6 +4,7 @@
 import { menuItems } from "../data/menuData";
 import { useState, useEffect } from "react";
 import Image from "next/image";
+import { contactEmail } from '@/data/site';
 
 const Footer = () => {
   const currentYear = new Date().getFullYear();
@@ -67,7 +68,7 @@ const Footer = () => {
           <div className="flex flex-col gap-4">
             <h3 className="text-lg font-semibold text-paan-dark-blue mb-2">Contact Us</h3>
             <div className="space-y-2 text-paan-dark-blue">
-              <p className="text-sm">Email: secretariat@paan.africa</p>
+              <p className="text-sm">{`Email: ${contactEmail}`}</p>
               <p className="text-sm">Phone: +254701 850 850</p>
               <p className="text-sm">Address: The Westwood Office, 6th Floor 6A, Comply Guide Advisory, Westlands, Nairobi, Kenya</p>
             </div>
