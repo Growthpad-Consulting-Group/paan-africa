@@ -10,11 +10,13 @@ import CareerApplicationModal from "@/components/CareerApplicationModal";
 import { useAppTranslations } from "../hooks/useTranslations";
 import { useCountUp } from "../hooks/useCountUp";
 import enMessages from "../messages/en.json";
-import { PortableText } from "@portabletext/react";
-import { getOpenPositions } from "@/lib/careerService";
+import { PortableText, type PortableTextComponents } from "@portabletext/react";
+import type { GetStaticPropsResult } from "next";
+import { getOpenPositions, type JobPosting } from "@/lib/careerService";
+import { useSectionObserver } from '@/hooks/useSectionObserver';
 
 // How the long role description (Portable Text) is styled; matches the previous hand-written HTML.
-const roleDescriptionComponents = {
+const roleDescriptionComponents: PortableTextComponents = {
   block: {
     normal: ({ children }) => <p className="text-gray-600 mb-4">{children}</p>,
     h3: ({ children }) => <h4 className="font-semibold text-[#172840] mb-3 mt-4 first:mt-0">{children}</h4>,
@@ -26,15 +28,17 @@ const roleDescriptionComponents = {
   },
 };
 
-const CareersPage = ({ pageH1 = enMessages.careers.hero.title, pageSubtitle = enMessages.careers.hero.subtitle, positions = [] }) => {
+type Props = { pageH1?: string; pageSubtitle?: string; positions?: JobPosting[] };
+
+const CareersPage = ({ pageH1 = enMessages.careers.hero.title, pageSubtitle = enMessages.careers.hero.subtitle, positions = [] }: Props) => {
   const { t } = useAppTranslations();
   const [isClient, setIsClient] = useState(false);
   const sectionRefs = {
-    home: useRef(null),
-    openPositions: useRef(null),
-    whyJoinUs: useRef(null),
-    culture: useRef(null),
-    application: useRef(null),
+    home: useRef<HTMLDivElement>(null),
+    openPositions: useRef<HTMLDivElement>(null),
+    whyJoinUs: useRef<HTMLDivElement>(null),
+    culture: useRef<HTMLDivElement>(null),
+    application: useRef<HTMLDivElement>(null),
   };
 
   const [isFixed, setIsFixed] = useState(false);
@@ -55,43 +59,13 @@ const CareersPage = ({ pageH1 = enMessages.careers.hero.title, pageSubtitle = en
   }, []);
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [modalPosition, setModalPosition] = useState('');
-  const [expandedJob, setExpandedJob] = useState(null);
+  const [expandedJob, setExpandedJob] = useState<number | null>(null);
 
-  // Restore IntersectionObserver for section transitions
-  useEffect(() => {
-    const observerOptions = {
-      root: null,
-      rootMargin: "0px",
-      threshold: 0.1,
-    };
 
-    const observerCallback = (entries) => {
-      entries.forEach((entry) => {
-        if (entry.isIntersecting) {
-          entry.target.classList.add("section-visible");
-        }
-      });
-    };
-
-    const observer = new IntersectionObserver(observerCallback, observerOptions);
-
-    Object.values(sectionRefs).forEach((ref) => {
-      if (ref.current) {
-        observer.observe(ref.current);
-      }
-    });
-
-    return () => {
-      Object.values(sectionRefs).forEach((ref) => {
-        if (ref.current) {
-          observer.unobserve(ref.current);
-        }
-      });
-    };
-  }, []);
+  useSectionObserver(sectionRefs);
 
   // Called with a position slug from a card's Apply button (preselects it), or with a click event from the generic buttons
-  const openModal = (slug) => {
+  const openModal = (slug?: unknown) => {
     setModalPosition(typeof slug === 'string' ? slug : '');
     setIsModalOpen(true);
   };
@@ -134,13 +108,13 @@ const CareersPage = ({ pageH1 = enMessages.careers.hero.title, pageSubtitle = en
               
               <div className="flex flex-col sm:flex-row gap-3 sm:gap-4 w-full sm:w-auto">
                 <button 
-                  onClick={() => document.getElementById('open-positions').scrollIntoView({ behavior: 'smooth' })}
+                  onClick={() => document.getElementById('open-positions')?.scrollIntoView({ behavior: 'smooth' })}
                   className="bg-[#F25849] border border-[#F25849] text-white py-3 sm:py-4 px-4 sm:px-6 md:px-8 lg:px-10 rounded-full hover:bg-[#D6473C] transition-all duration-300 transform ease-in-out hover:translate-y-[-2px] font-semibold text-sm sm:text-base w-full sm:w-auto min-h-[44px]"
                 >
                   {t('careers.hero.viewPositions')}
                 </button>
                 <button 
-                  onClick={() => document.getElementById('why-join-us').scrollIntoView({ behavior: 'smooth' })}
+                  onClick={() => document.getElementById('why-join-us')?.scrollIntoView({ behavior: 'smooth' })}
                   className="bg-transparent border border-white text-white py-3 sm:py-4 px-4 sm:px-6 md:px-8 lg:px-10 rounded-full hover:bg-white hover:text-[#172840] transition-all duration-300 transform ease-in-out hover:translate-y-[-2px] font-semibold text-sm sm:text-base w-full sm:w-auto min-h-[44px]"
                 >
                   {t('careers.hero.learnAboutUs')}
@@ -275,7 +249,7 @@ const CareersPage = ({ pageH1 = enMessages.careers.hero.title, pageSubtitle = en
   // Open Positions component
   const OpenPositions = () => {
     // Positions come from Sanity (Job Posting documents); see getStaticProps below.
-    const typeLabel = (position) => (position.employmentType === 'Full-time' ? t('careers.openPositions.fullTime') : position.employmentType);
+    const typeLabel = (position: JobPosting) => (position.employmentType === 'Full-time' ? t('careers.openPositions.fullTime') : position.employmentType);
     return (
       <section className="py-16 sm:py-20 bg-white" id="open-positions" ref={sectionRefs.openPositions}>
         <div className="max-w-6xl mx-auto px-4 sm:px-6">
@@ -686,8 +660,8 @@ const CareersPage = ({ pageH1 = enMessages.careers.hero.title, pageSubtitle = en
   );
 };
 
-export async function getStaticProps() {
-  let positions = [];
+export async function getStaticProps(): Promise<GetStaticPropsResult<Props>> {
+  let positions: JobPosting[] = [];
   try {
     positions = await getOpenPositions();
   } catch (error) {

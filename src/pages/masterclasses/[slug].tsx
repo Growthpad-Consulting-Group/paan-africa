@@ -6,9 +6,24 @@ import Footer from "@/layouts/footer";
 import PaystackScript from "@/components/PaystackScript";
 import jsPDF from 'jspdf';
 import { validateMasterclassPromoCode } from "@/lib/masterclassPromoCodeService";
-import { getMasterclassBySlug, getMasterclassSlugById, getMasterclassSlugs } from "@/lib/masterclassService";
+import type { GetStaticPaths, GetStaticProps } from "next";
+import { getMasterclassBySlug, getMasterclassSlugById, getMasterclassSlugs, type Masterclass } from "@/lib/masterclassService";
 
-const MasterclassDetailPage = ({ masterclass }) => {
+type AppliedPromo = {
+  id: string;
+  code: string;
+  description?: string | null;
+  discountType: string;
+  discountValue: number;
+  /** Amount taken off, already capped at the base price */
+  discountAmount: number;
+  minimumAmount?: number | null;
+  maximumDiscount?: number | null;
+};
+
+type Props = { masterclass: Masterclass };
+
+const MasterclassDetailPage = ({ masterclass }: Props) => {
   const [selectedPricing, setSelectedPricing] = useState('member');
   const [isLoading, setIsLoading] = useState(false);
   const [paystackReady, setPaystackReady] = useState(false);
@@ -21,7 +36,7 @@ const MasterclassDetailPage = ({ masterclass }) => {
   });
   const [promoCode, setPromoCode] = useState('');
   const [promoCodeError, setPromoCodeError] = useState('');
-  const [appliedPromoCode, setAppliedPromoCode] = useState(null);
+  const [appliedPromoCode, setAppliedPromoCode] = useState<AppliedPromo | null>(null);
   const [isValidatingPromoCode, setIsValidatingPromoCode] = useState(false);
 
   // Check if Paystack is ready
@@ -172,7 +187,7 @@ const MasterclassDetailPage = ({ masterclass }) => {
     setIsValidatingPromoCode(false);
 
     if (validation.valid) {
-      setAppliedPromoCode(validation.promoCode);
+      setAppliedPromoCode(validation.promoCode ?? null);
       setPromoCodeError('');
     } else {
       setAppliedPromoCode(null);
@@ -270,7 +285,7 @@ const MasterclassDetailPage = ({ masterclass }) => {
           }
         ]
       },
-      callback: function(response) {
+      callback: function(response: { status: string; reference: string }) {
         if (response.status === 'success') {
           // Send masterclass purchase data to backend
           fetch('/api/send-masterclass-purchase', {
@@ -527,13 +542,13 @@ const MasterclassDetailPage = ({ masterclass }) => {
         <meta property="og:locale" content="en_US" />
 
         {/* Course-specific Open Graph tags */}
-        <meta property="course:instructor" content={instructorName} />
-        <meta property="course:instructor_title" content={instructorTitle} />
-        <meta property="course:date" content={masterclassDate} />
-        <meta property="course:time" content={masterclassTime} />
-        <meta property="course:format" content={masterclassFormat} />
-        <meta property="course:level" content={masterclass.level} />
-        <meta property="course:category" content={masterclass.category} />
+        <meta property="course:instructor" content={instructorName ?? undefined} />
+        <meta property="course:instructor_title" content={instructorTitle ?? undefined} />
+        <meta property="course:date" content={masterclassDate ?? undefined} />
+        <meta property="course:time" content={masterclassTime ?? undefined} />
+        <meta property="course:format" content={masterclassFormat ?? undefined} />
+        <meta property="course:level" content={masterclass.level ?? undefined} />
+        <meta property="course:category" content={masterclass.category ?? undefined} />
 
         {/* Twitter Card Meta Tags */}
         <meta name="twitter:card" content="summary_large_image" />
@@ -557,9 +572,9 @@ const MasterclassDetailPage = ({ masterclass }) => {
         <meta name="currency" content={currency} />
 
         {/* Event Information */}
-        <meta name="event:date" content={masterclassDate} />
-        <meta name="event:time" content={masterclassTime} />
-        <meta name="event:format" content={masterclassFormat} />
+        <meta name="event:date" content={masterclassDate ?? undefined} />
+        <meta name="event:time" content={masterclassTime ?? undefined} />
+        <meta name="event:format" content={masterclassFormat ?? undefined} />
 
         {/* Structured Data */}
         <script
@@ -678,7 +693,7 @@ const MasterclassDetailPage = ({ masterclass }) => {
                 <div className="bg-white rounded-xl shadow-lg p-6 lg:p-8">
                   <h2 className="text-2xl font-bold text-slate-900 mb-6">What You'll Learn</h2>
                   <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
-                    {masterclass.learningOutcomes.map((outcome, index) => (
+                    {masterclass.learningOutcomes?.map((outcome: string, index: number) => (
                       <div key={index} className="flex items-start gap-3 p-3 bg-gray-50 rounded-lg">
                         <Icon icon="mdi:check-circle" className="text-red-500 w-5 h-5 mt-0.5 flex-shrink-0" />
                         <span className="text-gray-700 text-sm">{outcome}</span>
@@ -691,7 +706,7 @@ const MasterclassDetailPage = ({ masterclass }) => {
                 <div className="bg-white rounded-xl shadow-lg p-6 lg:p-8">
                   <h2 className="text-2xl font-bold text-slate-900 mb-6">Why Attend?</h2>
                   <div className="space-y-3">
-                    {masterclass.whyAttend.map((reason, index) => (
+                    {masterclass.whyAttend?.map((reason: string, index: number) => (
                       <div key={index} className="flex items-start gap-3 p-4 bg-gradient-to-r from-red-50 to-orange-50 rounded-lg border-l-4 border-red-500">
                         <Icon icon="mdi:star" className="text-red-500 w-5 h-5 mt-0.5 flex-shrink-0" />
                         <p className="text-gray-700 text-sm leading-relaxed">{reason}</p>
@@ -705,7 +720,7 @@ const MasterclassDetailPage = ({ masterclass }) => {
                   <div className="bg-white rounded-xl shadow-lg p-6 lg:p-8">
                     <h2 className="text-2xl font-bold text-slate-900 mb-6">Course Objectives</h2>
                     <div className="space-y-3">
-                      {masterclass.courseObjectives.map((objective, index) => (
+                      {masterclass.courseObjectives.map((objective: string, index: number) => (
                         <div key={index} className="flex items-start gap-3 p-4 bg-gradient-to-r from-blue-50 to-indigo-50 rounded-lg border-l-4 border-blue-500">
                           <Icon icon="mdi:target" className="text-blue-500 w-5 h-5 mt-0.5 flex-shrink-0" />
                           <p className="text-gray-700 text-sm leading-relaxed">{objective}</p>
@@ -719,7 +734,7 @@ const MasterclassDetailPage = ({ masterclass }) => {
                 <div className="bg-white rounded-xl shadow-lg p-6 lg:p-8">
                   <h2 className="text-2xl font-bold text-slate-900 mb-6">Who Should Attend?</h2>
                   <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
-                    {masterclass.whoShouldAttend.map((attendee, index) => (
+                    {masterclass.whoShouldAttend?.map((attendee: string, index: number) => (
                       <div key={index} className="flex items-center gap-3 p-3 bg-cyan-50 rounded-lg">
                         <Icon icon="mdi:account-tie" className="text-cyan-600 w-5 h-5 flex-shrink-0" />
                         <span className="text-gray-700 font-medium text-sm">{attendee}</span>
@@ -1019,7 +1034,7 @@ const MasterclassDetailPage = ({ masterclass }) => {
                         Bonus Benefits:
                       </h4>
                       <div className="space-y-1">
-                        {masterclass.benefits.map((benefit, index) => (
+                        {masterclass.benefits.map((benefit: string, index: number) => (
                           <div key={index} className="flex items-center gap-2 text-green-700 text-sm">
                             <Icon icon="mdi:check-circle" className="text-green-500 w-4 h-4 flex-shrink-0" />
                             <span>{benefit}</span>
@@ -1045,8 +1060,9 @@ const MasterclassDetailPage = ({ masterclass }) => {
                           alt={masterclass.instructor.name}
                           className="w-full h-full object-cover"
                           onError={(e) => {
-                            e.target.style.display = 'none';
-                            e.target.nextSibling.style.display = 'flex';
+                            const img = e.target as HTMLImageElement;
+                            img.style.display = 'none';
+                            (img.nextSibling as HTMLElement).style.display = 'flex';
                           }}
                         />
                       ) : null}
@@ -1063,7 +1079,7 @@ const MasterclassDetailPage = ({ masterclass }) => {
                   <div>
                     <h5 className="font-semibold text-slate-900 mb-2 text-sm">Expertise:</h5>
                     <div className="flex flex-wrap gap-2">
-                      {masterclass.instructor.expertise.map((skill, index) => (
+                      {masterclass.instructor.expertise.map((skill: string, index: number) => (
                         <span key={index} className="bg-red-500 text-white px-2 py-1 rounded-full text-xs">
                           {skill}
                         </span>
@@ -1137,13 +1153,13 @@ const MasterclassDetailPage = ({ masterclass }) => {
   );
 };
 
-export async function getStaticPaths() {
+export const getStaticPaths: GetStaticPaths = async () => {
   const slugs = await getMasterclassSlugs();
   return { paths: slugs.map((slug) => ({ params: { slug } })), fallback: 'blocking' };
-}
+};
 
-export async function getStaticProps({ params }) {
-  const { slug } = params;
+export const getStaticProps: GetStaticProps<Props, { slug: string }> = async ({ params }) => {
+  const { slug } = params!;
   // Old links were /masterclasses/<number>: permanently redirect them to the slug URL.
   if (/^\d+$/.test(slug)) {
     const target = await getMasterclassSlugById(Number(slug));
@@ -1152,6 +1168,6 @@ export async function getStaticProps({ params }) {
   const masterclass = await getMasterclassBySlug(slug);
   if (!masterclass) return { notFound: true, revalidate: 60 };
   return { props: { masterclass }, revalidate: 3600 };
-}
+};
 
 export default MasterclassDetailPage;

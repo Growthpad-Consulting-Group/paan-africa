@@ -14,4 +14,7 @@ declare global {
     dataLayer?: any[];
     fbq?: (...args: any[]) => void;
   }
+
+  /** Google Ads conversion helper defined by the inline script in pages/_app.js. Redirects to `url` after reporting. */
+  function gtag_report_conversion(url?: string): boolean;
 }

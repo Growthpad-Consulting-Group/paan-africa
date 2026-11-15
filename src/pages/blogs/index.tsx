@@ -8,10 +8,15 @@ import Footer from '@/layouts/footer';
 import { toast } from 'react-hot-toast';
 import ScrollToTop from "@/components/ScrollToTop";
 import SEO from '@/components/SEO';
-import { getAllPosts } from '@/lib/blogService';
+import type { GetStaticPropsResult } from 'next';
+import { getAllPosts, type BlogListItem } from '@/lib/blogService';
+import { errorMessage } from '@/utils/errors';
 import Pagination from '@/components/common/Pagination';
 
-export async function getStaticProps() {
+type BlogsData = { featuredPost: BlogListItem | null; regularPosts: BlogListItem[]; blogs: BlogListItem[]; error?: string };
+type Props = { initialBlogs: BlogsData };
+
+export async function getStaticProps(): Promise<GetStaticPropsResult<Props>> {
   try {
     const blogs = await getAllPosts();
     const featuredPost = blogs.find((b) => b.featured) || null;
@@ -28,13 +33,13 @@ export async function getStaticProps() {
   } catch (error) {
     console.error('Error loading blogs from Sanity:', error);
     return {
-      props: { initialBlogs: { featuredPost: null, regularPosts: [], blogs: [], error: error.message } },
+      props: { initialBlogs: { featuredPost: null, regularPosts: [], blogs: [], error: errorMessage(error) } },
       revalidate: 60,
     };
   }
 }
 
-const Blogs = ({ initialBlogs }) => {
+const Blogs = ({ initialBlogs }: Props) => {
   const router = useRouter();
   const { category, search, sort } = router.query;
   const { featuredPost, regularPosts, error } = initialBlogs;
@@ -57,10 +62,10 @@ const Blogs = ({ initialBlogs }) => {
   }, [loading, error, featuredPost, regularPosts, category, search, sort, router.isReady]);
 
   // State management
-  const [selectedCategory, setSelectedCategory] = useState(category || '');
-  const [searchQuery, setSearchQuery] = useState(search || '');
-  const [sortBy, setSortBy] = useState(sort || 'newest');
-  const [availableCategories, setAvailableCategories] = useState([]);
+  const [selectedCategory, setSelectedCategory] = useState(typeof category === 'string' ? category : '');
+  const [searchQuery, setSearchQuery] = useState(typeof search === 'string' ? search : '');
+  const [sortBy, setSortBy] = useState(typeof sort === 'string' ? sort : 'newest');
+  const [availableCategories, setAvailableCategories] = useState<string[]>([]);
   const [isSearchFocused, setIsSearchFocused] = useState(false);
   const [subscribeForm, setSubscribeForm] = useState({ name: '', email: '' });
   const [subscribeStatus, setSubscribeStatus] = useState({ loading: false, message: '', error: false });
@@ -81,7 +86,7 @@ const Blogs = ({ initialBlogs }) => {
 
   // Update URL when filters change
   useEffect(() => {
-    const query = {};
+    const query: Record<string, string> = {};
     if (selectedCategory) query.category = selectedCategory;
     if (searchQuery) query.search = searchQuery;
     if (sortBy !== 'newest') query.sort = sortBy;
@@ -116,12 +121,12 @@ const Blogs = ({ initialBlogs }) => {
     posts.sort((a, b) => {
       switch (sortBy) {
         case 'oldest':
-          return new Date(a.created_at) - new Date(b.created_at);
+          return new Date(a.created_at).getTime() - new Date(b.created_at).getTime();
         case 'readTime':
           return parseInt(a.readTime) - parseInt(b.readTime);
         case 'newest':
         default:
-          return new Date(b.created_at) - new Date(a.created_at);
+          return new Date(b.created_at).getTime() - new Date(a.created_at).getTime();
       }
     });
     
@@ -155,11 +160,11 @@ const Blogs = ({ initialBlogs }) => {
     return filteredAndSortedPosts.slice(startIndex, endIndex);
   }, [filteredAndSortedPosts, currentPage, postsPerPage]);
 
-  const handlePageChange = (page) => {
+  const handlePageChange = (page: number) => {
     setCurrentPage(page);
   };
 
-  const handleSubscribe = async (e) => {
+  const handleSubscribe = async (e: React.FormEvent) => {
     e.preventDefault();
     setSubscribeStatus({ loading: true, message: '', error: false });
 
@@ -190,12 +195,12 @@ const Blogs = ({ initialBlogs }) => {
     } catch (error) {
       setSubscribeStatus({
         loading: false,
-        message: error.message || 'Failed to subscribe. Please try again.',
+        message: errorMessage(error, '') || 'Failed to subscribe. Please try again.',
         error: true
       });
       
       // Show error toast
-      toast.error(error.message || 'Failed to subscribe. Please try again.');
+      toast.error(errorMessage(error, '') || 'Failed to subscribe. Please try again.');
     }
   };
 

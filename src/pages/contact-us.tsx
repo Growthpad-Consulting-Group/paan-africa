@@ -9,26 +9,27 @@ import ReCAPTCHA from "react-google-recaptcha";
 import { useRouter } from "next/router";
 import { toast } from "react-hot-toast";
 import { socialLinks as siteSocialLinks } from '@/data/site';
+import { useSectionObserver } from '@/hooks/useSectionObserver';
 
 
 const contact = () => {
     const router = useRouter();
-    const recaptchaRef = useRef(null);
+    const recaptchaRef = useRef<ReCAPTCHA>(null);
     const sectionRefs = {
-        home: useRef(null),
-        aboutUs: useRef(null),
-        ourMission: useRef(null),
-        whyJoinUs: useRef(null),
-        membership: useRef(null),
-        services: useRef(null),
-        events: useRef(null),
-        contactUs: useRef(null),
+        home: useRef<HTMLDivElement>(null),
+        aboutUs: useRef<HTMLDivElement>(null),
+        ourMission: useRef<HTMLDivElement>(null),
+        whyJoinUs: useRef<HTMLDivElement>(null),
+        membership: useRef<HTMLDivElement>(null),
+        services: useRef<HTMLDivElement>(null),
+        events: useRef<HTMLDivElement>(null),
+        contactUs: useRef<HTMLDivElement>(null),
     };
 
     const [isVideoPlaying, setIsVideoPlaying] = useState(false);
-    const videoRef = useRef(null);
-    const [errors, setErrors] = useState({});
-    const [recaptchaToken, setRecaptchaToken] = useState(null);
+    const videoRef = useRef<HTMLVideoElement>(null);
+    const [errors, setErrors] = useState<Record<string, string>>({});
+    const [recaptchaToken, setRecaptchaToken] = useState<string | null>(null);
     
     // Form state management
     const [formData, setFormData] = useState({
@@ -46,7 +47,7 @@ const contact = () => {
     // FIXED: Add missing state variables
     const [isModalOpen, setIsModalOpen] = useState(false);
     const [currentSlide, setCurrentSlide] = useState(0);
-    const [selectedAmbassador, setSelectedAmbassador] = useState(null);
+    const [selectedAmbassador, setSelectedAmbassador] = useState<unknown>(null);
     const [isProfileModalOpen, setIsProfileModalOpen] = useState(false);
 
     // Check if reCAPTCHA site key is available
@@ -58,7 +59,7 @@ const contact = () => {
     }
 
     // Handle reCAPTCHA change
-    const handleRecaptchaChange = (token) => {
+    const handleRecaptchaChange = (token: string | null) => {
         setRecaptchaToken(token);
         setErrors((prevErrors) => ({
             ...prevErrors,
@@ -67,7 +68,7 @@ const contact = () => {
     };
 
     // Handle input changes
-    const handleInputChange = (e) => {
+    const handleInputChange = (e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement | HTMLTextAreaElement>) => {
         const { name, value } = e.target;
         setFormData(prev => ({
             ...prev,
@@ -84,7 +85,7 @@ const contact = () => {
 
     // Form validation
     const validateForm = () => {
-        const newErrors = {};
+        const newErrors: Record<string, string> = {};
         
         // Validate first name
         if (!formData.firstName.trim()) {
@@ -135,7 +136,7 @@ const contact = () => {
     };
 
     // Handle form submission
-    const handleSubmit = async (e) => {
+    const handleSubmit = async (e: React.FormEvent) => {
         e.preventDefault();
         
         // Validate form
@@ -234,38 +235,8 @@ const contact = () => {
         }
     };
 
-    // Restore IntersectionObserver for section transitions
-    useEffect(() => {
-        const observerOptions = {
-            root: null,
-            rootMargin: "0px",
-            threshold: 0.1,
-        };
 
-        const observerCallback = (entries) => {
-            entries.forEach((entry) => {
-                if (entry.isIntersecting) {
-                    entry.target.classList.add("section-visible");
-                }
-            });
-        };
-
-        const observer = new IntersectionObserver(observerCallback, observerOptions);
-
-        Object.values(sectionRefs).forEach((ref) => {
-            if (ref.current) {
-                observer.observe(ref.current);
-            }
-        });
-
-        return () => {
-            Object.values(sectionRefs).forEach((ref) => {
-                if (ref.current) {
-                    observer.unobserve(ref.current);
-                }
-            });
-        };
-    }, []);
+  useSectionObserver(sectionRefs);
 
     const openModal = () => setIsModalOpen(true);
     const closeModal = () => setIsModalOpen(false);
@@ -296,7 +267,7 @@ const contact = () => {
     };
 
     // Profile modal functions
-    const openProfileModal = (ambassador) => {
+    const openProfileModal = (ambassador: unknown) => {
         setSelectedAmbassador(ambassador);
         setIsProfileModalOpen(true);
     };
@@ -484,7 +455,7 @@ const contact = () => {
                                         <textarea
                                             id="message"
                                             name="message"
-                                            rows="4"
+                                            rows={4}
                                             value={formData.message}
                                             onChange={handleInputChange}
                                             disabled={isSubmitting}
@@ -502,7 +473,7 @@ const contact = () => {
                                     <div className="flex flex-col items-center">
                                         <ReCAPTCHA
                                             ref={recaptchaRef}
-                                            sitekey={recaptchaSiteKey}
+                                            sitekey={recaptchaSiteKey as string}
                                             onChange={handleRecaptchaChange}
                                         />
                                         {errors.recaptcha && (
@@ -672,7 +643,7 @@ const contact = () => {
 };
 
 // FIXED: Hero component to accept props
-const Hero = ({ openModal }) => {
+const Hero = ({ openModal }: { openModal: () => void }) => {
     return (
         <div
             className="relative h-screen w-full bg-gray-900 overflow-visible" 

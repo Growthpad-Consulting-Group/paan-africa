@@ -4,8 +4,18 @@ import { toast } from "react-hot-toast";
 import { Icon } from "@iconify/react";
 import ReCAPTCHA from "react-google-recaptcha";
 import CommentCount from './CommentCount';
+import { errorMessage } from '@/utils/errors';
+import type { BlogComment } from '@/hooks/useBlogComments';
 
-const BlogComments = ({ blogId, comments, commentsLoading, commentsError, onCommentAdded }) => {
+type Props = {
+  blogId: number;
+  comments: BlogComment[];
+  commentsLoading?: boolean;
+  commentsError?: string | null;
+  onCommentAdded?: () => void;
+};
+
+const BlogComments = ({ blogId, comments, commentsLoading, commentsError, onCommentAdded }: Props) => {
   const { addComment, fetchComments } = useBlogComments();
   const [formData, setFormData] = useState({
     name: "",
@@ -13,14 +23,14 @@ const BlogComments = ({ blogId, comments, commentsLoading, commentsError, onComm
     content: "",
   });
   const [isSubmitting, setIsSubmitting] = useState(false);
-  const [focusedField, setFocusedField] = useState(null);
+  const [focusedField, setFocusedField] = useState<string | null>(null);
   const [formErrors, setFormErrors] = useState({
     name: false,
     email: false,
     content: false,
     captcha: false,
   });
-  const recaptchaRef = useRef(null);
+  const recaptchaRef = useRef<ReCAPTCHA>(null);
 
  
 
@@ -37,7 +47,7 @@ const BlogComments = ({ blogId, comments, commentsLoading, commentsError, onComm
     return !Object.values(errors).some((error) => error);
   };
 
-  const handleSubmit = async (e) => {
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
 
     if (!validateForm()) {
@@ -57,7 +67,7 @@ const BlogComments = ({ blogId, comments, commentsLoading, commentsError, onComm
         name: formData.name,
         email: formData.email,
         content: formData.content,
-        captchaToken: recaptchaRef.current.getValue(),
+        captchaToken: recaptchaRef.current?.getValue(),
       });
 
       if (result.success) {
@@ -73,7 +83,7 @@ const BlogComments = ({ blogId, comments, commentsLoading, commentsError, onComm
       }
     } catch (error) {
       toast.error(
-        error.message || "Failed to submit comment. Please try again."
+        errorMessage(error, "") || "Failed to submit comment. Please try again."
       );
     } finally {
       setIsSubmitting(false);
@@ -241,7 +251,7 @@ const BlogComments = ({ blogId, comments, commentsLoading, commentsError, onComm
                         content: !formData.content.trim(),
                       }));
                     }}
-                    rows="4"
+                    rows={4}
                     className={`w-full px-4 py-3 rounded-xl border-2 bg-white/50 backdrop-blur-sm resize-none transition-all duration-300 ${
                       focusedField === "comment"
                         ? "border-[#F25849] ring-4 ring-red-50 shadow-lg"
@@ -273,7 +283,7 @@ const BlogComments = ({ blogId, comments, commentsLoading, commentsError, onComm
                 <div className="mb-4 sm:mb-0 sm:flex-1">
                   <ReCAPTCHA
                     ref={recaptchaRef}
-                    sitekey={process.env.NEXT_PUBLIC_RECAPTCHA_SITE_KEY}
+                    sitekey={process.env.NEXT_PUBLIC_RECAPTCHA_SITE_KEY as string}
                     onChange={() =>
                       setFormErrors((prev) => ({ ...prev, captcha: false }))
                     }

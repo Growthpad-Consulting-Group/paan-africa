@@ -19,15 +19,16 @@ import AgenciesMarquee from "@/components/AgenciesMarquee";
 import VoicesFromNetwork from "@/components/VoicesFromNetwork";
 import AgencyLogosGrid from "@/components/AgencyLogosGrid";
 import AgencyLogosMarquee from "@/components/AgencyLogosMarquee";
-import { getAgencyLogos } from "@/lib/agencyService";
+import { getAgencyLogos, type AgencyLogo } from "@/lib/agencyService";
 import ScrollToTop from "@/components/ScrollToTop";
 import ConnectingDots from "@/components/ConnectingDots";
 import ProgramCard from "@/components/ProgramCard";
 import StrategicPartners from "@/components/StrategicPartners";
 import CookieConsentBanner from "@/components/CookieConsentBanner";
+import { useConnectingDots } from '@/hooks/useConnectingDots';
 
 // Add PasscodeCopy component definition before HomePage
-function PasscodeCopy({ passcode }) {
+function PasscodeCopy({ passcode }: { passcode: string }) {
   const [copied, setCopied] = useState(false);
   const { t } = useAppTranslations();
   
@@ -56,7 +57,7 @@ function PasscodeCopy({ passcode }) {
   );
 }
 
-const HomePage = ({ agencyLogos = [] }) => {
+const HomePage = ({ agencyLogos = [] }: { agencyLogos?: AgencyLogo[] }) => {
   const { t } = useAppTranslations();
   
   const sectionRefs = {
@@ -72,12 +73,12 @@ const HomePage = ({ agencyLogos = [] }) => {
 
   const isFixed = useFixedHeader();
   const [isModalOpen, setIsModalOpen] = useState(false);
-  const canvasRef = useRef(null);
+  const canvasRef = useRef<HTMLCanvasElement>(null);
 
   // Video controls: refs and playing state
-  const videoRefs = useRef([]);
-  const [isPlayingByIndex, setIsPlayingByIndex] = useState({});
-  const togglePlay = (index) => {
+  const videoRefs = useRef<(HTMLVideoElement | null)[]>([]);
+  const [isPlayingByIndex, setIsPlayingByIndex] = useState<Record<number, boolean>>({});
+  const togglePlay = (index: number) => {
     const el = videoRefs.current[index];
     if (!el) return;
     if (el.paused) {
@@ -93,160 +94,8 @@ const HomePage = ({ agencyLogos = [] }) => {
   const closeModal = () => setIsModalOpen(false);
 
 
-  // Remove IntersectionObserver effect (lines 70-100)
-  // useEffect(() => {
-  //   const observerOptions = {
-  //     root: null,
-  //     rootMargin: "0px",
-  //     threshold: 0.1,
-  //   };
-  //   const observerCallback = (entries) => {
-  //     entries.forEach((entry) => {
-  //       if (entry.isIntersecting) {
-  //         entry.target.classList.add("section-visible");
-  //       }
-  //     });
-  //   };
-  //   const observer = new IntersectionObserver(observerCallback, observerOptions);
-  //   Object.values(sectionRefs).forEach((ref) => {
-  //     if (ref.current) {
-  //       observer.observe(ref.current);
-  //     }
-  //   });
-  //   return () => {
-  //     Object.values(sectionRefs).forEach((ref) => {
-  //       if (ref.current) {
-  //         observer.unobserve(ref.current);
-  //       }
-  //     });
-  //   };
-  // }, []);
 
-  useEffect(() => {
-    const cnvs = canvasRef.current;
-    if (!cnvs) return;
-    let animationId;
-    let running = true;
-    let mx = 0;
-    let my = 0;
-    let dots = [];
-    let c;
-    let width = 0;
-    let height = 0;
-    let dpr = window.devicePixelRatio || 1;
-
-    // Responsive parameters
-    function getParams() {
-      const isMobile = width < 640;
-      return {
-        dots_num: isMobile ? 30 : 70,
-        r: 1,
-        mouse_ol: isMobile ? 80 : 150,
-        dots_ol: isMobile ? 80 : 150,
-        max_speed: 1,
-        max_ms_opac: 1,
-        max_dots_opac: 1,
-        uni_divs: isMobile ? 10 : 30,
-      };
-    }
-
-    function resizeCanvas() {
-      // Use parent container's size
-      const parent = cnvs.parentElement;
-      width = parent ? parent.offsetWidth : window.innerWidth;
-      height = parent ? parent.offsetHeight : window.innerHeight;
-      dpr = window.devicePixelRatio || 1;
-      cnvs.width = width * dpr;
-      cnvs.height = height * dpr;
-      cnvs.style.width = width + 'px';
-      cnvs.style.height = height + 'px';
-      c = cnvs.getContext('2d');
-      c.setTransform(1, 0, 0, 1, 0, 0); // reset transform
-      c.scale(dpr, dpr);
-    }
-
-    function updtMouse(e) {
-      // Get mouse position relative to canvas
-      const rect = cnvs.getBoundingClientRect();
-      mx = (e.touches ? e.touches[0].clientX : e.clientX) - rect.left;
-      my = (e.touches ? e.touches[0].clientY : e.clientY) - rect.top;
-    }
-
-    function init() {
-      dots = [];
-      const { dots_num, uni_divs } = getParams();
-      for(let i=0; i<dots_num; i++) {
-        let x = Math.floor((Math.random()*width/uni_divs)+(parseInt(i/(dots_num/uni_divs))*(width/uni_divs)));
-        let y = Math.floor(Math.random()*height);
-        let dx = Math.random()*1+0.1;
-        let dy = Math.random()*1+0.1;
-        if(i%2==0) {
-          dx*=-1;
-          dy*=-1;
-        }
-        dots.push({x, y, dx, dy});
-      }
-    }
-
-    function update() {
-      if (!running) return;
-      c.clearRect(0, 0, width, height);
-      const { dots_num, mouse_ol, dots_ol, max_ms_opac, max_dots_opac } = getParams();
-      for(let i=0; i<dots_num; i++) {
-        let dot = dots[i];
-        dot.x += dot.dx;
-        dot.y += dot.dy;
-        if(dot.x>width || dot.x<0) dot.dx *= -1;
-        if(dot.y>height || dot.y<0) dot.dy *= -1;
-        let x = dot.x;
-        let y = dot.y;
-        let d = Math.sqrt((x-mx)*(x-mx)+(y-my)*(y-my));
-        if(d<mouse_ol) {
-          c.strokeStyle = `rgba(100, 180, 255, ${max_ms_opac*(mouse_ol-d)/mouse_ol})`;
-          c.lineWidth = 2;
-          c.beginPath();
-          c.moveTo(x, y);
-          c.lineTo(mx, my);
-          c.stroke();
-        }
-        for(let j=i+1; j<dots_num; j++) {
-          let x1 = dots[j].x;
-          let y1 = dots[j].y;
-          let d2 = Math.sqrt((x1-x)*(x1-x)+(y1-y)*(y1-y));
-          if(d2<dots_ol) {
-            c.strokeStyle = `rgba(157, 210, 255, ${max_dots_opac*(dots_ol-d2)/dots_ol})`;
-            c.lineWidth = 1;
-            c.beginPath();
-            c.moveTo(x1, y1);
-            c.lineTo(x, y);
-            c.stroke();
-          }
-        }
-      }
-      animationId = requestAnimationFrame(update);
-    }
-
-    function handleResize() {
-      resizeCanvas();
-      init();
-    }
-
-    resizeCanvas();
-    init();
-    update();
-    window.addEventListener('mousemove', updtMouse);
-    window.addEventListener('touchmove', updtMouse, { passive: false });
-    window.addEventListener('resize', handleResize);
-    window.addEventListener('orientationchange', handleResize);
-    return () => {
-      running = false;
-      window.removeEventListener('mousemove', updtMouse);
-      window.removeEventListener('touchmove', updtMouse);
-      window.removeEventListener('resize', handleResize);
-      window.removeEventListener('orientationchange', handleResize);
-      if (animationId) cancelAnimationFrame(animationId);
-    };
-  }, []);
+  useConnectingDots(canvasRef);
 
   return (
     <>

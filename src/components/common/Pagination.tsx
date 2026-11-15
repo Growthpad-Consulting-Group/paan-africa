@@ -1,5 +1,15 @@
 import { Icon } from "@iconify/react";
 
+type Props = {
+  currentPage: number;
+  totalPages: number;
+  onPageChange: (page: number) => void;
+  totalItems: number;
+  itemsPerPage: number;
+  /** id of the element to scroll to after a page change */
+  scrollToId?: string | null;
+};
+
 export default function Pagination({
   currentPage,
   totalPages,
@@ -7,9 +17,9 @@ export default function Pagination({
   totalItems,
   itemsPerPage,
   scrollToId = null,
-}) {
+}: Props) {
   const getPageNumbers = () => {
-    const pages = [];
+    const pages: (number | string)[] = [];
     const maxVisible = 7;
 
     if (totalPages <= maxVisible) {
@@ -42,7 +52,7 @@ export default function Pagination({
     return pages;
   };
 
-  const handlePageChange = (page) => {
+  const handlePageChange = (page: number) => {
     onPageChange(page);
     
     // Scroll to specific element or top of page
@@ -99,7 +109,7 @@ export default function Pagination({
           return (
             <button
               key={page}
-              onClick={() => handlePageChange(page)}
+              onClick={() => handlePageChange(page as number)}
               className={`px-4 py-2 rounded-lg font-medium transition-all duration-300 ${
                 isActive
                   ? 'bg-paan-red text-white shadow-lg scale-110'

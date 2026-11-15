@@ -4,9 +4,30 @@ import { useState, useRef, useEffect } from "react";
 import { Icon } from "@iconify/react";
 import ReCAPTCHA from "react-google-recaptcha";
 import Modal, { ModalHeader } from "./Modal";
+import { errorMessage } from '@/utils/errors';
+import type { JobPosting } from '@/lib/careerService';
 
-const CareerApplicationModal = ({ isOpen, onClose, positions = [], defaultPosition = "" }) => {
-  const [formData, setFormData] = useState({
+type Props = {
+  isOpen: boolean;
+  onClose: () => void;
+  positions?: JobPosting[];
+  defaultPosition?: string;
+};
+
+type ApplicationForm = {
+  firstName: string;
+  lastName: string;
+  email: string;
+  phone: string;
+  position: string;
+  experience: string;
+  location: string;
+  coverLetter: string;
+  resume: File | null;
+};
+
+const CareerApplicationModal = ({ isOpen, onClose, positions = [], defaultPosition = "" }: Props) => {
+  const [formData, setFormData] = useState<ApplicationForm>({
     firstName: "",
     lastName: "",
     email: "",
@@ -24,10 +45,10 @@ const CareerApplicationModal = ({ isOpen, onClose, positions = [], defaultPositi
     }
   }, [isOpen, defaultPosition]);
   const [isSubmitting, setIsSubmitting] = useState(false);
-  const [submitStatus, setSubmitStatus] = useState(null);
-  const [error, setError] = useState(null);
-  const [recaptchaToken, setRecaptchaToken] = useState(null);
-  const recaptchaRef = useRef(null);
+  const [submitStatus, setSubmitStatus] = useState<"success" | null>(null);
+  const [error, setError] = useState<string | null>(null);
+  const [recaptchaToken, setRecaptchaToken] = useState<string | null>(null);
+  const recaptchaRef = useRef<ReCAPTCHA>(null);
 
   // Check if reCAPTCHA site key is available
   const recaptchaSiteKey = process.env.NEXT_PUBLIC_RECAPTCHA_SITE_KEY;
@@ -37,7 +58,7 @@ const CareerApplicationModal = ({ isOpen, onClose, positions = [], defaultPositi
     );
   }
 
-  const handleInputChange = (e) => {
+  const handleInputChange = (e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement | HTMLTextAreaElement>) => {
     const { name, value } = e.target;
     setFormData(prev => ({
       ...prev,
@@ -45,22 +66,22 @@ const CareerApplicationModal = ({ isOpen, onClose, positions = [], defaultPositi
     }));
   };
 
-  const handleFileChange = (e) => {
+  const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     setFormData(prev => ({
       ...prev,
-      resume: e.target.files[0]
+      resume: e.target.files?.[0] ?? null
     }));
   };
 
   // Handle reCAPTCHA change
-  const handleRecaptchaChange = (token) => {
+  const handleRecaptchaChange = (token: string | null) => {
     setRecaptchaToken(token);
     if (error) {
       setError(null);
     }
   };
 
-  const handleSubmit = async (e) => {
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     setIsSubmitting(true);
     setError(null);
@@ -136,7 +157,7 @@ const CareerApplicationModal = ({ isOpen, onClose, positions = [], defaultPositi
       }, 2000);
     } catch (err) {
       console.error("Error submitting application:", err);
-      setError(err.message || "Failed to submit application. Please try again.");
+      setError(errorMessage(err, "") || "Failed to submit application. Please try again.");
     } finally {
       setIsSubmitting(false);
     }

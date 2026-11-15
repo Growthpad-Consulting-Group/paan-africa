@@ -11,7 +11,8 @@ export type BlogComment = {
   is_approved: boolean;
 };
 
-export type NewComment = { blogId: number; name: string; email: string; content: string };
+/** `captchaToken` is passed by the form but is not verified server-side (comments insert straight into Supabase). */
+export type NewComment = { blogId: number; name: string; email: string; content: string; captchaToken?: string | null };
 
 const messageOf = (err: unknown) => (err instanceof Error ? err.message : String(err));
 

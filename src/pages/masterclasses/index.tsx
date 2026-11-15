@@ -7,7 +7,8 @@ import { Icon } from "@iconify/react";
 import { useState, useEffect } from "react";
 import { motion } from "framer-motion";
 import ScrollToTop from "@/components/ScrollToTop";
-import { getMasterclasses, getFeaturedSeries } from "@/lib/masterclassService";
+import type { GetStaticPropsResult } from "next";
+import { getMasterclasses, getFeaturedSeries, type Masterclass, type MasterclassSeries } from "@/lib/masterclassService";
 
 // Animation variants
 const fadeInUp = {
@@ -24,7 +25,9 @@ const staggerContainer = {
   }
 };
 
-const MasterclassesPage = ({ masterclasses: masterclassRecords = [], featuredSeries = null }) => {
+type Props = { masterclasses: Masterclass[]; featuredSeries: MasterclassSeries | null };
+
+const MasterclassesPage = ({ masterclasses: masterclassRecords = [], featuredSeries = null }: Props) => {
   const [selectedCategory, setSelectedCategory] = useState('all');
   const [searchTerm, setSearchTerm] = useState('');
 
@@ -34,8 +37,8 @@ const MasterclassesPage = ({ masterclasses: masterclassRecords = [], featuredSer
   const masterclassesData = masterclassRecords.filter((m) => !m.hideFromListing).map((m) => ({ ...m, instructor: m.instructor.name, description: m.listingDescription }));
 
   // Helper function to parse dates for sorting
-  const parseDate = (dateString) => {
-    const months = {
+  const parseDate = (dateString: string) => {
+    const months: Record<string, number> = {
       'January': 0, 'February': 1, 'March': 2, 'April': 3, 'May': 4, 'June': 5,
       'July': 6, 'August': 7, 'September': 8, 'October': 9, 'November': 10, 'December': 11
     };
@@ -150,13 +153,13 @@ const MasterclassesPage = ({ masterclasses: masterclassRecords = [], featuredSer
                 variants={fadeInUp}
               >
                 <button 
-                  onClick={() => document.getElementById('masterclasses-grid').scrollIntoView({ behavior: 'smooth' })}
+                  onClick={() => document.getElementById('masterclasses-grid')?.scrollIntoView({ behavior: 'smooth' })}
                   className="bg-[#F25849] text-white px-8 py-4 rounded-full font-semibold text-lg hover:bg-[#D6473C] transition-all duration-300 shadow-lg hover:shadow-xl"
                 >
                   Browse Masterclasses
                 </button>
                 <button 
-                  onClick={() => document.getElementById('upcoming-masterclass').scrollIntoView({ behavior: 'smooth' })}
+                  onClick={() => document.getElementById('upcoming-masterclass')?.scrollIntoView({ behavior: 'smooth' })}
                   className="bg-transparent border-2 border-white text-white px-8 py-4 rounded-full font-semibold text-lg hover:bg-white hover:text-[#172840] transition-all duration-300"
                 >
                   View Featured
@@ -598,7 +601,7 @@ const MasterclassesPage = ({ masterclasses: masterclassRecords = [], featuredSer
             </p>
             <div className="flex flex-col sm:flex-row gap-4 justify-center">
               <button 
-                onClick={() => document.getElementById('masterclasses-grid').scrollIntoView({ behavior: 'smooth' })}
+                onClick={() => document.getElementById('masterclasses-grid')?.scrollIntoView({ behavior: 'smooth' })}
                 className="bg-white text-[#F25849] px-8 py-4 rounded-full font-semibold text-lg hover:bg-gray-100 transition-all duration-300 shadow-lg"
               >
                 Browse All Masterclasses
@@ -620,7 +623,7 @@ const MasterclassesPage = ({ masterclasses: masterclassRecords = [], featuredSer
   );
 };
 
-export async function getStaticProps() {
+export async function getStaticProps(): Promise<GetStaticPropsResult<Props>> {
   try {
     const [masterclasses, featuredSeries] = await Promise.all([getMasterclasses(), getFeaturedSeries()]);
     return { props: { masterclasses, featuredSeries }, revalidate: 3600 };

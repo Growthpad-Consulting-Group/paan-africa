@@ -12,12 +12,13 @@ import TableOfContents from '@/components/blog/TableOfContents';
 import BlogAuthor from '@/components/blog/BlogAuthor';
 import RelatedPosts from '@/components/blog/RelatedPosts';
 import Head from 'next/head';
-import { getAllSlugs, getPostBySlug, getRelatedPosts } from "@/lib/blogService";
+import type { GetStaticPaths, GetStaticProps } from "next";
+import { getAllSlugs, getPostBySlug, getRelatedPosts, type BlogPost as BlogPostData, type BlogListItem } from "@/lib/blogService";
 import ScrollToTop from "@/components/ScrollToTop";
 import { formatBlogSeoTitle } from '@/utils/formatSeoTitle';
 
 // ─── Social Share Icons ────────────────────────────────────────────────────────
-const SocialShare = ({ url, title }) => {
+const SocialShare = ({ url, title }: { url: string; title: string }) => {
   const [isVisible, setIsVisible] = useState(false);
 
   useEffect(() => {
@@ -198,12 +199,12 @@ const PostArticleCTABanner = () => (
 );
 
 // ─── Format date helper ────────────────────────────────────────────────────────
-const formatDate = (dateString) => {
+const formatDate = (dateString: string) => {
   const date = new Date(dateString);
   const day = date.getDate();
   const month = date.toLocaleString('default', { month: 'long' });
   const year = date.getFullYear();
-  const ordinal = (d) => {
+  const ordinal = (d: number) => {
     if (d > 3 && d < 21) return 'th';
     switch (d % 10) {
       case 1: return 'st'; case 2: return 'nd'; case 3: return 'rd'; default: return 'th';
@@ -213,13 +214,13 @@ const formatDate = (dateString) => {
 };
 
 // ─── getStaticProps / getStaticPaths (ISR; refreshed by the Sanity webhook) ───
-export async function getStaticPaths() {
+export const getStaticPaths: GetStaticPaths = async () => {
   const slugs = await getAllSlugs();
   return { paths: slugs.map((slug) => ({ params: { slug } })), fallback: 'blocking' };
-}
+};
 
-export async function getStaticProps({ params }) {
-  const { slug } = params;
+export const getStaticProps: GetStaticProps<Props, { slug: string }> = async ({ params }) => {
+  const { slug } = params!;
   try {
     const blog = await getPostBySlug(slug);
     if (!blog) return { notFound: true, revalidate: 60 };
@@ -229,10 +230,12 @@ export async function getStaticProps({ params }) {
     console.error('Error loading blog post from Sanity:', error);
     throw error;
   }
-}
+};
 
 // ─── Page Component ────────────────────────────────────────────────────────────
-export default function BlogPost({ blog, relatedPosts = [], error, pageSlug }) {
+type Props = { blog: BlogPostData; relatedPosts: BlogListItem[]; error: string | null; pageSlug: string };
+
+export default function BlogPost({ blog, relatedPosts = [], error, pageSlug }: Props) {
   const router = useRouter();
   const slug = pageSlug || router.query.slug;
   const { comments, fetchComments, commentsLoading, commentsError } = useBlogComments();
@@ -307,7 +310,7 @@ export default function BlogPost({ blog, relatedPosts = [], error, pageSlug }) {
     blog.article_body.trim().length > 0;
 
   // ── Split article body at the midpoint for inline CTA injection ──
-  const getMidpointSplit = (html) => {
+  const getMidpointSplit = (html: string) => {
     if (!html) return { before: '', after: '' };
     // Split on paragraph tags to find a clean insertion point
     const parts = html.split(/(?=<p[\s>])/i);
@@ -321,7 +324,7 @@ export default function BlogPost({ blog, relatedPosts = [], error, pageSlug }) {
   const { before: contentBefore, after: contentAfter } = getMidpointSplit(blog.article_body);
   const pageTitle = formatBlogSeoTitle(blog, slug);
 
-  const handleSubscribe = async (e) => {
+  const handleSubscribe = async (e: React.FormEvent) => {
     e.preventDefault();
     setSubscribeStatus({ loading: true, message: '', error: false });
     try {
@@ -529,7 +532,7 @@ export default function BlogPost({ blog, relatedPosts = [], error, pageSlug }) {
                   <div className="mt-8 sm:mt-12 pt-6 sm:pt-8 border-t border-gray-200">
                     <h3 className="text-sm sm:text-base font-medium text-[#172840] mb-3 sm:mb-4">Tags:</h3>
                     <div className="flex flex-wrap gap-2 sm:gap-3">
-                      {blog.article_tags.map((tag, index) => (
+                      {blog.article_tags.map((tag: string, index: number) => (
                         <span key={index} className="px-3 py-1 sm:px-4 sm:py-1.5 text-xs sm:text-sm text-paan-dark-blue bg-paan-dark-blue/5 rounded-full">
                           #{tag}
                         </span>

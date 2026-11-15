@@ -60,7 +60,7 @@ const Footer = () => {
   }, []);
 
   // Optimized smooth scroll function
-  const handleScroll = (e, href) => {
+  const handleScroll = (e: React.MouseEvent, href: string) => {
     e.preventDefault();
     const targetId = href.replace("#", "");
     const element = document.getElementById(targetId);
@@ -136,12 +136,12 @@ const Footer = () => {
                         style={{
                           '--hover-color': hoverColor,
                           transition: 'color 0.3s ease'
-                        }}
+                        } as React.CSSProperties}
                         onMouseEnter={(e) => {
-                          e.target.style.color = hoverColor;
+                          (e.currentTarget as unknown as HTMLElement).style.color = hoverColor;
                         }}
                         onMouseLeave={(e) => {
-                          e.target.style.color = '';
+                          (e.currentTarget as unknown as HTMLElement).style.color = '';
                         }}
                       />
                     </Link>

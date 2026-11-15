@@ -7,55 +7,26 @@ import FAQs from "@/components/FAQs";
 import Link from "next/link";
 import { useAppTranslations } from '../hooks/useTranslations';
 import { bookingLinks } from '@/data/site';
+import { useSectionObserver } from '@/hooks/useSectionObserver';
 
 
 const FAQsPage = () => {
   const { t } = useAppTranslations();
   const sectionRefs = {
-    home: useRef(null),
-    aboutUs: useRef(null),
-    ourMission: useRef(null),
-    whyJoinUs: useRef(null),
-    membership: useRef(null),
-    services: useRef(null),
-    events: useRef(null),
-    contactUs: useRef(null),
+    home: useRef<HTMLDivElement>(null),
+    aboutUs: useRef<HTMLDivElement>(null),
+    ourMission: useRef<HTMLDivElement>(null),
+    whyJoinUs: useRef<HTMLDivElement>(null),
+    membership: useRef<HTMLDivElement>(null),
+    services: useRef<HTMLDivElement>(null),
+    events: useRef<HTMLDivElement>(null),
+    contactUs: useRef<HTMLDivElement>(null),
   };
 
   const isFixed = useFixedHeader();
 
-  // Restore IntersectionObserver for section transitions
-  useEffect(() => {
-    const observerOptions = {
-      root: null,
-      rootMargin: "0px",
-      threshold: 0.1,
-    };
 
-    const observerCallback = (entries) => {
-      entries.forEach((entry) => {
-        if (entry.isIntersecting) {
-          entry.target.classList.add("section-visible");
-        }
-      });
-    };
-
-    const observer = new IntersectionObserver(observerCallback, observerOptions);
-
-    Object.values(sectionRefs).forEach((ref) => {
-      if (ref.current) {
-        observer.observe(ref.current);
-      }
-    });
-
-    return () => {
-      Object.values(sectionRefs).forEach((ref) => {
-        if (ref.current) {
-          observer.unobserve(ref.current);
-        }
-      });
-    };
-  }, []);
+  useSectionObserver(sectionRefs);
 
   // Hero component defined inside main component to access translations
   const Hero = () => {
