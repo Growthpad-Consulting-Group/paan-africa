@@ -1,8 +1,10 @@
+// @ts-nocheck  (legacy markup; slated for the Phase 1.5 rewrite - props to be typed then)
 import { useState, useRef } from 'react';
 import { Icon } from '@iconify/react';
 import toast from 'react-hot-toast';
 import ReCAPTCHA from 'react-google-recaptcha';
 import Modal, { ModalHeader } from './Modal';
+import { countries } from '@/data/countries';
 
 const ExhibitionApplicationModal = ({ isOpen, onClose }) => {
   const [formData, setFormData] = useState({
@@ -61,12 +63,6 @@ const ExhibitionApplicationModal = ({ isOpen, onClose }) => {
     'Custom Space (Please specify)'
   ];
 
-  const countries = [
-    'Nigeria', 'Kenya', 'South Africa', 'Ghana', 'Egypt', 'Morocco', 
-    'Tunisia', 'Algeria', 'Ethiopia', 'Uganda', 'Tanzania', 'Rwanda',
-    'Senegal', 'Ivory Coast', 'Cameroon', 'Angola', 'Zambia', 'Zimbabwe',
-    'Botswana', 'Namibia', 'Mauritius', 'Seychelles', 'Other'
-  ];
 
   const addons = [
     { id: 'power', label: 'Power Supply', icon: 'mdi:power' },

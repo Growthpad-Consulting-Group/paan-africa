@@ -15,6 +15,7 @@ import { useAppTranslations } from '@/hooks/useTranslations';
 import { localize, type Agency } from '@/lib/agencyService';
 import { useSectionObserver } from '@/hooks/useSectionObserver';
 import { useConnectingDots } from '@/hooks/useConnectingDots';
+import { useRecaptcha } from '@/hooks/useRecaptcha';
 
 
 const TIERS = {
@@ -64,16 +65,7 @@ const AgencyProfile = ({ agency }: { agency: Agency }) => {
   const [contactForm, setContactForm] = useState({ name: '', email: '', company: '', message: '' });
   const [contactErrors, setContactErrors] = useState({});
   const [isSending, setIsSending] = useState(false);
-  const [recaptchaToken, setRecaptchaToken] = useState(null);
-  const recaptchaRef = useRef(null);
-
-  // Check if reCAPTCHA site key is available
-  const recaptchaSiteKey = process.env.NEXT_PUBLIC_RECAPTCHA_SITE_KEY;
-  if (!recaptchaSiteKey) {
-    console.error(
-      "reCAPTCHA site key is missing. Please set NEXT_PUBLIC_RECAPTCHA_SITE_KEY in .env.local"
-    );
-  }
+  const { siteKey: recaptchaSiteKey, ref: recaptchaRef, token: recaptchaToken, setToken: setRecaptchaToken } = useRecaptcha();
 
   const openModal = () => setIsModalOpen(true);
   const closeModal = () => setIsModalOpen(false);

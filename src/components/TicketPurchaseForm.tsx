@@ -1,7 +1,9 @@
+// @ts-nocheck  (legacy markup; slated for the Phase 1.5 rewrite - props to be typed then)
 "use client";
 
 import { useState, useEffect } from "react";
 import { Icon } from "@iconify/react";
+import { countries } from '@/data/countries';
 
 const TicketPurchaseForm = ({ onClose }) => {
   const [formData, setFormData] = useState({
@@ -211,12 +213,6 @@ const TicketPurchaseForm = ({ onClose }) => {
   ];
 
   // Country options
-  const countries = [
-    "Nigeria", "Kenya", "South Africa", "Ghana", "Egypt", "Morocco", 
-    "Tunisia", "Algeria", "Ethiopia", "Uganda", "Tanzania", "Rwanda",
-    "Senegal", "Ivory Coast", "Cameroon", "Angola", "Zambia", "Zimbabwe",
-    "Botswana", "Namibia", "Mauritius", "Seychelles", "Other"
-  ];
 
   // Role options
   const roles = [

@@ -6,6 +6,7 @@ import ReCAPTCHA from "react-google-recaptcha";
 import Modal, { ModalHeader } from "./Modal";
 import { errorMessage } from '@/utils/errors';
 import type { JobPosting } from '@/lib/careerService';
+import { useRecaptcha } from '@/hooks/useRecaptcha';
 
 type Props = {
   isOpen: boolean;
@@ -47,16 +48,7 @@ const CareerApplicationModal = ({ isOpen, onClose, positions = [], defaultPositi
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [submitStatus, setSubmitStatus] = useState<"success" | null>(null);
   const [error, setError] = useState<string | null>(null);
-  const [recaptchaToken, setRecaptchaToken] = useState<string | null>(null);
-  const recaptchaRef = useRef<ReCAPTCHA>(null);
-
-  // Check if reCAPTCHA site key is available
-  const recaptchaSiteKey = process.env.NEXT_PUBLIC_RECAPTCHA_SITE_KEY;
-  if (!recaptchaSiteKey) {
-    console.error(
-      "reCAPTCHA site key is missing. Please set NEXT_PUBLIC_RECAPTCHA_SITE_KEY in .env.local"
-    );
-  }
+  const { siteKey: recaptchaSiteKey, ref: recaptchaRef, token: recaptchaToken, setToken: setRecaptchaToken } = useRecaptcha();
 
   const handleInputChange = (e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement | HTMLTextAreaElement>) => {
     const { name, value } = e.target;

@@ -10,11 +10,11 @@ import { useRouter } from "next/router";
 import { toast } from "react-hot-toast";
 import { socialLinks as siteSocialLinks } from '@/data/site';
 import { useSectionObserver } from '@/hooks/useSectionObserver';
+import { useRecaptcha } from '@/hooks/useRecaptcha';
 
 
 const contact = () => {
     const router = useRouter();
-    const recaptchaRef = useRef<ReCAPTCHA>(null);
     const sectionRefs = {
         home: useRef<HTMLDivElement>(null),
         aboutUs: useRef<HTMLDivElement>(null),
@@ -29,7 +29,7 @@ const contact = () => {
     const [isVideoPlaying, setIsVideoPlaying] = useState(false);
     const videoRef = useRef<HTMLVideoElement>(null);
     const [errors, setErrors] = useState<Record<string, string>>({});
-    const [recaptchaToken, setRecaptchaToken] = useState<string | null>(null);
+    const { siteKey: recaptchaSiteKey, ref: recaptchaRef, token: recaptchaToken, setToken: setRecaptchaToken } = useRecaptcha();
     
     // Form state management
     const [formData, setFormData] = useState({
@@ -50,13 +50,6 @@ const contact = () => {
     const [selectedAmbassador, setSelectedAmbassador] = useState<unknown>(null);
     const [isProfileModalOpen, setIsProfileModalOpen] = useState(false);
 
-    // Check if reCAPTCHA site key is available
-    const recaptchaSiteKey = process.env.NEXT_PUBLIC_RECAPTCHA_SITE_KEY;
-    if (!recaptchaSiteKey) {
-        console.error(
-            "reCAPTCHA site key is missing. Please set NEXT_PUBLIC_RECAPTCHA_SITE_KEY in .env.local"
-        );
-    }
 
     // Handle reCAPTCHA change
     const handleRecaptchaChange = (token: string | null) => {

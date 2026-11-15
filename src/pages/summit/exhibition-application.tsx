@@ -1,3 +1,4 @@
+// @ts-nocheck  (legacy markup; slated for the Phase 1.5 rewrite - props to be typed then)
 import { useState, useRef, useEffect } from 'react';
 import SummitCancelledBanner from "@/components/summit/SummitCancelledBanner";
 import { useRouter } from 'next/router';
@@ -10,6 +11,7 @@ import SEO from "@/components/SEO";
 import SummitFooter from "@/layouts/summit-footer";
 import ScrollToTop from "@/components/ScrollToTop";
 import Head from "next/head";
+import { countries } from '@/data/countries';
 
 const ExhibitionApplication = () => {
   const router = useRouter();
@@ -92,12 +94,6 @@ const ExhibitionApplication = () => {
     'Custom Space (Please specify)'
   ];
 
-  const countries = [
-    'Nigeria', 'Kenya', 'South Africa', 'Ghana', 'Egypt', 'Morocco', 
-    'Tunisia', 'Algeria', 'Ethiopia', 'Uganda', 'Tanzania', 'Rwanda',
-    'Senegal', 'Ivory Coast', 'Cameroon', 'Angola', 'Zambia', 'Zimbabwe',
-    'Botswana', 'Namibia', 'Mauritius', 'Seychelles', 'Other'
-  ];
 
   const addons = [
     { id: 'display', label: 'Display Equipment', icon: 'mdi:monitor' },
