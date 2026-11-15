@@ -19,6 +19,7 @@ import AgenciesMarquee from "@/components/AgenciesMarquee";
 import VoicesFromNetwork from "@/components/VoicesFromNetwork";
 import AgencyLogosGrid from "@/components/AgencyLogosGrid";
 import AgencyLogosMarquee from "@/components/AgencyLogosMarquee";
+import { getAgencyLogos } from "@/lib/agencyService";
 import ScrollToTop from "@/components/ScrollToTop";
 import ConnectingDots from "@/components/ConnectingDots";
 import ProgramCard from "@/components/ProgramCard";
@@ -55,7 +56,7 @@ function PasscodeCopy({ passcode }) {
   );
 }
 
-const HomePage = () => {
+const HomePage = ({ agencyLogos = [] }) => {
   const { t } = useAppTranslations();
   
   const sectionRefs = {
@@ -349,7 +350,7 @@ const HomePage = () => {
         </div>
 
         {/* Agency Logos Marquee Section */}
-        <AgencyLogosMarquee />
+        <AgencyLogosMarquee agencies={agencyLogos} />
 
               {/* Who we are section */}
         <div
@@ -1021,5 +1022,14 @@ const HomePage = () => {
     </>
   );
 };
+
+export async function getStaticProps() {
+  try {
+    return { props: { agencyLogos: await getAgencyLogos() }, revalidate: 3600 };
+  } catch (error) {
+    console.error('Error loading agency logos from Sanity:', error);
+    return { props: { agencyLogos: [] }, revalidate: 60 };
+  }
+}
 
 export default HomePage;

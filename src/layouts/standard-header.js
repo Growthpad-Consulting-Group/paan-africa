@@ -123,15 +123,7 @@ const Header = () => {
     isHomePage = true;
   } else if(currentPath === '/retrieve-ticket'){
     isHomePage = true;
-  } else if(currentPath === '/certified-agencies/liftup'){
-    isHomePage = true;
-  } else if(currentPath === '/certified-agencies/penquin'){
-    isHomePage = true;
-  } else if(currentPath === '/certified-agencies/nitro121'){
-    isHomePage = true;
-  } else if(currentPath === '/certified-agencies/xperia_agency'){
-    isHomePage = true;
-  } else if(currentPath === '/certified-agencies/omni_options'){
+  } else if(currentPath.startsWith('/certified-agencies/')){
     isHomePage = true;
   }
 

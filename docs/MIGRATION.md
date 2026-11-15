@@ -68,15 +68,21 @@ Modelled on the CCSA tracker (`call-center-solutions-africa/docs/MIGRATION.md`).
 | Cutover checks | ⏳ | Set `SANITY_REVALIDATE_SECRET` + Sanity webhook; add CORS origins; deploy preview and diff 5 top posts; then remove blog code from Supabase (`blogs`, `blog_*` tables stay until verified in prod) |
 | Known pre-existing issues found | ⏳ | `africas-future-of-digital-advertising` has a 1.7 MB base64 image in the body (upload as a real image); `[slug]` subscribe form posts to non-existent `/api/subscribe` (real route is `/api/subscribe-newsletter`); `RelatedPosts` linked to `/blog/` (fixed → `/blogs/`) |
 
-### Phase 1.2 — Certified Agencies (highest code-reduction win)
-Seven near-identical ~850-line pages (`aquila, liftup, media_seal, nitro121, omni-options, penquin, xperia_agency` = 6,000 lines).
+### Phase 1.2 — Certified Agencies ✅
+Seven near-identical ~850-line pages (6,000 lines) → one Sanity schema + one template. Done 2026-11-15.
 | Area | Status | Notes |
 |---|---|---|
-| Schema `agency` (name, slug, logo, hero, about, services, regions, certification date/level, team, case studies, contact, SEO) | ⏳ | Diff the 7 files first to find the true variable fields |
-| One template `certified-agencies/[slug]` + `certified-agencies/index` | ⏳ | `getStaticPaths` + ISR |
-| Redirects for old underscore URL (`media_seal`, `xperia_agency`) | ⏳ | Normalise slugs; add `redirects()` in `next.config.js` |
-| `AgencyLogosGrid`, `AgencyLogosMarquee`, `AgenciesMarquee` read from Sanity | ⏳ | Marquee has ~10 agencies vs 7 profile pages: add `hasProfilePage`, `order`, `logo`; GCG, TDC, Ingenium are logo-only |
-| Delete 7 page files | ⏳ | Expected: −6,000 lines |
+| Schema `agency` (+ `localizedString` / `localizedText`) | ✅ | Name, slug, tier (associate/full/gold), member since, countries (flags), about, specializations, video (URL or file), client logos, testimonial, social links, contact intro, SEO. English required, French optional (falls back to English). `hasProfilePage` + `order` + `marqueeLogo` drive the homepage logo strip |
+| Seed script `scripts/migrate-agencies-to-sanity.mjs` | ✅ | Dry-run default; skips existing docs unless `--force`. 10 agencies (7 with pages + Ingenium, Talking Drum Comms, Growthpad as logo-only), 107 files uploaded (logos, client logos, 2 videos) |
+| One template: `components/agencies/AgencyProfile.tsx` + `pages/certified-agencies/[slug].tsx` | ✅ | Generated from the Aquila page so layout/animation/form are unchanged; ISR 1h + webhook. Component is `@ts-nocheck` internally (props typed) |
+| Verified vs old pages | ✅ | Rendered text, links and image counts compared with a pre-change baseline: Aquila, Nitro, Omni, Penquin identical; Liftup/Media Seal differ only in "Follow … on social media" wording; Xperia now uses the standard header |
+| URLs unchanged | ✅ | Same slugs (incl. `media_seal`, `xperia_agency`), so no redirects. Optional later: hyphenate + 301 |
+| Homepage logo strip (`AgencyLogosMarquee`) from Sanity | ✅ | Left strip is Sanity (10 logos). Right strip = free members, still hardcoded → move in 1.3 (clients/partners) |
+| Deleted: 7 page files, `certifiedAgencies.aquila/liftup` i18n keys | ✅ | Shared form labels moved to `certifiedAgencies.common` |
+| `/certified-agencies` listing page | ⏳ | Did not exist before; now trivial to add from `getAgencyLogos()` if wanted |
+| Delete `public/assets/images/certified-members/*` (≈117 MB, incl. 78 MB of video) | ⏳ | Keep until verified in production. `talent-discovery.js` still references two files there |
+
+**Bugs found in the old pages (fixed by the migration):** Media Seal contact enquiries were emailed/stored as agency "LyftUp" and Penquin's as "Aquila"; Nitro's LinkedIn icon linked to Instagram; Omni Options and Xperia had placeholder `#` social links and reused Aquila's YouTube video; Xperia's heading said "Clients Aquila Has Worked With"; Omni Options was "Full Member" in the Associate (grey) colour; the header special-cased `/certified-agencies/omni_options` (404 path). **Not fixed (content, needs the agencies):** real videos for Aquila/Omni/Xperia, social links for Omni/Xperia.
 
 ### Phase 1.3 — Other content (recommended order)
 | # | Content | Source today | Why | Status |

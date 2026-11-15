@@ -3,60 +3,9 @@
 import Image from 'next/image';
 import styles from './AgencyLogosMarquee.module.css';
 
-const AgencyLogosMarquee = () => {
-  // Agency logos array for left-sliding marquee
-  const agencyLogosLeft = [
-    {
-      id: 1,
-      name: 'Aquila East Africa',
-      logo: '/assets/images/agencies/aquila.svg',
-    },
-    {
-      id: 2,
-      name: 'Lyftup Agency',
-      logo: '/assets/images/agencies/lyftup.png',
-    },
-    {
-      id: 3,
-      name: 'Media Seal',
-      logo: '/assets/images/agencies/media-seal.png',
-    },
-    {
-      id: 4,
-      name: 'Nitro 21',
-      logo: '/assets/images/agencies/nitro-21.png',
-    },
-    {
-      id: 5,
-      name: 'Penquin',
-      logo: '/assets/images/agencies/penquin.png',
-    },
-    {
-      id: 6,
-      name: 'Xperia Agency',
-      logo: '/assets/images/agencies/Xperia-agency.png',
-    },
-    {
-      id: 7,
-      name: 'Omni Options',
-      logo: '/assets/images/agencies/omni-options.avif',
-    },
-    {
-      id: 8,
-      name: 'Ingenium Concept Ltd',
-      logo: '/assets/images/agencies/ingenium.png',
-    },
-    {
-      id: 9,
-      name: 'Talking Drum Comms',
-      logo: '/assets/images/agencies/TDC_Logo.webp',
-    },
-    {
-      id: 10,
-      name: 'Growthpad Consulting Group',
-      logo: '/assets/images/agencies/gcg.png',
-    },
-  ];
+const AgencyLogosMarquee = ({ agencies = [] }) => {
+  // Certified agencies (managed in Sanity: Certified Agency documents, ordered by "Display order")
+  const agencyLogosLeft = agencies.map((a, i) => ({ id: i + 1, name: a.name, logo: a.logoUrl }));
 
   // Agency logos array for right-sliding marquee
   const agencyLogosRight = [

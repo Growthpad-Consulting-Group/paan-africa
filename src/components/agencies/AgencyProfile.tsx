@@ -1,7 +1,8 @@
+// @ts-nocheck  (ported from the legacy page template; the props are typed, internals can be tightened later)
 import SEO from "@/components/SEO";
 import Header from "@/layouts/standard-header";
 import Image from "next/image";
-import Footer from "../../layouts/footer";
+import Footer from "@/layouts/footer";
 import { useEffect, useRef, useState } from "react";
 import { useFixedHeader, handleScroll } from '../../../utils/scrollUtils';
 import ScrollToTop from "@/components/ScrollToTop";
@@ -10,11 +11,37 @@ import { motion } from "framer-motion";
 import { Icon } from '@iconify/react';
 import toast from 'react-hot-toast';
 import ReCAPTCHA from 'react-google-recaptcha';
-import { useAppTranslations } from '../../hooks/useTranslations';
+import { useAppTranslations } from '@/hooks/useTranslations';
+import { localize, type Agency } from '@/lib/agencyService';
 
 
-const HomePage = () => {
-  const { t } = useAppTranslations();
+const TIERS = {
+  associate: { labelKey: 'certifiedAgencies.common.certification.associateMember', gradient: 'from-gray-400 to-gray-500' },
+  full: { labelKey: 'certifiedAgencies.common.certification.fullMember', gradient: 'from-amber-400 to-amber-500' },
+  gold: { labelKey: 'certifiedAgencies.common.certification.goldMember', gradient: 'from-amber-400 to-amber-500' },
+};
+
+const getVideo = (agency) => {
+  if (agency.videoFileUrl) return { kind: 'file', src: agency.videoFileUrl };
+  if (!agency.videoUrl) return null;
+  return /youtube\.com|youtu\.be/.test(agency.videoUrl) ? { kind: 'embed', src: agency.videoUrl } : { kind: 'file', src: agency.videoUrl };
+};
+
+const AgencyProfile = ({ agency }: { agency: Agency }) => {
+  const { t, locale } = useAppTranslations();
+  const L = (v) => localize(v, locale);
+  const tier = TIERS[agency.membershipLevel || 'associate'];
+  const video = getVideo(agency);
+  const aboutTitle = L(agency.aboutTitle) || `About ${agency.name}`;
+  const aboutParagraphs = L(agency.aboutDescription).split(/\n\s*\n/).map((p) => p.replace(/\s*\n\s*/g, ' ').trim()).filter(Boolean);
+  const clientsTitle = L(agency.clientsTitle) || `Clients ${agency.name} Have Worked With`;
+  const socials = [
+    { label: 'LinkedIn', href: agency.linkedinUrl, icon: 'mdi:linkedin', hover: 'group-hover:text-[#0077B5]' },
+    { label: 'Instagram', href: agency.instagramUrl, icon: 'mingcute:instagram-fill', hover: 'group-hover:text-[#E4405F]' },
+    { label: 'Facebook', href: agency.facebookUrl, icon: 'ic:baseline-facebook', hover: 'group-hover:text-[#1877F2]' },
+    { label: 'X', href: agency.xUrl, icon: 'iconoir:x', hover: 'group-hover:text-black' },
+    { label: 'Website', href: agency.websiteUrl, icon: 'mdi:web', hover: 'group-hover:text-paan-blue' },
+  ].filter((s) => s.href);
   const sectionRefs = {
     home: useRef(null),
     aboutUs: useRef(null),
@@ -243,15 +270,15 @@ const HomePage = () => {
 
   const validateContactForm = () => {
     const newErrors = {};
-    if (!contactForm.name.trim()) newErrors.name = t('certifiedAgencies.aquila.contactModal.errors.nameRequired');
+    if (!contactForm.name.trim()) newErrors.name = t('certifiedAgencies.common.contactModal.errors.nameRequired');
     if (!contactForm.email.trim()) {
-      newErrors.email = t('certifiedAgencies.aquila.contactModal.errors.emailRequired');
+      newErrors.email = t('certifiedAgencies.common.contactModal.errors.emailRequired');
     } else if (!/\S+@\S+\.\S+/.test(contactForm.email)) {
-      newErrors.email = t('certifiedAgencies.aquila.contactModal.errors.invalidEmail');
+      newErrors.email = t('certifiedAgencies.common.contactModal.errors.invalidEmail');
     }
-    if (!contactForm.company.trim()) newErrors.company = t('certifiedAgencies.aquila.contactModal.errors.companyRequired');
-    if (!contactForm.message.trim()) newErrors.message = t('certifiedAgencies.aquila.contactModal.errors.messageRequired');
-    if (!recaptchaToken) newErrors.recaptcha = t('certifiedAgencies.aquila.contactModal.errors.recaptchaRequired');
+    if (!contactForm.company.trim()) newErrors.company = t('certifiedAgencies.common.contactModal.errors.companyRequired');
+    if (!contactForm.message.trim()) newErrors.message = t('certifiedAgencies.common.contactModal.errors.messageRequired');
+    if (!recaptchaToken) newErrors.recaptcha = t('certifiedAgencies.common.contactModal.errors.recaptchaRequired');
     return newErrors;
   };
 
@@ -276,7 +303,7 @@ const HomePage = () => {
         body: JSON.stringify({ 
           ...contactForm, 
           recaptchaToken,
-          agency: 'Aquila' 
+          agency: agency.name 
         }),
       });
 
@@ -302,9 +329,9 @@ const HomePage = () => {
   return (
     <>
     <SEO
-        title={t('certifiedAgencies.aquila.seo.title')}
-        description={t('certifiedAgencies.aquila.seo.description')}
-        keywords={t('certifiedAgencies.aquila.seo.keywords')}
+        title={L(agency.seoTitle) || `${agency.name} | PAAN Certified Agency`}
+        description={L(agency.seoDescription)}
+        keywords={L(agency.seoKeywords)}
       />
     <div className="relative">
       <main className="px-3 pt-6 sm:px-0 sm:pt-0 relative">
@@ -342,17 +369,18 @@ const HomePage = () => {
                   transition={{ duration: 1, type: "spring" }}
                 >
                   <a
-                    href="https://www.aquilaeastafrica.co.ke"
+                    href={agency.websiteUrl || undefined}
                     target="_blank"
                     rel="noopener noreferrer"
                     className="inline-block transition-opacity duration-300 hover:opacity-80"
-                    aria-label="Visit Aquila East Africa website"
+                    aria-label={`Visit ${agency.name} website`}
                   >
                     <Image 
-                      src="/assets/images/certified-members/aquila/aquila-logo.svg" 
+                      src={agency.logoUrl}
+                      unoptimized={agency.logoUrl.endsWith('.svg')}
                       width={400} 
                       height={280} 
-                      alt="AQCILLA Logo" 
+                      alt={agency.logoAlt || `${agency.name} logo`} 
                       className="mx-auto w-40 sm:w-64 h-auto object-contain" 
                     />
                   </a>
@@ -366,13 +394,13 @@ const HomePage = () => {
                     src="/assets/images/certified-members/badge.svg" 
                     width={110} 
                     height={70} 
-                    alt="AQuiLLA DIGITAL Badge" 
+                    alt="PAAN Certified Member Badge" 
                     className="mx-auto w-16 sm:w-20 h-auto object-contain" 
                   />
                 </motion.div>
               </div>
               <h1 className="text-2xl sm:text-4xl lg:text-6xl uppercase font-bold text-gray-900 mb-2 sm:mb-4">
-                {t('certifiedAgencies.aquila.hero.title')}
+                {agency.name}
               </h1>
               <p className="text-sm sm:text-md lg:text-lg text-gray-600 max-w-2xl mx-auto mb-2 sm:mb-4">
                 {t('certifiedAgencies.common.hero.memberDescription')}
@@ -381,36 +409,20 @@ const HomePage = () => {
             {/* Location and Flags at the bottom of hero */}
             <div className="absolute bottom-4 left-1/2 transform -translate-x-1/2 flex flex-wrap justify-center items-center gap-2 sm:gap-3 bg-white/80 rounded-full px-2 sm:px-4 py-1.5 sm:py-2 shadow-md w-[95vw] max-w-md text-xs sm:text-base">
               <Icon icon="mdi:map-marker" className="w-4 h-4 sm:w-5 sm:h-5 text-paan-blue" />
-              <span className="font-medium text-gray-700">{t('certifiedAgencies.aquila.hero.locations.kenya')}</span>
-              <span title="Kenya">
-                <Image
-                  src="https://flagcdn.com/w20/ke.png"
-                  alt="Kenya flag"
-                  width={20}
-                  height={14}
-                  style={{ display: 'inline', verticalAlign: 'middle' }}
-                />
-              </span>
-              <span className="font-medium text-gray-700">{t('certifiedAgencies.aquila.hero.locations.uganda')}</span>
-              <span title="Uganda">
-                <Image
-                  src="https://flagcdn.com/w20/ug.png"
-                  alt="Uganda flag"
-                  width={20}
-                  height={14}
-                  style={{ display: 'inline', verticalAlign: 'middle' }}
-                />
-              </span>
-              <span className="font-medium text-gray-700">{t('certifiedAgencies.aquila.hero.locations.rwanda')}</span>
-              <span title="Rwanda">
-                <Image
-                  src="https://flagcdn.com/w20/rw.png"
-                  alt="Rwanda flag"
-                  width={20}
-                  height={14}
-                  style={{ display: 'inline', verticalAlign: 'middle' }}
-                />
-              </span>
+              {agency.countries.map((c) => (
+                <span key={c.code} className="contents">
+                  <span className="font-medium text-gray-700">{L(c.name)}</span>
+                  <span title={L(c.name)}>
+                    <Image
+                      src={`https://flagcdn.com/w20/${c.code}.png`}
+                      alt={`${L(c.name)} flag`}
+                      width={20}
+                      height={14}
+                      style={{ display: 'inline', verticalAlign: 'middle' }}
+                    />
+                  </span>
+                </span>
+              ))}
             </div>
           </section>
         </div>
@@ -425,38 +437,32 @@ const HomePage = () => {
                   {/* Main Heading */}
                   <div className="space-y-4">
                     <h2 className="text-3xl sm:text-4xl lg:text-5xl font-bold text-paan-dark-blue leading-tight">
-                      {t('certifiedAgencies.aquila.about.title')}
+                      {aboutTitle}
                     </h2>
                     <div className="w-16 h-1 bg-gradient-to-r from-paan-dark-blue to-paan-dark-blue/60"></div>
                   </div>
 
                   {/* Description */}
-                  <p className="text-lg sm:text-xl leading-relaxed text-paan-dark-blue/90 font-light">
-                    {t('certifiedAgencies.aquila.about.description')}
-                  </p>
+                  <div className="space-y-4">
+                    {aboutParagraphs.map((para, i) => (
+                      <p key={i} className="text-lg sm:text-xl leading-relaxed text-paan-dark-blue/90 font-light">
+                        {para}
+                      </p>
+                    ))}
+                  </div>
 
                                       {/* Areas of Specialization */}
                     <div className="space-y-4">
                       <h3 className="text-xl sm:text-2xl font-semibold text-paan-dark-blue mb-4">
-                        {t('certifiedAgencies.aquila.about.specializationTitle')}
+                        {t('certifiedAgencies.common.about.specializationTitle')}
                       </h3>
                       <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
-                        <div className="flex items-center space-x-3">
-                          <div className="w-2 h-2 bg-paan-dark-blue rounded-full"></div>
-                          <span className="text-paan-dark-blue/90">{t('certifiedAgencies.aquila.about.specializations.creativeMarketing')}</span>
-                        </div>
-                        <div className="flex items-center space-x-3">
-                          <div className="w-2 h-2 bg-paan-dark-blue rounded-full"></div>
-                          <span className="text-paan-dark-blue/90">{t('certifiedAgencies.aquila.about.specializations.advertisingSolutions')}</span>
-                        </div>
-                        <div className="flex items-center space-x-3">
-                          <div className="w-2 h-2 bg-paan-dark-blue rounded-full"></div>
-                          <span className="text-paan-dark-blue/90">{t('certifiedAgencies.aquila.about.specializations.brandActivation')}</span>
-                        </div>
-                        <div className="flex items-center space-x-3">
-                          <div className="w-2 h-2 bg-paan-dark-blue rounded-full"></div>
-                          <span className="text-paan-dark-blue/90">{t('certifiedAgencies.aquila.about.specializations.pr')}</span>
-                        </div>
+                        {agency.specializations.map((s, i) => (
+                          <div key={i} className="flex items-center space-x-3">
+                            <div className="w-2 h-2 bg-paan-dark-blue rounded-full"></div>
+                            <span className="text-paan-dark-blue/90">{L(s)}</span>
+                          </div>
+                        ))}
                       </div>
                     </div>
                 </div>
@@ -467,14 +473,21 @@ const HomePage = () => {
                 <div className="relative group">
                   {/* Video Container */}
                   <div className="relative overflow-hidden rounded-2xl shadow-2xl bg-black/20 backdrop-blur-sm border border-white/10">
-                    <iframe
-                      className="w-full h-auto aspect-video object-cover"
-                      src="https://www.youtube.com/embed/zJd1akSivAw"
-                      title="Aquila East Africa"
-                      frameBorder="0"
-                      allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
-                      allowFullScreen
-                    ></iframe>
+                    {video?.kind === 'embed' && (
+                      <iframe
+                        className="w-full h-auto aspect-video object-cover"
+                        src={video.src}
+                        title={`${agency.name} video`}
+                        frameBorder="0"
+                        allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+                        allowFullScreen
+                      ></iframe>
+                    )}
+                    {video?.kind === 'file' && (
+                      <video ref={videoRef} className="w-full h-auto aspect-video object-cover" src={video.src} controls playsInline preload="metadata">
+                        {t('certifiedAgencies.common.hero.videoFallback')}
+                      </video>
+                    )}
                   </div>
 
                   {/* Decorative Elements */}
@@ -509,11 +522,11 @@ const HomePage = () => {
 
               {/* Membership Level */}
               <div className="text-center">
-                <div className="inline-flex items-center bg-gradient-to-r from-gray-400 to-gray-500 rounded-2xl px-6 py-4 shadow-lg">
+                <div className={`inline-flex items-center bg-gradient-to-r ${tier.gradient} rounded-2xl px-6 py-4 shadow-lg`}>
                                       <Icon icon="mdi:crown" className="w-10 h-10 text-white mr-3" />
                     <div className="text-left">
                       <div className="text-sm text-gray-100">{t('certifiedAgencies.common.certification.membershipLevel')}</div>
-                      <div className="font-bold text-white">{t('certifiedAgencies.common.certification.associateMember')}</div>
+                      <div className="font-bold text-white">{t(tier.labelKey)}</div>
                     </div>
                 </div>
               </div>
@@ -524,7 +537,7 @@ const HomePage = () => {
                                       <Icon icon="mdi:calendar-check" className="w-10 h-10 text-paan-blue mr-3" />
                     <div className="text-left">
                       <div className="text-sm text-gray-600">{t('certifiedAgencies.common.certification.memberSince')}</div>
-                      <div className="font-semibold text-paan-dark-blue">2025</div>
+                      <div className="font-semibold text-paan-dark-blue">{agency.memberSince}</div>
                     </div>
                 </div>
               </div>
@@ -534,13 +547,13 @@ const HomePage = () => {
         {/* Clients They Have Worked With Section */}
         <div className="bg-white py-16 sm:py-20 relative z-10">
           <section className="relative mx-auto max-w-6xl px-4 sm:px-6">
-            <h2 className="text-3xl sm:text-4xl font-bold text-paan-dark-blue text-center mb-10">{t('certifiedAgencies.aquila.clients.title')}</h2>
+            <h2 className="text-3xl sm:text-4xl font-bold text-paan-dark-blue text-center mb-10">{clientsTitle}</h2>
             <div className="grid grid-cols-2 sm:grid-cols-4 gap-6 md:gap-10 items-center justify-center">
-              {[1,2,3,4,5,6,7,8].map((num) => (
-                <div key={num} className="flex items-center justify-center p-4 bg-gray-50 rounded-xl shadow-sm hover:shadow-md transition-shadow duration-200">
+              {agency.clientLogos.map((logo, i) => (
+                <div key={i} className="flex items-center justify-center p-4 bg-gray-50 rounded-xl shadow-sm hover:shadow-md transition-shadow duration-200">
                   <Image
-                    src={`/assets/images/certified-members/aquila/${num}.png`}
-                    alt={`Client logo ${num}`}
+                    src={logo.url}
+                    alt={logo.alt || `Client logo ${i + 1}`}
                     width={120}
                     height={60}
                     className="object-contain h-16 w-auto"
@@ -569,16 +582,18 @@ const HomePage = () => {
                   <div className="flex-1">
                     {/* Testimonial text */}
                     <blockquote className="text-xl sm:text-2xl font-medium text-gray-800 leading-relaxed mb-8 italic">
-                      {t('certifiedAgencies.aquila.testimonial.quote')}
+                      {L(agency.testimonialQuote)}
                     </blockquote>
                     
                     {/* Attribution */}
                     <div className="flex flex-col items-start space-y-2">
                       <div className="w-16 h-px bg-gradient-to-r from-paan-dark-blue to-paan-purple"></div>
-                      <cite className="not-italic">
-                        <div className="font-semibold text-lg text-gray-900">{t('certifiedAgencies.aquila.testimonial.attribution.name')}</div>
-                        <div className="text-gray-600 text-sm">{t('certifiedAgencies.aquila.testimonial.attribution.title')}</div>
-                      </cite>
+                      {(agency.testimonialName || agency.testimonialRole) && (
+                        <cite className="not-italic">
+                          {agency.testimonialName && <div className="font-semibold text-lg text-gray-900">{agency.testimonialName}</div>}
+                          {agency.testimonialRole && <div className="text-gray-600 text-sm">{agency.testimonialRole}</div>}
+                        </cite>
+                      )}
                     </div>
                   </div>
                 </div>
@@ -601,87 +616,25 @@ const HomePage = () => {
 
           {/* Social Media Links */}
           <div className="space-y-4">
-            <p className="text-gray-600 text-sm">{t('certifiedAgencies.aquila.socialMedia.followUs')}</p>
+            <p className="text-gray-600 text-sm">{`Follow ${agency.name} on social media`}</p>
             <div className="flex justify-center items-center gap-6">
-              {/* LinkedIn */}
-              <a
-                href="https://www.linkedin.com/company/aquilaeastafrica/"
-                target="_blank"
-                rel="noopener noreferrer"
-                className="group transition-all duration-300 hover:scale-110"
-                aria-label="LinkedIn"
-              >
-                <Icon
-                  icon="mdi:linkedin"
-                  width="28"
-                  height="28"
-                  className="text-gray-400 group-hover:text-[#0077B5] transition-colors duration-300"
-                />
-              </a>
-
-              {/* Instagram */}
-              <a
-                href="https://www.instagram.com/aquilaeastafrica/"
-                target="_blank"
-                rel="noopener noreferrer"
-                className="group transition-all duration-300 hover:scale-110"
-                aria-label="Instagram"
-              >
-                <Icon
-                  icon="mingcute:instagram-fill"
-                  width="28"
-                  height="28"
-                  className="text-gray-400 group-hover:text-[#E4405F] transition-colors duration-300"
-                />
-              </a>
-
-              {/* Facebook */}
-              <a
-                href="https://www.facebook.com/AquilaEastAfricaLtd"
-                target="_blank"
-                rel="noopener noreferrer"
-                className="group transition-all duration-300 hover:scale-110"
-                aria-label="Facebook"
-              >
-                <Icon
-                  icon="ic:baseline-facebook"
-                  width="28"
-                  height="28"
-                  className="text-gray-400 group-hover:text-[#1877F2] transition-colors duration-300"
-                />
-              </a>
-
-              {/* X (Twitter) */}
-              <a
-                href="https://x.com/AquilaEA"
-                target="_blank"
-                rel="noopener noreferrer"
-                className="group transition-all duration-300 hover:scale-110"
-                aria-label="X"
-              >
-                <Icon
-                  icon="iconoir:x"
-                  width="28"
-                  height="28"
-                  className="text-gray-400 group-hover:text-black transition-colors duration-300"
-                />
-              </a>
-
-              {/* Website */}
-              <a
-                href="https://www.aquilaeastafrica.co.ke"
-                target="_blank"
-                rel="noopener noreferrer"
-                className="group transition-all duration-300 hover:scale-110"
-                aria-label="Website"
-              >
-                <Icon
-                  icon="mdi:web"
-                  width="28"
-                  height="28"
-                  className="text-gray-400 group-hover:text-paan-blue transition-colors duration-300"
-                />
-              </a>
+              {socials.map((s) => (
+                <a
+                  key={s.label}
+                  href={s.href}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="group transition-all duration-300 hover:scale-110"
+                  aria-label={s.label}
+                >
+                  <Icon
+                    icon={s.icon}
+                    width="28"
+                    height="28"
+                    className={`text-gray-400 ${s.hover} transition-colors duration-300`}
+                  />
+                </a>
+              ))}
             </div>
           </div>
         </div>
@@ -707,15 +660,15 @@ const HomePage = () => {
             {/* Modal content */}
             <div className="p-8">
               <div className="text-center mb-8">
-                <h2 className="text-2xl font-semibold text-[#172840] mb-2">{t('certifiedAgencies.aquila.contactModal.title')}</h2>
-                <p className="text-gray-600">{t('certifiedAgencies.aquila.contactModal.description')}</p>
+                <h2 className="text-2xl font-semibold text-[#172840] mb-2">{`Contact ${agency.name}`}</h2>
+                <p className="text-gray-600">{L(agency.contactDescription) || 'Get in touch with our team for your creative marketing needs'}</p>
               </div>
 
               <form onSubmit={handleContactSubmit} className="space-y-6">
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
                   <div>
                     <label htmlFor="contact-name" className="block text-sm font-medium text-[#172840] mb-1">
-                      {t('certifiedAgencies.aquila.contactModal.form.fullName')} <span className="text-[#F25849]">{t('certifiedAgencies.aquila.contactModal.form.required')}</span>
+                      {t('certifiedAgencies.common.contactModal.form.fullName')} <span className="text-[#F25849]">{t('certifiedAgencies.common.contactModal.form.required')}</span>
                     </label>
                     <input
                       type="text"
@@ -734,7 +687,7 @@ const HomePage = () => {
 
                   <div>
                     <label htmlFor="contact-email" className="block text-sm font-medium text-[#172840] mb-1">
-                      {t('certifiedAgencies.aquila.contactModal.form.emailAddress')} <span className="text-[#F25849]">{t('certifiedAgencies.aquila.contactModal.form.required')}</span>
+                      {t('certifiedAgencies.common.contactModal.form.emailAddress')} <span className="text-[#F25849]">{t('certifiedAgencies.common.contactModal.form.required')}</span>
                     </label>
                     <input
                       type="email"
@@ -753,7 +706,7 @@ const HomePage = () => {
 
                   <div className="md:col-span-2">
                     <label htmlFor="contact-company" className="block text-sm font-medium text-[#172840] mb-1">
-                      {t('certifiedAgencies.aquila.contactModal.form.companyName')} <span className="text-[#F25849]">{t('certifiedAgencies.aquila.contactModal.form.required')}</span>
+                      {t('certifiedAgencies.common.contactModal.form.companyName')} <span className="text-[#F25849]">{t('certifiedAgencies.common.contactModal.form.required')}</span>
                     </label>
                     <input
                       type="text"
@@ -773,7 +726,7 @@ const HomePage = () => {
 
                 <div>
                   <label htmlFor="contact-message" className="block text-sm font-medium text-[#172840] mb-1">
-                    {t('certifiedAgencies.aquila.contactModal.form.message')} <span className="text-[#F25849]">{t('certifiedAgencies.aquila.contactModal.form.required')}</span>
+                    {t('certifiedAgencies.common.contactModal.form.message')} <span className="text-[#F25849]">{t('certifiedAgencies.common.contactModal.form.required')}</span>
                   </label>
                   <textarea
                     id="contact-message"
@@ -786,7 +739,7 @@ const HomePage = () => {
                     className={`w-full px-4 py-2 border-b border-gray-300 bg-transparent focus:outline-none focus:border-[#F25849] transition-colors duration-300 resize-none ${
                       contactErrors.message ? 'border-red-500' : ''
                     } ${isSending ? 'opacity-50' : ''}`}
-                    placeholder={t('certifiedAgencies.aquila.contactModal.form.placeholder')}
+                    placeholder={t('certifiedAgencies.common.contactModal.form.placeholder')}
                   ></textarea>
                   {contactErrors.message && <p className="text-red-500 text-sm mt-1">{contactErrors.message}</p>}
                 </div>
@@ -811,7 +764,7 @@ const HomePage = () => {
                       isSending ? 'opacity-50 cursor-not-allowed' : ''
                     }`}
                   >
-                    {isSending ? t('certifiedAgencies.aquila.contactModal.form.sending') : t('certifiedAgencies.aquila.contactModal.form.sendMessage')}
+                    {isSending ? t('certifiedAgencies.common.contactModal.form.sending') : t('certifiedAgencies.common.contactModal.form.sendMessage')}
                   </button>
                 </div>
               </form>
@@ -852,4 +805,4 @@ const HomePage = () => {
   );
 };
 
-export default HomePage;
+export default AgencyProfile;
