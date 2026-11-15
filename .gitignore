@@ -36,3 +36,4 @@ yarn.lock
 .history/
 .history
 *.tsbuildinfo
+scripts/backups/

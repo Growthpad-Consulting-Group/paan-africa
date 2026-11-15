@@ -1,4 +1,3 @@
-// @ts-nocheck  (ported from the legacy page template; the props are typed, internals can be tightened later)
 import SEO from "@/components/SEO";
 import Header from "@/layouts/standard-header";
 import Image from "next/image";
@@ -12,7 +11,7 @@ import { Icon } from '@iconify/react';
 import toast from 'react-hot-toast';
 import ReCAPTCHA from 'react-google-recaptcha';
 import { useAppTranslations } from '@/hooks/useTranslations';
-import { localize, type Agency } from '@/lib/agencyService';
+import { localize, type Agency, type Localized } from '@/lib/agencyService';
 import { useSectionObserver } from '@/hooks/useSectionObserver';
 import { useConnectingDots } from '@/hooks/useConnectingDots';
 import { useRecaptcha } from '@/hooks/useRecaptcha';
@@ -24,7 +23,9 @@ const TIERS = {
   gold: { labelKey: 'certifiedAgencies.common.certification.goldMember', gradient: 'from-amber-400 to-amber-500' },
 };
 
-const getVideo = (agency) => {
+type Video = { kind: 'file' | 'embed'; src: string };
+
+const getVideo = (agency: Agency): Video | null => {
   if (agency.videoFileUrl) return { kind: 'file', src: agency.videoFileUrl };
   if (!agency.videoUrl) return null;
   return /youtube\.com|youtu\.be/.test(agency.videoUrl) ? { kind: 'embed', src: agency.videoUrl } : { kind: 'file', src: agency.videoUrl };
@@ -32,7 +33,7 @@ const getVideo = (agency) => {
 
 const AgencyProfile = ({ agency }: { agency: Agency }) => {
   const { t, locale } = useAppTranslations();
-  const L = (v) => localize(v, locale);
+  const L = (v: Localized | undefined) => localize(v, locale);
   const tier = TIERS[agency.membershipLevel || 'associate'];
   const video = getVideo(agency);
   const aboutTitle = L(agency.aboutTitle) || `About ${agency.name}`;
@@ -59,11 +60,11 @@ const AgencyProfile = ({ agency }: { agency: Agency }) => {
   const isFixed = useFixedHeader();
   const [isModalOpen, setIsModalOpen] = useState(false);
   const canvasRef = useRef<HTMLCanvasElement>(null);
-  const videoRef = useRef(null);
+  const videoRef = useRef<HTMLVideoElement>(null);
   const [isPlaying, setIsPlaying] = useState(false);
   const [isContactModalOpen, setIsContactModalOpen] = useState(false);
   const [contactForm, setContactForm] = useState({ name: '', email: '', company: '', message: '' });
-  const [contactErrors, setContactErrors] = useState({});
+  const [contactErrors, setContactErrors] = useState<Record<string, string>>({});
   const [isSending, setIsSending] = useState(false);
   const { siteKey: recaptchaSiteKey, ref: recaptchaRef, token: recaptchaToken, setToken: setRecaptchaToken } = useRecaptcha();
 
@@ -84,7 +85,7 @@ const AgencyProfile = ({ agency }: { agency: Agency }) => {
 
   useConnectingDots(canvasRef);
 
-  const handleContactChange = (e) => {
+  const handleContactChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
     const { name, value } = e.target;
     setContactForm(prev => ({
       ...prev,
@@ -100,7 +101,7 @@ const AgencyProfile = ({ agency }: { agency: Agency }) => {
   };
 
   // Handle reCAPTCHA change
-  const handleRecaptchaChange = (token) => {
+  const handleRecaptchaChange = (token: string | null) => {
     setRecaptchaToken(token);
     setContactErrors(prev => ({
       ...prev,
@@ -109,7 +110,7 @@ const AgencyProfile = ({ agency }: { agency: Agency }) => {
   };
 
   const validateContactForm = () => {
-    const newErrors = {};
+    const newErrors: Record<string, string> = {};
     if (!contactForm.name.trim()) newErrors.name = t('certifiedAgencies.common.contactModal.errors.nameRequired');
     if (!contactForm.email.trim()) {
       newErrors.email = t('certifiedAgencies.common.contactModal.errors.emailRequired');
@@ -122,7 +123,7 @@ const AgencyProfile = ({ agency }: { agency: Agency }) => {
     return newErrors;
   };
 
-  const handleContactSubmit = async (e) => {
+  const handleContactSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
 
     // Validate form
@@ -154,7 +155,7 @@ const AgencyProfile = ({ agency }: { agency: Agency }) => {
         // Reset form and reCAPTCHA
         setContactForm({ name: '', email: '', company: '', message: '' });
         setRecaptchaToken(null);
-        recaptchaRef.current.reset();
+        recaptchaRef.current?.reset();
         setIsContactModalOpen(false);
       } else {
         toast.error(data.message || t('certifiedAgencies.common.toast.messageFailed'), { id: toastId });
@@ -461,7 +462,7 @@ const AgencyProfile = ({ agency }: { agency: Agency }) => {
               {socials.map((s) => (
                 <a
                   key={s.label}
-                  href={s.href}
+                  href={s.href ?? undefined}
                   target="_blank"
                   rel="noopener noreferrer"
                   className="group transition-all duration-300 hover:scale-110"
@@ -575,7 +576,7 @@ const AgencyProfile = ({ agency }: { agency: Agency }) => {
                     value={contactForm.message}
                     onChange={handleContactChange}
                     disabled={isSending}
-                    rows="4"
+                    rows={4}
                     className={`w-full px-4 py-2 border-b border-gray-300 bg-transparent focus:outline-none focus:border-[#F25849] transition-colors duration-300 resize-none ${
                       contactErrors.message ? 'border-red-500' : ''
                     } ${isSending ? 'opacity-50' : ''}`}
@@ -588,7 +589,7 @@ const AgencyProfile = ({ agency }: { agency: Agency }) => {
                 <div>
                   <ReCAPTCHA
                     ref={recaptchaRef}
-                    sitekey={recaptchaSiteKey}
+                    sitekey={recaptchaSiteKey as string}
                     onChange={handleRecaptchaChange}
                   />
                   {contactErrors.recaptcha && (

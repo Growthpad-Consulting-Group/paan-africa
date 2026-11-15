@@ -1,4 +1,3 @@
-import { useBlogComments } from "@/hooks/useBlogComments";
 import { useRouter } from "next/router";
 import Image from "next/image";
 import { Icon } from "@iconify/react";
@@ -6,8 +5,6 @@ import Link from "next/link";
 import { useEffect, useState, useRef } from "react";
 import Header from "@/layouts/standard-header";
 import Footer from "@/layouts/footer";
-import BlogComments from '@/components/blog/BlogComments';
-import CommentCount from '@/components/blog/CommentCount';
 import TableOfContents from '@/components/blog/TableOfContents';
 import BlogAuthor from '@/components/blog/BlogAuthor';
 import RelatedPosts from '@/components/blog/RelatedPosts';
@@ -144,7 +141,7 @@ const MidArticleCTA = () => (
 );
 
 // ─── Post-Article CTA Banner ───────────────────────────────────────────────────
-// Sits between the article body and the comments section.
+// Sits between the article body and the end-of-article blocks.
 const PostArticleCTABanner = () => (
   <div className="my-10 rounded-2xl bg-white border border-gray-100 shadow-md overflow-hidden">
     <div className="flex flex-col md:flex-row">
@@ -238,7 +235,6 @@ type Props = { blog: BlogPostData; relatedPosts: BlogListItem[]; error: string |
 export default function BlogPost({ blog, relatedPosts = [], error, pageSlug }: Props) {
   const router = useRouter();
   const slug = pageSlug || router.query.slug;
-  const { comments, fetchComments, commentsLoading, commentsError } = useBlogComments();
   const relatedPostsLoading = false;
   const [currentUrl, setCurrentUrl] = useState('');
   const [subscribeForm, setSubscribeForm] = useState({ name: '', email: '' });
@@ -246,10 +242,6 @@ export default function BlogPost({ blog, relatedPosts = [], error, pageSlug }: P
   const hasFetchedRef = useRef(false);
   const authorRef = useRef(null);
 
-
-  useEffect(() => {
-    if (blog?.id) fetchComments(blog.id);
-  }, [blog?.id, fetchComments]);
 
   useEffect(() => {
     setCurrentUrl(window.location.href);
@@ -328,15 +320,17 @@ export default function BlogPost({ blog, relatedPosts = [], error, pageSlug }: P
     e.preventDefault();
     setSubscribeStatus({ loading: true, message: '', error: false });
     try {
-      const response = await fetch('/api/subscribe', {
+      const response = await fetch('/api/subscribe-newsletter', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify(subscribeForm),
       });
       if (response.ok) {
-        setSubscribeStatus({ loading: false, message: 'Subscription successful!', error: false });
+        setSubscribeStatus({ loading: false, message: 'Subscription successful! Please check your email for confirmation.', error: false });
+        setSubscribeForm({ name: '', email: '' });
       } else {
-        setSubscribeStatus({ loading: false, message: 'Subscription failed. Please try again later.', error: true });
+        const data = await response.json().catch(() => ({}));
+        setSubscribeStatus({ loading: false, message: data.message || 'Subscription failed. Please try again later.', error: true });
       }
     } catch (err) {
       setSubscribeStatus({ loading: false, message: 'An error occurred. Please try again later.', error: true });
@@ -439,7 +433,7 @@ export default function BlogPost({ blog, relatedPosts = [], error, pageSlug }: P
           </div>
         </div>
 
-        {/* Article Content and Comments */}
+        {/* Article Content */}
         <div className="w-full max-w-[1440px] mx-auto px-4 sm:px-6 lg:px-8 py-10 sm:py-16 md:py-20">
 
           {/* Article */}
@@ -474,13 +468,6 @@ export default function BlogPost({ blog, relatedPosts = [], error, pageSlug }: P
                       <Icon icon="heroicons:user" className="w-4 h-4" />
                       <span>By {blog.author}</span>
                     </div>
-                  )}
-                  {hasContent && blog?.id && (
-                    <CommentCount
-                      comments={comments}
-                      loading={commentsLoading}
-                      onClick={() => document.querySelector('#comments-section')?.scrollIntoView({ behavior: 'smooth' })}
-                    />
                   )}
                 </div>
 
@@ -546,19 +533,6 @@ export default function BlogPost({ blog, relatedPosts = [], error, pageSlug }: P
               </div>
             </article>
           </div>
-
-          {/* Comments Section */}
-          {hasContent && blog?.id && (
-            <div id="comments-section" className="bg-white rounded-xl sm:rounded-2xl overflow-hidden">
-              <BlogComments
-                blogId={blog.id}
-                comments={comments}
-                commentsLoading={commentsLoading}
-                commentsError={commentsError}
-                onCommentAdded={() => fetchComments(blog.id)}
-              />
-            </div>
-          )}
 
           {/* Back to Blogs */}
           <div className="mt-8 sm:mt-12 flex justify-center">

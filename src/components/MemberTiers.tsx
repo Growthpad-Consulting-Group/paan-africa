@@ -1,4 +1,3 @@
-// @ts-nocheck (header markup is still the legacy JSX; the table bodies are typed and data-driven)
 import Image from 'next/image';
 import React from 'react';
 
