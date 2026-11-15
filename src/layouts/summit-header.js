@@ -1,6 +1,7 @@
 "use client";
 
 import Image from "next/image";
+import { SUMMIT_CANCELLED } from "@/data/summit/status";
 import Link from "next/link";
 import { useState, useEffect } from "react";
 import { menuItems, ctaButton } from "../data/summitMenu";
@@ -152,10 +153,11 @@ const Header = ({ navLinkColor }) => {
             <LanguageSwitch className="mr-2 xl:mr-3" />
             
             <button 
+              disabled={SUMMIT_CANCELLED}
               onClick={() => window.location.href = '/summit/purchase-ticket'}
-              className="bg-paan-red text-white px-4 py-2 text-sm rounded-full hover:bg-paan-red/90 transition-all duration-300 font-medium shadow-lg flex items-center justify-center gap-2"
+              className="bg-paan-red text-white px-4 py-2 text-sm rounded-full hover:bg-paan-red/90 transition-all duration-300 font-medium shadow-lg flex items-center justify-center gap-2 disabled:opacity-60 disabled:pointer-events-none"
             >
-              {ctaButton.label}
+              {SUMMIT_CANCELLED ? 'Registration Closed' : ctaButton.label}
             </button>
           </div>
         </div>
@@ -191,10 +193,11 @@ const Header = ({ navLinkColor }) => {
             })}
             <div className="px-3 sm:px-4 py-3 mt-4">
               <button 
+                disabled={SUMMIT_CANCELLED}
                 onClick={() => window.location.href = '/summit/purchase-ticket'}
-                className="bg-paan-red text-white px-4 py-2 text-sm rounded-full hover:bg-paan-red/90 transition-all duration-300 font-medium shadow-lg flex items-center justify-center gap-2 w-full"
+                className="bg-paan-red text-white px-4 py-2 text-sm rounded-full hover:bg-paan-red/90 transition-all duration-300 font-medium shadow-lg flex items-center justify-center gap-2 w-full disabled:opacity-60 disabled:pointer-events-none"
               >
-                {ctaButton.label}
+                {SUMMIT_CANCELLED ? 'Registration Closed' : ctaButton.label}
               </button>
             </div>
           </div>

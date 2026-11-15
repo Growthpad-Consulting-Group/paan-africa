@@ -28,16 +28,8 @@ const PlanYourTripSection = () => {
               <div className="bg-white rounded-lg p-3 sm:p-4 shadow-md">
                 <div className="flex items-center gap-2 sm:gap-3 mb-2">
                   <Icon icon="mdi:map-marker" className="text-paan-red" width="16" height="16" />
-                  <h4 className="font-semibold text-paan-dark-blue text-sm sm:text-base">Sarit Centre, Nairobi</h4>
+                  <h4 className="font-semibold text-paan-dark-blue text-sm sm:text-base">TBC</h4>
                 </div>
-                <a 
-                  href="https://www.google.com/maps/dir/?api=1&destination=Sarit+Centre+Nairobi" 
-                  target="_blank" 
-                  rel="noopener noreferrer"
-                  className="text-paan-blue hover:text-paan-red transition-colors text-xs sm:text-sm"
-                >
-                  View Directions →
-                </a>
               </div>
               
               <div className="bg-white rounded-lg p-3 sm:p-4 shadow-md">

@@ -1,4 +1,5 @@
 import SEO from "@/components/SEO";
+import SummitCancelledBanner from "@/components/summit/SummitCancelledBanner";
 import TravelGuideHeader from "@/layouts/travel-guide-header";
 import Image from "next/image";
 import { Icon } from "@iconify/react";
@@ -491,10 +492,10 @@ const Exhibitors = () => {
               "eventStatus": "https://schema.org/EventScheduled",
               "location": {
                 "@type": "Place",
-                  "name": "Sarit Centre",
+                  "name": "TBC",
                 "address": {
                   "@type": "PostalAddress",
-                    "streetAddress": "Sarit Centre, Westlands",
+                    "streetAddress": "TBC",
                   "addressLocality": "Nairobi",
                   "addressRegion": "Nairobi County",
                   "postalCode": "00100",
@@ -1382,6 +1383,7 @@ const Exhibitors = () => {
             onClose={closeModal} 
           />
         )}
+        <SummitCancelledBanner />
       </main>
     </>
   );

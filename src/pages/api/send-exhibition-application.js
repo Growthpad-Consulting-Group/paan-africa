@@ -133,7 +133,7 @@ export default async function handler(req, res) {
       <h3>Important Information:</h3>
       <ul>
         <li><strong>Event Dates:</strong> April 23-24, 2026</li>
-        <li><strong>Venue:</strong> Sarit Centre, Nairobi, Kenya</li>
+        <li><strong>Venue:</strong> TBC</li>
         <li><strong>Expected Attendees:</strong> 300+ in-person, 1,000+ streaming</li>
       </ul>
       

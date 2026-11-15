@@ -1,4 +1,5 @@
 import { useState, useEffect, useRef } from "react";
+import SummitCancelledBanner from "@/components/summit/SummitCancelledBanner";
 import { useRouter } from "next/router";
 import Head from "next/head";
 import Image from "next/image";
@@ -789,6 +790,7 @@ const ExperienceDetailPage = () => {
         <ScrollToTop />
         <PaystackScript />
         <Toaster position="top-right" />
+        <SummitCancelledBanner />
       </main>
     </>
   );

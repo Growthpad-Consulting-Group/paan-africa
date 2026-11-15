@@ -1,4 +1,6 @@
 import SEO from "@/components/SEO";
+import SummitCancelledBanner from "@/components/summit/SummitCancelledBanner";
+import { SUMMIT_CANCELLED, SUMMIT_CANCELLATION_NOTICE } from "@/data/summit/status";
 import Header from "@/layouts/ticket-purchase-header";
 import Image from "next/image";
 import { Icon } from "@iconify/react";
@@ -896,6 +898,23 @@ const SummitPage = () => {
                   </motion.div>
                 </section>
               </div>
+              {SUMMIT_CANCELLED ? (
+                <div className="max-w-3xl mx-auto px-4 sm:px-6 lg:px-8 pb-16">
+                  <div className="p-6 sm:p-10 bg-white border border-paan-red/30 rounded-2xl shadow-xl text-center">
+                    <Icon icon="mdi:calendar-remove" className="w-12 h-12 text-paan-red mx-auto mb-4" />
+                    <h2 className="font-bold text-2xl text-paan-dark-blue mb-3">{SUMMIT_CANCELLATION_NOTICE.title}</h2>
+                    <p className="text-paan-dark-blue/80 mb-6">{SUMMIT_CANCELLATION_NOTICE.message}</p>
+                    <a
+                      href={`mailto:${SUMMIT_CANCELLATION_NOTICE.contactEmail}?subject=PAAN Summit 2026 Cancellation Enquiry`}
+                      className="inline-flex items-center gap-2 bg-paan-dark-blue text-white px-6 py-3 rounded-full hover:bg-paan-dark-blue/90 transition-all duration-300 font-medium"
+                    >
+                      <Icon icon="mdi:email" className="w-5 h-5" />
+                      Contact {SUMMIT_CANCELLATION_NOTICE.contactEmail}
+                    </a>
+                  </div>
+                </div>
+              ) : (
+              <>
               {/* Progress bar */}
               <StepBar currentStep={currentStep} />
               {/* Main Content Area */}
@@ -935,8 +954,10 @@ const SummitPage = () => {
                     {currentStep === 4 && <PaymentStep onNext={handleNext} onPrev={handlePrev} paymentInfo={paymentInfo} handlePaymentChange={handlePaymentChange} selectedTickets={selectedTickets} errors={errors} isSubmitting={isSubmitting} promoCode={promoCode} setPromoCode={setPromoCode} promoCodeValidation={promoCodeValidation} setPromoCodeValidation={setPromoCodeValidation} handlePromoCodeValidation={handlePromoCodeValidation} isValidatingPromo={isValidatingPromo} />}
                   </>
                 )}
-                
+
               </div>
+              </>
+              )}
           </div>
          
           {/* Parallax Section */}
@@ -1016,6 +1037,7 @@ const SummitPage = () => {
           isOpen={showExhibitionModal} 
           onClose={() => setShowExhibitionModal(false)} 
         />
+        <SummitCancelledBanner />
       </main>
     </>
   );

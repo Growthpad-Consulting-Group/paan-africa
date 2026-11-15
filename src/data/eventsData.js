@@ -1,6 +1,21 @@
 // data/eventsData.js
 export const eventsData = {
   upcoming: [
+    {
+      id: 18,
+      title: "AI in Strategic Communication",
+      date: "2026-11-03",
+      time: "12:00 PM EAT",
+      location: "Virtual Event",
+      venue: "Zoom",
+      description: "AI is changing how communication professionals research, create, analyse information and make decisions. But using AI strategically requires more than learning how to use new tools. It requires an understanding of communication objectives, audiences, context, data and the role human judgement continues to play. This webinar brings together experienced strategic communication practitioners and AI and data expertise to explore how communication professionals can apply AI more effectively in their work.",
+      image: "https://ik.imagekit.io/nkmvdjnna/PAAN/webinars/paanxapn.jpg",
+      category: "Webinar",
+      price: "Free",
+      registrationUrl: "https://us06web.zoom.us/meeting/register/6EU_7z3ARS-DFeatkgzF6Q",
+      status: "upcoming",
+      featured: true
+    },
     // {
     //   id: 14,
     //   title: "How Fintech Brands Can Succeed in Cross-Regional Campaigns",
@@ -16,36 +31,6 @@ export const eventsData = {
     //   status: "upcoming",
     //   featured: true
     // },
-    {
-      id: 15,
-      title: "Culture, Data & Behaviour: Understanding Today's African Consumer",
-      date: "2026-05-27",
-      time: "12:00 PM EAT",
-      location: "Virtual Event",
-      venue: "Zoom",
-      description: "African consumers are evolving rapidly, shaped by shifting cultural identities, digital adoption, economic realities, and global influences. For agencies and brands, understanding these nuances is critical to building relevance, trust, and long-term growth across diverse African markets. This session brings together strategy, creative, and leadership perspectives from Media Seal WPI to unpack how culture, data, and behaviour intersect, and what that means for brands navigating today's African consumer landscape.",
-      image: "https://ik.imagekit.io/nkmvdjnna/PAAN/webinars/culture-data-behaviour.jpg",
-      category: "Webinar",
-      price: "Free",
-      registrationUrl: "https://tinyurl.com/3jxfajja",
-      status: "upcoming",
-      featured: true
-    },
-    {
-      id: 2,
-      title: "PAAN Creative Summit 2026",
-      date: "2026-10-28",
-      time: "09:00 AM - 06:00 PM",
-      location: "Nairobi, Kenya",
-      venue: "Sarit Centre, Nairobi",
-      description: "Join us for the biggest creative industry gathering in Africa. Network with top agencies, freelancers, and clients. Features keynote speakers, workshops, and networking sessions.",
-      image: "/assets/images/summit-image.webp",
-      category: "Summit",
-      price: "Free for Full Members",
-      registrationUrl: "/summit",
-      status: "upcoming",
-      featured: true
-    },
   ],
   past: [
     {
@@ -271,7 +256,6 @@ export const eventsData = {
 
 export const eventCategories = [
   "All Events",
-  "Summit",
   "Webinar"
 ];
 

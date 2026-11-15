@@ -1,4 +1,5 @@
 import { motion } from "framer-motion";
+import { SUMMIT_CANCELLED } from "@/data/summit/status";
 import { Icon } from "@iconify/react";
 import { useEffect, useRef } from "react";
 
@@ -62,7 +63,7 @@ const Hero = ({ sectionRefs, handleScroll, timeLeft }) => {
                 animate={{ opacity: 1, y: 0 }}
                 transition={{ duration: 0.6, delay: 0.6 }}
               >
-                Register for PAAN Summit 2026
+                {SUMMIT_CANCELLED ? 'PAAN Summit 2026 Cancelled' : 'Register for PAAN Summit 2026'}
               </motion.h1>            
               <motion.div 
                 className="flex flex-col sm:flex-row gap-2 sm:gap-4 mb-3 sm:mb-4 md:mb-6"
@@ -78,10 +79,12 @@ const Hero = ({ sectionRefs, handleScroll, timeLeft }) => {
                 animate={{ opacity: 1, x: 0 }}
                 transition={{ duration: 0.6, delay: 1.0 }}
               >
-                Limited early-bird discounts available.
+                {SUMMIT_CANCELLED
+                  ? 'Registration and ticket sales are closed.'
+                  : 'Limited early-bird discounts available.'}
               </motion.p>
-              <motion.div 
-                className="text-xs sm:text-sm md:text-base font-normal text-white mb-4 sm:mb-6 leading-tight"
+              <motion.div
+                className={`text-xs sm:text-sm md:text-base font-normal text-white mb-4 sm:mb-6 leading-tight ${SUMMIT_CANCELLED ? 'hidden' : ''}`}
                 initial={{ opacity: 0, scale: 0.9 }}
                 animate={{ opacity: 1, scale: 1 }}
                 transition={{ duration: 0.6, delay: 1.2 }}
@@ -138,7 +141,7 @@ const SeminarLocationAndDate = () => {
   return (
     <div className="flex flex-col sm:flex-row gap-2 sm:gap-4">
       <div className="flex items-center gap-2 text-white text-xs sm:text-sm">
-        <span className="break-words sm:whitespace-nowrap"><span className="font-bold">Create. Connect. Commercialize.</span> &nbsp; Sarit Center, Nairobi • 28-29 Oct 2026</span>
+        <span className="break-words sm:whitespace-nowrap"><span className="font-bold">Create. Connect. Commercialize.</span> &nbsp; TBC • 28-29 Oct 2026</span>
       </div>
     </div>
   );

@@ -1,4 +1,6 @@
 import SEO from "@/components/SEO";
+import SummitCancelledBanner from "@/components/summit/SummitCancelledBanner";
+import { SUMMIT_CANCELLED } from "@/data/summit/status";
 import TravelGuideHeader from "@/layouts/travel-guide-header";
 import Image from "next/image";
 import { Icon } from "@iconify/react";
@@ -385,10 +387,10 @@ const TravelGuide = () => {
               "eventStatus": "https://schema.org/EventScheduled",
               "location": {
                 "@type": "Place",
-                  "name": "Sarit Centre",
+                  "name": "TBC",
                 "address": {
                   "@type": "PostalAddress",
-                    "streetAddress": "Sarit Centre, Westlands",
+                    "streetAddress": "TBC",
                   "addressLocality": "Nairobi",
                   "addressRegion": "Nairobi County",
                   "postalCode": "00100",
@@ -691,13 +693,13 @@ const TravelGuide = () => {
                         <div className="relative h-48 sm:h-56 md:h-64 mb-4 sm:mb-6 rounded-lg overflow-hidden">
                             <Image
                                 src="https://ik.imagekit.io/nkmvdjnna/PAAN/summit/airport.png"
-                                alt="Airport to Sarit Center"
+                                alt="Airport to venue (TBC)"
                                 fill
                                 className="object-cover"
                             />
                         </div>
                         <div className="space-y-3 sm:space-y-4">
-                            <h3 className="text-xl sm:text-2xl font-bold text-white mb-2 sm:mb-3">Airport → Sarit Center</h3>
+                            <h3 className="text-xl sm:text-2xl font-bold text-white mb-2 sm:mb-3">Airport → Venue (TBC)</h3>
                             <p className="text-white text-sm sm:text-base">Arrive via Jomo Kenyatta International (NBO). The venue is 25–40 minutes by car. Options include Uber, Bolt, Little Cab, or hotel transfers. Complimentary shuttles will run at set times.</p>
                         </div>
                     </div>
@@ -1152,6 +1154,7 @@ const TravelGuide = () => {
          </div>
         <SummitFooter />
         <ScrollToTop />
+        <SummitCancelledBanner />
       </main>
     </>
   );
@@ -1208,10 +1211,11 @@ const Hero = ({ sectionRefs, handleScroll, isFixed, timeLeft }) => {
                 variants={scaleIn}
               >
                 <button 
+                  disabled={SUMMIT_CANCELLED}
                   onClick={() => window.location.href = '/summit'}
-                  className="bg-paan-red text-white px-6 sm:px-8 py-3 rounded-full hover:bg-paan-red/90 transition-all duration-300 font-medium text-sm sm:text-base shadow-lg flex items-center justify-center gap-2 w-full sm:w-auto"
+                  className="bg-paan-red text-white px-6 sm:px-8 py-3 rounded-full hover:bg-paan-red/90 transition-all duration-300 font-medium text-sm sm:text-base shadow-lg flex items-center justify-center gap-2 w-full sm:w-auto disabled:opacity-60 disabled:pointer-events-none"
                 >
-                  Register Now
+                  {SUMMIT_CANCELLED ? 'Registration Closed' : 'Register Now'}
                 </button>
                 <button 
                   onClick={() => window.location.href = '/summit/travel-guide#visa-requirements'}
@@ -1241,7 +1245,7 @@ const SeminarLocationAndDate = ()=> {
     <div className="flex flex-col sm:flex-row gap-2 sm:gap-4">
       <div className="flex items-center gap-2 text-white text-xs sm:text-sm">
         <Icon icon="mdi:map-marker" className="text-red-500 flex-shrink-0" width="20" height="20" />
-        <span className="break-words sm:whitespace-nowrap">Sarit Centre, Nairobi, Kenya - <strong>28–29 October 2026</strong></span>
+        <span className="break-words sm:whitespace-nowrap">TBC - <strong>28–29 October 2026</strong></span>
       </div>
       
       <div className="flex items-center gap-2 text-white text-xs sm:text-sm">

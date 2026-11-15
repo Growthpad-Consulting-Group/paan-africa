@@ -1,4 +1,5 @@
 import { useState, useRef, useEffect } from 'react';
+import SummitCancelledBanner from "@/components/summit/SummitCancelledBanner";
 import { useRouter } from 'next/router';
 import Header from "@/layouts/ticket-purchase-header";
 import { Icon } from '@iconify/react';
@@ -271,10 +272,10 @@ const ExhibitionApplication = () => {
                 "eventStatus": "https://schema.org/EventScheduled",
                 "location": {
                   "@type": "Place",
-                  "name": "Sarit Centre",
+                  "name": "TBC",
                   "address": {
                     "@type": "PostalAddress",
-                    "streetAddress": "Sarit Centre, Westlands",
+                    "streetAddress": "TBC",
                     "addressLocality": "Nairobi",
                     "addressRegion": "Nairobi County",
                     "postalCode": "00100",
@@ -425,7 +426,7 @@ const ExhibitionApplication = () => {
                 </div>
                 <div className="flex items-center gap-2">
                   <Icon icon="mdi:map-marker" className="w-4 h-4" />
-                  <span>Sarit Centre, Nairobi</span>
+                  <span>TBC</span>
                 </div>
                 <div className="flex items-center gap-2">
                   <Icon icon="mdi:account-group" className="w-4 h-4" />
@@ -854,6 +855,7 @@ const ExhibitionApplication = () => {
 
         <SummitFooter />
         <ScrollToTop />
+        <SummitCancelledBanner />
       </main>
     </>
   );

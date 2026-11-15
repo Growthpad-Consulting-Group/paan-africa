@@ -645,10 +645,10 @@ const SummitPage = () => {
               "eventStatus": "https://schema.org/EventScheduled",
               "location": {
                 "@type": "Place",
-                "name": "Sarit Centre",
+                "name": "TBC",
                 "address": {
                   "@type": "PostalAddress",
-                  "streetAddress": "Sarit Centre, Westlands",
+                  "streetAddress": "TBC",
                   "addressLocality": "Nairobi",
                   "addressRegion": "Nairobi County",
                   "postalCode": "00100",

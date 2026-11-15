@@ -305,7 +305,7 @@ const TicketsSection = ({ earlyBirdTimeLeft }) => {
                 </div>
                 <div className="flex items-center gap-3">
                   <Icon icon="mdi:map-marker" className="text-paan-red" width="20" height="20" />
-                  <span className="text-sm font-medium">Sarit Centre, Nairobi, Kenya</span>
+                  <span className="text-sm font-medium">TBC</span>
                 </div>
                 <div className="flex items-center gap-3">
                   <Icon icon="mdi:users" className="text-paan-red" width="20" height="20" />
@@ -407,7 +407,7 @@ const TicketsSection = ({ earlyBirdTimeLeft }) => {
 
                   <div className="flex flex-col gap-1 sm:gap-2 md:gap-3 mt-3 sm:mt-4 md:mt-6">
                     <button className="bg-paan-yellow text-paan-dark-blue px-2 sm:px-3 py-1 sm:py-2 rounded-full hover:bg-paan-yellow/90 transition-all duration-300 font-medium text-xs sm:text-sm shadow-lg flex items-center justify-center w-fit">October 28-29, 2026</button>
-                    <button className="bg-transparent border border-white text-white px-2 sm:px-3 py-1 sm:py-2 rounded-full hover:bg-white hover:text-paan-dark-blue transition-all duration-300 font-medium text-xs sm:text-sm shadow-lg flex items-center justify-center w-fit">Sarit Center, Nairobi, Kenya</button>
+                    <button className="bg-transparent border border-white text-white px-2 sm:px-3 py-1 sm:py-2 rounded-full hover:bg-white hover:text-paan-dark-blue transition-all duration-300 font-medium text-xs sm:text-sm shadow-lg flex items-center justify-center w-fit">TBC</button>
                   </div>
                 </div>
               </div>
