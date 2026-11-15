@@ -58,3 +58,41 @@ export async function getAwards(edition = SUMMIT_EDITION): Promise<AwardsData> {
     featuredFreelancerIds: featured(freelancer),
   }
 }
+
+// ── Bookable travel experiences ─────────────────────────────────────────────
+
+/**
+ * Same shape the travel-guide and booking pages used when this was hardcoded.
+ * `id` is the permanent string id: it is the URL, the Paystack reference and the booking key.
+ */
+export type SummitExperience = {
+  id: string
+  category: string | null
+  title: string
+  subtitle: string | null
+  description: string | null
+  price: number
+  priceUnit: string
+  priceNote: string | null
+  image: string
+  duration: string | null
+  availability: string | null
+  highlights: string[]
+}
+
+const EXPERIENCE_FIELDS = `
+  "id": experienceId, category, title, subtitle, description, price, "priceUnit": coalesce(priceUnit, "USD"), priceNote,
+  "image": image.asset->url, duration, availability, "highlights": coalesce(highlights, [])
+`
+
+export const getSummitExperiences = (edition = SUMMIT_EDITION) =>
+  sanityFetch<SummitExperience[]>(
+    `*[_type == "summitExperience" && edition == $edition && defined(experienceId)] | ${ORDER}{${EXPERIENCE_FIELDS}}`,
+    { edition }
+  )
+
+export const getSummitExperience = (id: string, edition = SUMMIT_EDITION) =>
+  sanityFetch<SummitExperience | null>(
+    `*[_type == "summitExperience" && edition == $edition && experienceId == $id][0]{${EXPERIENCE_FIELDS}}`,
+    { edition, id }
+  )

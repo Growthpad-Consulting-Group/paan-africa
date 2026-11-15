@@ -10,14 +10,15 @@ import SummitFooter from "@/layouts/summit-footer";
 import ScrollToTop from "@/components/ScrollToTop";
 import PaystackScript from "@/components/PaystackScript";
 import { motion } from "framer-motion";
-import { summitExperiences } from "../../travel-guide";
+import type { GetStaticPaths, GetStaticProps } from "next";
+import { getSummitExperience, getSummitExperiences, type SummitExperience } from "@/lib/summitService";
 import toast, { Toaster } from "react-hot-toast";
 import ReCAPTCHA from "react-google-recaptcha";
 
-const ExperienceDetailPage = () => {
+type Props = { experience: SummitExperience };
+
+const ExperienceDetailPage = ({ experience }: Props) => {
   const router = useRouter();
-  const { id } = router.query;
-  const [experience, setExperience] = useState(null);
   const [formData, setFormData] = useState({
     name: '',
     email: '',
@@ -29,20 +30,13 @@ const ExperienceDetailPage = () => {
     hotel: '',
     dietaryRequirements: ''
   });
-  const [errors, setErrors] = useState({});
+  const [errors, setErrors] = useState<Record<string, string>>({});
   const [isSubmitting, setIsSubmitting] = useState(false);
-  const [recaptchaToken, setRecaptchaToken] = useState(null);
-  const recaptchaRef = useRef(null);
+  const [recaptchaToken, setRecaptchaToken] = useState<string | null>(null);
+  const recaptchaRef = useRef<ReCAPTCHA>(null);
   const [paystackReady, setPaystackReady] = useState(false);
   const [showPayment, setShowPayment] = useState(false);
   const [bookingId, setBookingId] = useState(null);
-
-  useEffect(() => {
-    if (id) {
-      const found = summitExperiences.find(exp => exp.id === id);
-      setExperience(found);
-    }
-  }, [id]);
 
   // Check if Paystack is ready
   useEffect(() => {
@@ -59,7 +53,7 @@ const ExperienceDetailPage = () => {
     return () => clearInterval(interval);
   }, []);
 
-  const handleChange = (e) => {
+  const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement | HTMLTextAreaElement>) => {
     const { name, value } = e.target;
     setFormData(prev => ({
       ...prev,
@@ -73,7 +67,7 @@ const ExperienceDetailPage = () => {
     }
   };
 
-  const handleRecaptchaChange = (token) => {
+  const handleRecaptchaChange = (token: string | null) => {
     setRecaptchaToken(token);
     setErrors(prev => ({
       ...prev,
@@ -82,7 +76,7 @@ const ExperienceDetailPage = () => {
   };
 
   const validateForm = () => {
-    const newErrors = {};
+    const newErrors: Record<string, string> = {};
     if (!formData.name.trim()) newErrors.name = 'Name is required';
     if (!formData.email.trim()) {
       newErrors.email = 'Email is required';
@@ -95,7 +89,7 @@ const ExperienceDetailPage = () => {
     return newErrors;
   };
 
-  const handleSubmit = async (e) => {
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
 
     const validationErrors = validateForm();
@@ -237,7 +231,7 @@ const ExperienceDetailPage = () => {
             }
           ]
         },
-        onSuccess: async (response) => {
+        onSuccess: async (response: { reference: string }) => {
           console.log('Paystack payment successful:', response);
           // Handle successful payment
           try {
@@ -310,7 +304,7 @@ const ExperienceDetailPage = () => {
     <>
       <SEO
         title={`${experience.title} - PAAN Summit 2026 Travel Experiences`}
-        description={experience.description}
+        description={experience.description ?? undefined}
         keywords={`${experience.title}, PAAN Summit 2026, Nairobi tours, travel experiences`}
       />
       <Head>
@@ -378,13 +372,13 @@ const ExperienceDetailPage = () => {
               </section>
 
               {/* Features/Highlights */}
-              {(experience.features || experience.highlights) && (
+              {experience.highlights && (
                 <section>
                   <h2 className="text-2xl font-bold text-paan-dark-blue mb-4">
-                    {experience.features ? "What's Included" : 'Highlights'}
+                    Highlights
                   </h2>
                   <ul className="space-y-3">
-                    {(experience.features || experience.highlights).map((item, idx) => (
+                    {experience.highlights.map((item: string, idx: number) => (
                       <li key={idx} className="flex items-start gap-3">
                         <Icon icon="mdi:check-circle" className="text-paan-red mt-1 flex-shrink-0" width="24" height="24" />
                         <span className="text-gray-700">{item}</span>
@@ -674,7 +668,7 @@ const ExperienceDetailPage = () => {
                       name="dietaryRequirements"
                       value={formData.dietaryRequirements}
                       onChange={handleChange}
-                      rows="2"
+                      rows={2}
                       placeholder="Any special dietary needs?"
                       className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-paan-red focus:border-transparent"
                     />
@@ -689,7 +683,7 @@ const ExperienceDetailPage = () => {
                       name="specialRequests"
                       value={formData.specialRequests}
                       onChange={handleChange}
-                      rows="3"
+                      rows={3}
                       placeholder="Any additional requests or questions?"
                       className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-paan-red focus:border-transparent"
                     />
@@ -794,6 +788,17 @@ const ExperienceDetailPage = () => {
       </main>
     </>
   );
+};
+
+export const getStaticPaths: GetStaticPaths = async () => {
+  const experiences = await getSummitExperiences();
+  return { paths: experiences.map((e) => ({ params: { id: e.id } })), fallback: 'blocking' };
+};
+
+export const getStaticProps: GetStaticProps<Props, { id: string }> = async ({ params }) => {
+  const experience = await getSummitExperience(params!.id);
+  if (!experience) return { notFound: true, revalidate: 60 };
+  return { props: { experience }, revalidate: 3600 };
 };
 
 export default ExperienceDetailPage;
