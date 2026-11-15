@@ -102,15 +102,19 @@ Seven near-identical ~850-line pages (6,000 lines) → one Sanity schema + one t
 ### Do NOT migrate to Sanity
 Ticket types & prices (payments depend on DB integrity), promo codes, talent profiles, trends data, form submissions. Sanity may *reference* ticket type IDs but Supabase stays source of truth.
 
-### Phase 1.5 — Summit & Awards (moved into scope 2026-11-15)
-Both are cancelled and hidden (`SUMMIT_CANCELLED`, `HIDDEN_PATHS` in `next.config.js`), so content can be migrated and verified without anything going public. Model by **edition (year)** so past/future editions coexist.
-| Area | Source today | Status |
+### Phase 1.5 — Summit & Awards (moved into scope 2026-11-15) 🔄
+Both are cancelled and hidden (`SUMMIT_CANCELLED`, `HIDDEN_PATHS` in `next.config.js`), so content is migrated and verified without anything going public. **Local verification:** build/start with `SHOW_HIDDEN_PAGES=1` (added to `next.config.js`; default off, never set it in production) to render the redirected pages and compare them byte-for-byte with a pre-change baseline. Content is keyed by **edition (year)**, `SUMMIT_EDITION` in `data/summit/status.js`.
+
+**Scope:** the *structured* content moves to Sanity. The long marketing prose inside these pages stays in the page code (same approach as the home/about pages).
+| Slice | Status | Notes |
 |---|---|---|
-| Schemas: `summitEdition`, `speaker`, `session`, `track`, `sponsorPartner`, `exhibitor`, `travelExperience`, `awardCategory` (+ terms/info) | `data/summit/{speakers,sessions,tracks}.js`, `summit/exhibitors.js` (1,609 lines), `summit/travel-guide.js` (1,649) + `travel-guide/experiences/[id].js` (800), `paan-awards.js` (1,549), `paan-awards/categories.js` (1,217), `paan-awards-terms.js` (372), `summit.js` (1,696), `components/summit/*` | ⏳ |
-| Seed scripts (dry-run default, same pattern as events/masterclasses) + images → Sanity | | ⏳ |
-| Pages on ISR from Sanity; keep redirects/flags working | | ⏳ |
-| **Stays in Supabase / unchanged:** ticket types, prices, purchase + payment flow, `experience_bookings`, promo codes, speaker/exhibition application submissions | | — |
-| Baseline-compare each page (hidden pages are only reachable by temporarily lifting the redirect in a local build) | | ⏳ |
+| 0. Dead code | ✅ | `travel-guide`, `exhibitors`, `paan-awards`, `categories` carried copies of `speakers` + `sessions` and carousel helpers that nothing rendered (~360 lines): deleted |
+| 1. Speakers, experiences/sessions, tracks | ✅ | `summitSpeaker` (8), `summitSession` (6), `summitTrack` (7); `lib/summitService.ts`; `summit.js` on ISR; 21 images → Sanity. `data/summit/{speakers,sessions,tracks}.js` removed (kept as seed sources in `scripts/data/`); unused `SessionsSection`/`SpeakersSection` deleted. `TracksSection` took `track.id === 7` for its layout: now positional |
+| 2. Award categories | ✅ | `awardGroup` (5 agency + 3 freelancer groups, 37 awards; `featured` flag replaces the hardcoded "selected" ID lists). The two pages kept drifting copies (one description differed): the full-list wording is used. `paan-awards` 1,549 → 1,209 lines, `categories` 1,217 → 908 |
+| 3. Travel experiences (11, bookable via Paystack) | ⏳ | Data lives in `travel-guide.js` as `export const summitExperiences` (a page exporting data) and is imported by `experiences/[id].js`. **Payment path**: the string id (e.g. `purple-tea-farm`) is the booking key (`experience_bookings`), so keep it as a required unique field like `masterclassId` |
+| 4. Exhibition booths (40) | ⏳ | `boothData` in `exhibitors.js`: number, size, price, type, status (Available / Reserved / Booked): status changes often, so a good CMS fit |
+| 5. Remaining page content | ⏳ | travel-guide guides (accommodation, visa, packing, explore Nairobi), exhibitor packages/add-ons, awards key dates/terms. Model only what changes between editions |
+| 6. Convert + split the pages | ⏳ | TS conversion, split into section components (the 6 forms still carry `@ts-nocheck`) |
 
 ### Phase 1.4 — Cleanup: delete old, unused files and directories
 **Gate:** only after everything is deployed and verified in production (suggest one week of monitoring). One commit per category below so any can be reverted; before each: `next build` + baseline compare + the dead-code scan (`knip`) has been re-run. Everything deleted stays recoverable from git history.

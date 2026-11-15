@@ -24,3 +24,37 @@ export const getSummitTracks = (edition = SUMMIT_EDITION) =>
     `*[_type == "summitTrack" && edition == $edition] | ${ORDER}{ "id": _id, title, description, "image": image.asset->url, "features": coalesce(features, []) }`,
     { edition }
   )
+
+// ── Awards ────────────────────────────────────────────────────────────────
+
+/** Shapes match what the awards pages already expected, so their rendering code is unchanged. */
+export type AgencyAwardGroup = { id: string; name: string; description: string | null; subcategories: { id: string; name: string; description: string | null }[] }
+export type FreelancerAwardGroup = { id: string; name: string; description: string | null; subcategories: { id: string; title: string; description: string | null; icon: string | null }[] }
+export type AwardsData = {
+  agencyGroups: AgencyAwardGroup[]
+  freelancerGroups: FreelancerAwardGroup[]
+  /** Awards shown on the main awards page (the categories page shows all) */
+  featuredAgencyIds: string[]
+  featuredFreelancerIds: string[]
+}
+
+type RawGroup = { audience: 'agency' | 'freelancer'; groupId: string; name: string; description: string | null; awards: { awardId: string; name: string; description: string | null; icon: string | null; featured: boolean }[] }
+
+export async function getAwards(edition = SUMMIT_EDITION): Promise<AwardsData> {
+  const groups = await sanityFetch<RawGroup[]>(
+    `*[_type == "awardGroup" && edition == $edition] | ${ORDER}{
+      audience, groupId, name, description,
+      "awards": coalesce(awards[]{ awardId, name, description, icon, "featured": featured == true }, [])
+    }`,
+    { edition }
+  )
+  const agency = groups.filter((g) => g.audience === 'agency')
+  const freelancer = groups.filter((g) => g.audience === 'freelancer')
+  const featured = (gs: RawGroup[]) => gs.flatMap((g) => g.awards.filter((a) => a.featured).map((a) => a.awardId))
+  return {
+    agencyGroups: agency.map((g) => ({ id: g.groupId, name: g.name, description: g.description, subcategories: g.awards.map((a) => ({ id: a.awardId, name: a.name, description: a.description })) })),
+    freelancerGroups: freelancer.map((g) => ({ id: g.groupId, name: g.name, description: g.description, subcategories: g.awards.map((a) => ({ id: a.awardId, title: a.name, description: a.description, icon: a.icon })) })),
+    featuredAgencyIds: featured(agency),
+    featuredFreelancerIds: featured(freelancer),
+  }
+}
