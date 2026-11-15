@@ -1,7 +1,6 @@
 import Image from "next/image";
-import { tracks } from '@/data/summit/tracks';
 
-const TracksSection = ({ sectionRefs, handleScroll, isFixed }) => {
+const TracksSection = ({ sectionRefs, handleScroll, isFixed, tracks = [] }) => {
   const handleMouseEnter = (e) => {
     const infoSection = e.currentTarget;
     infoSection.style.backgroundColor = 'transparent';
@@ -35,10 +34,13 @@ const TracksSection = ({ sectionRefs, handleScroll, isFixed }) => {
         <h2 className="text-2xl sm:text-3xl text-center md:text-4xl font-normal text-paan-dark-blue mb-2 sm:mb-3">Summit Tracks</h2>
         <h3 className="text-sm sm:text-base md:text-lg font-normal py-2 sm:py-3 md:py-4 text-center text-paan-dark-blue mb-6 sm:mb-8">Tracks and the two-day agenda snapshot.</h3>
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 sm:gap-5 md:gap-6">
-          {tracks.map((track) => (
+          {tracks.map((track, index) => {
+            // the last card spans the full row when it would otherwise sit alone on a two-column row
+            const isLastOdd = index === tracks.length - 1 && tracks.length % 2 === 1;
+            return (
             <div 
               key={track.id} 
-              className={`relative rounded-lg shadow-lg overflow-hidden min-h-[320px] sm:min-h-[360px] md:h-80 lg:h-96 flex flex-col md:block ${track.id === 7 ? 'sm:col-span-2 lg:col-span-1' : ''}`}
+              className={`relative rounded-lg shadow-lg overflow-hidden min-h-[320px] sm:min-h-[360px] md:h-80 lg:h-96 flex flex-col md:block ${isLastOdd ? 'sm:col-span-2 lg:col-span-1' : ''}`}
             >
               {/* Image - full height on desktop, constrained on mobile */}
               <div className="relative flex-1 min-h-[180px] sm:min-h-[200px] md:absolute md:inset-0 overflow-hidden">
@@ -60,7 +62,7 @@ const TracksSection = ({ sectionRefs, handleScroll, isFixed }) => {
                 onMouseLeave={handleMouseLeave}
               >
                 <h4 
-                  className={`text-base sm:text-lg ${track.id === 7 ? 'md:text-lg' : 'md:text-xl'} font-bold text-paan-dark-blue mb-2 sm:mb-3 transition-colors duration-300 line-clamp-2`}
+                  className={`text-base sm:text-lg ${isLastOdd ? 'md:text-lg' : 'md:text-xl'} font-bold text-paan-dark-blue mb-2 sm:mb-3 transition-colors duration-300 line-clamp-2`}
                 >
                   {track.title.includes(' & ') ? (
                     <>
@@ -81,7 +83,8 @@ const TracksSection = ({ sectionRefs, handleScroll, isFixed }) => {
                 </div>
               </div>
             </div>
-          ))}
+          );
+          })}
         </div>
       </section>
     </div>

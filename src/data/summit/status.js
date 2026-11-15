@@ -8,3 +8,6 @@ export const SUMMIT_CANCELLATION_NOTICE = {
     "Registration and ticket sales are closed. Ticket holders will be contacted directly regarding next steps.",
   contactEmail: "secretariat@paan.africa",
 };
+
+// The summit edition (year) whose speakers, sessions, tracks and exhibition floor the site shows.
+export const SUMMIT_EDITION = 2026;

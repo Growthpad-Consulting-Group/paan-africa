@@ -20,6 +20,7 @@ import CountdownBanner from "@/components/summit/CountdownBanner";
 import ObjectivesSection from "@/components/summit/ObjectivesSection";
 import AtAGlanceSection from "@/components/summit/AtAGlanceSection";
 import TracksSection from "@/components/summit/TracksSection";
+import { getSummitSpeakers, getSummitSessions, getSummitTracks } from "@/lib/summitService";
 
 // Animation variants - defined outside component for global access
 const fadeInUp = {
@@ -54,7 +55,7 @@ const scaleIn = {
   transition: { duration: 0.5, ease: "easeOut" }
 };
 
-const SummitPage = () => {
+const SummitPage = ({ speakers = [], sessions = [], tracks = [] }) => {
   const sectionRefs = {
     home: useRef(null),
     about: useRef(null),
@@ -130,117 +131,7 @@ const SummitPage = () => {
     return sessions.slice(currentSessionIndex, currentSessionIndex + visibleSessions);
   };
 
-  // Speakers data
-  const speakers = [
-    {
-      id: 1,
-      name: "Anna Ceesay",
-      title: "Founder & CEO, Fabella, The Gambia",
-      image: "https://ik.imagekit.io/nkmvdjnna/PAAN/summit/speakers/Anna.png",
-      linkedin: "https://www.linkedin.com/in/annaceesay/?originalSubdomain=gm"
-    },
-    {
-      id: 2,
-      name: "Yannick Lefang",
-      title: "CEO & Founder - Kasi Insight, Africa",
-      image: "https://ik.imagekit.io/nkmvdjnna/PAAN/summit/speakers/Yannick.jpeg",
-      linkedin: "https://www.linkedin.com/in/yannicklefang?originalSubdomain=ca"
-    },
-    {
-      id: 3,
-      name: "Dr. Gillian Hammah",
-      title: "CMO Aya Data. Ghana",
-      image: "https://ik.imagekit.io/nkmvdjnna/PAAN/summit/speakers/Hammar.jpeg",
-      linkedin: "https://www.linkedin.com/in/gillian-hammah?originalSubdomain=gh"
-    },
-    {
-      id: 4,
-      name: "Craig Rodney",
-      title: "Founder, The Agency Coach, South Africa",
-      image: "https://ik.imagekit.io/nkmvdjnna/PAAN/summit/speakers/Craig.jpeg",
-      linkedin: "https://www.linkedin.com/in/craigrodney/?originalSubdomain=za"
-    },
-    {
-      id: 5,
-      name: "Clive Mishon",
-      title: "Founder, Alliance of Independent Agencies. UK",
-      image: "https://ik.imagekit.io/nkmvdjnna/PAAN/summit/speakers/clive.jpeg",
-      linkedin: "https://www.linkedin.com/in/clive-mishon-33b5318?originalSubdomain=uk"
-    },
-    {
-      id: 6,
-      name: "Magdalene Kariuki",
-      title: "Associate director, Africa Practice. Kenya",
-      image: "https://ik.imagekit.io/nkmvdjnna/PAAN/summit/speakers/Magdalene.jpeg",
-      linkedin: "https://www.linkedin.com/in/magdalene-kariuki-mppa"
-    },
-    {
-      id: 7,
-      name: "Victor Simba",
-      title: "International Development, PWC. Kenya",
-      image: "https://ik.imagekit.io/nkmvdjnna/PAAN/summit/speakers/Victor.jpeg",
-      linkedin: "https://www.linkedin.com/in/victor-simba-06502123a?originalSubdomain=ke"
-    },
-    {
-      id: 8,
-      name: "Musa Kalenga",
-      title: "CEO, Brave Group, South Africa",
-      image: "https://ik.imagekit.io/nkmvdjnna/PAAN/summit/speakers/musa.webp",
-      linkedin: "https://www.linkedin.com/in/musa-kalenga-31b10523/?originalSubdomain=za"
-    },
-  ];
 
-  // Sessions/Special Features data
-  const sessions = [
-    {
-      id: 1,
-      title: "Creator Crawl",
-      description: "An evening tour of Nairobi's creative hotspots designed for networking and collaboration.",
-      image: "https://ik.imagekit.io/nkmvdjnna/PAAN/summit/creator-crawl.png",
-      icon: "mdi:handshake",
-      category: "Networking"
-    },
-    {
-      id: 2,
-      title: "City Excursions",
-      description: "Curated cultural and innovation hub visits to immerse participants in Nairobi's vibrant ecosystem.",
-      image: "https://ik.imagekit.io/nkmvdjnna/PAAN/summit/city-excursions.png",
-      icon: "mdi:tools",
-      category: "Experience"
-    },
-    {
-      id: 3,
-      title: "Investor Roundtables",
-      description: "Invite-only sessions connecting startups, creators, and investors for candid deal-making discussions.",
-      image: "https://ik.imagekit.io/nkmvdjnna/PAAN/summit/investor-roundtable.png",
-      icon: "mdi:map-marker",
-      category: "Investment"
-    },
-    {
-      id: 4,
-      title: "Creator Crawl",
-      description: "An evening tour of Nairobi's creative hotspots designed for networking and collaboration.",
-      image: "https://ik.imagekit.io/nkmvdjnna/PAAN/summit/creator-crawl.png",
-      icon: "mdi:handshake",
-      category: "Networking"
-    },
-    {
-      id: 5,
-      title: "City Excursions",
-      description: "Curated cultural and innovation hub visits to immerse participants in Nairobi's vibrant ecosystem.",
-      image: "https://ik.imagekit.io/nkmvdjnna/PAAN/summit/city-excursions.png",
-      icon: "mdi:tools",
-      category: "Experience"
-    },
-    {
-      id: 6,
-      title: "Investor Roundtables",
-      description: "Invite-only sessions connecting startups, creators, and investors for candid deal-making discussions.",
-      image: "https://ik.imagekit.io/nkmvdjnna/PAAN/summit/investor-roundtable.png",
-      icon: "mdi:map-marker",
-      category: "Investment"
-    },
-  ];
 
   // Count up animation effect
   useEffect(() => {
@@ -621,7 +512,7 @@ const SummitPage = () => {
       
       
         {/* Program Section */}
-        <TracksSection 
+        <TracksSection tracks={tracks} 
           sectionRefs={sectionRefs} 
           handleScroll={handleScroll} 
           isFixed={isFixed} 
@@ -1692,6 +1583,16 @@ const SeminarLocationAndDate = ()=> {
       </div>
     </div>
   );
+}
+
+export async function getStaticProps() {
+  try {
+    const [speakers, sessions, tracks] = await Promise.all([getSummitSpeakers(), getSummitSessions(), getSummitTracks()]);
+    return { props: { speakers, sessions, tracks }, revalidate: 3600 };
+  } catch (error) {
+    console.error('Error loading summit content from Sanity:', error);
+    return { props: { speakers: [], sessions: [], tracks: [] }, revalidate: 60 };
+  }
 }
 
 export default SummitPage;

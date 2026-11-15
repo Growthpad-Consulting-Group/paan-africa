@@ -7,8 +7,11 @@ import agency from './agency'
 import event from './event'
 import jobPosting from './jobPosting'
 import masterclass from './masterclass'
+import summitSpeaker from './summitSpeaker'
+import summitSession from './summitSession'
+import summitTrack from './summitTrack'
 import masterclassSeries from './masterclassSeries'
 import { localizedString, localizedText } from './localized'
 
-// Next phases add: agency, event, jobPosting, masterclass, siteSettings, ...
-export const schemaTypes: SchemaTypeDefinition[] = [post, author, category, blockContent, agency, event, jobPosting, masterclass, masterclassSeries, localizedString, localizedText]
+// Next phases add: agency, event, jobPosting, masterclass, summitSpeaker, summitSession, summitTrack, siteSettings, ...
+export const schemaTypes: SchemaTypeDefinition[] = [post, author, category, blockContent, agency, event, jobPosting, masterclass, summitSpeaker, summitSession, summitTrack, masterclassSeries, localizedString, localizedText]
