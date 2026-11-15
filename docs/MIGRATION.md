@@ -14,19 +14,28 @@ Modelled on the CCSA tracker (`call-center-solutions-africa/docs/MIGRATION.md`).
 - i18n via `next-intl` (`src/messages/en.json`, `fr.json`).
 - Pages use `getServerSideProps` (blogs, careers, masterclasses) — no static/ISR.
 
+## Update (after pulling latest, 2026-11-15)
+- **Summit 2026 + PAAN Awards cancelled**: `SUMMIT_CANCELLED=true` (`src/data/summit/status.js`), `/summit/*`, `/paan-awards/*`, `/paan-awards-terms` redirect to `/` (temporary) via `HIDDEN_PATHS` in `next.config.js`, and are excluded in `next-sitemap.config.js`. → **Summit and Awards content is out of scope for Sanity for now**; do not spend effort on 2,800+ lines of unreachable pages. Revisit when/if an edition returns (then model as `summitEdition` with a year field).
+- **Webinars are the live events content** (`eventsData.js` is edited by hand for each webinar) → Events moves up to Phase 1.2b, right after agencies.
+- **Agency marquee lists more agencies than there are profile pages** (Growthpad/GCG, TDC, Ingenium have logos only) → `agency` schema gets `hasProfilePage`; marquee/grid read from Sanity.
+- **Ticket retrieval** (`retrieve-ticket` + API) is still live for existing ticket holders → ticket/payment code stays untouched and must keep working through the migration.
+- **Redirects must be carried through every phase** (HIDDEN_PATHS, www/host redirect, plus new agency/blog redirects).
+
+**Package manager: pnpm** (switched from npm on branch `feat/sanity-foundation`; `pnpm-lock.yaml`, `packageManager` field). Studio code lives in `src/sanity/` + root `sanity.config.ts`.
+
 ## Guiding rule: what goes in Sanity vs. stays in Supabase
 | Goes to Sanity (editorial, edited by humans) | Stays in Supabase (transactional / user-generated) |
 |---|---|
 | Blog posts, categories, authors | `ticket_purchases`, `purchasers`, `attendees`, `purchase_items`, `payment_transactions`, `ticket_types` |
 | Certified agencies | `promo_codes`, `masterclass_promo_codes` |
-| Masterclasses | `experience_bookings` |
+| Webinars / events (live) | `experience_bookings` |
 | Events / webinars | `summit_leads`, `eoi_submissions`, `enquiry_submissions`, `agency_enquiries`, `agency_contacts`, `partner_enquiries`, `newsletter_subscriptions` |
-| Summit content (speakers, sessions, tracks, sponsors, exhibitors, travel experiences) | Talent discovery (`profiles`, `skills`, `portfolio_items`, `profile_badges`, countries/cities) |
-| Awards categories | Trends dashboard data + cron aggregation |
+| ~~Summit content~~ (deferred: cancelled) | Talent discovery (`profiles`, `skills`, `portfolio_items`, `profile_badges`, countries/cities) |
+| ~~Awards categories~~ (deferred: cancelled) | Trends dashboard data + cron aggregation |
 | Clients, partners, FAQs, testimonials | `blog_comments` (user-generated; keep, key by Sanity post `_id`/slug) |
 | Careers / job postings (currently i18n JSON) | |
 | Academy programs, membership tiers, pricing | |
-| Site settings (nav, footer, banners/popup, social, SEO defaults) | |
+| Site settings (nav, footer, banners/popup, CTA links e.g. demo/contact, hidden-pages list, social, SEO defaults) | |
 
 **Consequence vs. CCSA:** Supabase can *not* be fully removed here. Target is "Supabase for data, Sanity for content". `hr_users` (blog authors) is replaced by Sanity `author` documents.
 
@@ -37,12 +46,12 @@ Modelled on the CCSA tracker (`call-center-solutions-africa/docs/MIGRATION.md`).
 ### Phase 1.0 — Foundation
 | Task | Status | Notes |
 |---|---|---|
-| Install `sanity`, `next-sanity`, `@sanity/image-url`, `@sanity/vision`, `@portabletext/react` | ⏳ | Copy `sanity.config.ts` + `sanity/lib` pattern from CCSA |
+| Install `sanity`, `next-sanity`, `@sanity/image-url`, `@sanity/vision`, `@portabletext/react` | ✅ | Copy `sanity.config.ts` + `sanity/lib` pattern from CCSA |
 | New dataset + env vars (`NEXT_PUBLIC_SANITY_PROJECT_ID`, `_DATASET`, read token, webhook secret) | ⏳ | Separate project from CCSA |
-| Embed Studio at `/studio` | ⏳ | Pages-router catch-all first, `app/studio` later |
-| Shared helpers: `sanityClient`, `urlFor`, GROQ fetch wrapper | ⏳ | |
+| Embed Studio at `/studio` | ✅ | Pages-router catch-all first, `app/studio` later |
+| Shared helpers: `sanityClient`, `urlFor`, GROQ fetch wrapper | ✅ | |
 | i18n strategy for en/fr | ⏳ | Decide once: field-level (`sanity-plugin-internationalized-array`) — recommended, since `next-intl` is already document-agnostic |
-| ISR + on-demand revalidation webhook (`/api/revalidate`) | ⏳ | Replaces `getServerSideProps` for content pages |
+| ISR + on-demand revalidation webhook (`/api/revalidate`) | 🔄 | Handler done; still need to add the webhook in Sanity manage + `SANITY_REVALIDATE_SECRET` env (local + Vercel). Replaces `getServerSideProps` for content pages |
 
 ### Phase 1.1 — Blog (first, mirrors CCSA)
 | Area | Status | Notes |
@@ -62,20 +71,19 @@ Seven near-identical ~850-line pages (`aquila, liftup, media_seal, nitro121, omn
 | Schema `agency` (name, slug, logo, hero, about, services, regions, certification date/level, team, case studies, contact, SEO) | ⏳ | Diff the 7 files first to find the true variable fields |
 | One template `certified-agencies/[slug]` + `certified-agencies/index` | ⏳ | `getStaticPaths` + ISR |
 | Redirects for old underscore URL (`media_seal`, `xperia_agency`) | ⏳ | Normalise slugs; add `redirects()` in `next.config.js` |
-| `AgencyLogosGrid`, `AgencyLogosMarquee`, `AgenciesMarquee` read from Sanity | ⏳ | |
+| `AgencyLogosGrid`, `AgencyLogosMarquee`, `AgenciesMarquee` read from Sanity | ⏳ | Marquee has ~10 agencies vs 7 profile pages: add `hasProfilePage`, `order`, `logo`; GCG, TDC, Ingenium are logo-only |
 | Delete 7 page files | ⏳ | Expected: −6,000 lines |
 
 ### Phase 1.3 — Other content (recommended order)
 | # | Content | Source today | Why | Status |
 |---|---|---|---|---|
-| 1 | Masterclasses | hardcoded in `masterclasses/index.js` (~760 lines) and `[id].js` (~2,150 lines) | Biggest hardcoded blob; also fixes numeric-id routing → slugs | ⏳ |
-| 2 | Events & webinars | `data/eventsData.js`, `events/[id].js` | Frequent edits | ⏳ |
-| 3 | Summit content | `data/summit/*`, `summit/exhibitors.js` (1,600 lines), `summit/travel-guide`, `PartnersSection`, `SpeakersSection` | Changes every year; add `year`/`edition` field so past summits are archived, not deleted | ⏳ |
-| 4 | Awards categories | `paan-awards/categories.js` (1,200 lines) | Annual cycle | ⏳ |
-| 5 | Careers | `src/messages` JSON + `careers.js` | Same as CCSA careers; application form already has `send-career-application` API | ⏳ |
-| 6 | Clients, partners, FAQs, testimonials | `clients.js`, `partners.js`, `StrategicPartners`, `FAQs`, `VoicesFromNetwork` | Small, reusable | ⏳ |
-| 7 | Academy / membership tiers / pricing | `academy/index.js`, `Tier1-3`, `MemberTiers`, `pricing.js` | Marketing copy changes | ⏳ |
-| 8 | Site settings | `menuData.js`, `summitMenu.js`, `usePopupBanner`, footer, `ChristmasContext` | Seasonal banners/popups without deploy | ⏳ |
+| 1 | Events & webinars | `data/eventsData.js`, `events/[id].js`, homepage events block | Edited by hand for every webinar; past/upcoming derived from date, not two arrays | ⏳ |
+| 2 | Masterclasses | hardcoded in `masterclasses/index.js` (~760 lines) and `[id].js` (~2,150 lines) | Biggest hardcoded blob; also fixes numeric-id routing → slugs | ⏳ |
+| 3 | Summit / Awards | `data/summit/*`, `summit/*`, `paan-awards/*` | **Deferred**: cancelled and redirected. Leave code as-is behind `SUMMIT_CANCELLED`; decide later whether to delete or model per edition | ⏸ |
+| 4 | Careers | `src/messages` JSON + `careers.js` | Same as CCSA careers; application form already has `send-career-application` API | ⏳ |
+| 5 | Clients, partners, FAQs, testimonials | `clients.js`, `partners.js`, `StrategicPartners`, `FAQs`, `VoicesFromNetwork` | Small, reusable | ⏳ |
+| 6 | Academy / membership tiers / pricing | `academy/index.js`, `Tier1-3`, `MemberTiers`, `pricing.js` | Marketing copy changes | ⏳ |
+| 7 | Site settings | `menuData.js`, `summitMenu.js`, `usePopupBanner`, footer, `ChristmasContext` | Seasonal banners/popups without deploy | ⏳ |
 
 ### Do NOT migrate to Sanity
 Ticket types & prices (payments depend on DB integrity), promo codes, talent profiles, trends data, form submissions. Sanity may *reference* ticket type IDs but Supabase stays source of truth.
@@ -96,7 +104,7 @@ Greenfield: nothing is typed yet. Do it **alongside** the CMS work so new code i
 ### Setup
 | Task | Status |
 |---|---|
-| Add `typescript`, `@types/*`, `tsconfig.json` (`strict`, `allowJs`, `@/*` alias), replace `jsconfig.json` | ⏳ |
+| Add `typescript` (pinned ^5.9, next-intl peer), `@types/*`, `tsconfig.json` (`strict`, `allowJs`, `@/*` alias), replace `jsconfig.json` | ✅ |
 | `sanity typegen` → generated types for GROQ results | ⏳ |
 | Zod schemas (already a dep) shared by API routes and forms | ⏳ |
 
@@ -110,9 +118,9 @@ Everything created in Phase 1: Sanity client/lib, `blogService`, agency template
 | `components/SEO`, `lib/*`, `utils/structuredData` | High | Shared |
 | `lib/ticketService`, `paystack`, `meta-capi`, `promoCodeService`, `pdfTicketGenerator` | High | Money paths — types pay off most; add tests while here |
 | `api/paystack/webhook`, `verify-payment`, `generate-ticket`, `send-summit-ticket` | High | Payments |
-| `components/summit/*` (purchase flow) | Medium | Multi-step form state |
+| `components/summit/*` (purchase flow, now disabled) | Low | Deprioritised while summit cancelled |
 | Other `api/send-*` routes (~18) | Medium | Share one typed mail/Slack helper — they look near-duplicate |
-| Pages (~45) | Medium/Low | |
+| Pages (~45; skip hidden summit/awards pages until reactivated) | Medium/Low | |
 | Modals (`*Modal.js`, ~12) | Low | Candidates for the shared `Modal` shell |
 
 ---
@@ -138,7 +146,8 @@ src/app/
     academy/  freelancers/  talent-discovery/  trends-dashboard/
     paan-awards/ categories/ terms/
     paan-ma-program/  paan-ambassador/
-    summit/ exhibitors/ travel-guide/ [experiences]/ purchase-ticket/ speaker-application/ exhibition-application/
+    retrieve-ticket/
+    (summit/, paan-awards/: hidden via redirects; migrate only if reactivated)
     payment/ success/ failure/
     legal/ privacy-policy/ terms-and-conditions/
   studio/[[...index]]/page.tsx
@@ -152,7 +161,7 @@ src/app/
 3. ⏳ Blogs (Sanity, ISR)
 4. ⏳ Certified agencies, masterclasses, events, careers
 5. ⏳ Home + marketing pages
-6. ⏳ Summit + ticket purchase + payment pages (**last, highest risk** — keep Meta CAPI/GA4 purchase events verified before/after)
+6. ⏳ Payment pages + retrieve-ticket + (hidden) summit pages (**last, highest risk** — keep Meta CAPI/GA4 purchase events verified before/after). While cancelled, summit/awards routes can be migrated as a pure redirect, not re-built
 7. ⏳ API routes → Route Handlers (Paystack webhook: verify raw-body signature handling changes)
 8. ⏳ Replace `sitemap.xml.js`/`sitemap-blogs.xml.js`/`next-sitemap` with `app/sitemap.ts`
 9. ⏳ Delete `src/pages/`
@@ -166,10 +175,64 @@ src/app/
 
 ---
 
+## 3b. Feature-based folder structure (final step, after the App Router migration)
+Same convention as `growthpad-website`: `src/app` holds thin route files only (fetch + compose), all UI and logic lives in `src/features/<feature>/`, anything used by 2+ features lives in `src/shared/`.
+
+Do this **after** Sections 1–3 are done (not during), so each move is a pure rename/refactor with no behaviour change. Move one feature per PR, run `tsc` + `next build` after each, and keep `@/*` aliases so imports are the only diff.
+
+```
+src/
+  app/                      # routes only: page.tsx, layout.tsx, route.ts, sitemap.ts, studio/
+  features/
+    blog/            components/  lib/
+    agencies/        components/  lib/            # certified agencies (Sanity)
+    events/          components/  lib/            # webinars (Sanity)
+    masterclasses/   components/  lib/  data/
+    academy/         components/  data/           # tiers, membership, pricing
+    careers/         components/  lib/
+    talent-discovery/components/  lib/            # map, profiles, search
+    trends/          components/  lib/
+    tickets/         components/  lib/            # purchase, payment, retrieve-ticket (formerly summit/)
+    summit/          components/  data/           # hidden while cancelled
+    awards/          components/  data/           # hidden while cancelled
+    contact/         components/                 # forms + enquiry modals
+    home/            components/  data/
+    legal/           components/
+  shared/
+    components/      # Modal, Accordion, Pagination, FormInput/Textarea/Checkbox, CountrySelect, ScrollToTop, SEO...
+    layouts/         # header, standard-header, footer, summit-header
+    hooks/  lib/  data/
+  sanity/            # client.ts, env.ts, image.ts, queries.ts, schemaTypes/, components/
+  messages/          # next-intl en/fr (stays)
+  styles/
+```
+
+Mapping of today's flat `src/components/*.js` (~85 files) → features:
+| Today | Goes to |
+|---|---|
+| `AgencyLogos*`, `AgenciesMarquee`, `AgencyEnquiryModal` | `features/agencies` |
+| `EventCard`, `EventDetail`, `PAANWebinar`, `SeminarRegistration` | `features/events` |
+| `Ticket*`, `PaymentAnalytics`, `PaystackScript`, `components/summit/*` | `features/tickets` (+ `features/summit`) |
+| `Talent*`, `MapboxMap`, `MapStyles`, `BadgeSystem`, `RegionalFilter`, `CategoryFilter` | `features/talent-discovery` |
+| `Trend*`, `AnalyticsChart` | `features/trends` |
+| `Tier1-3`, `MemberTiers`, `BenefitsToggle`, `Academy*` | `features/academy` |
+| `*Modal`, `ContactForm/Section/Parallax`, `EnquiryModal` | `features/contact` (generic ones → `shared/Modal`) |
+| `components/blog/*`, `usePublicBlog` | `features/blog` |
+| `Modal`, `Accordion`, `Marquee`, `components/common/*`, `SEO`, `ScrollToTop`, `CookieConsentBanner` | `shared/components` |
+
+Rules (copied from the growthpad approach):
+- A feature never imports from another feature; shared code moves to `shared/`.
+- Feature `data/` files are temporary: once content is in Sanity they are deleted.
+- `src/app/**/page.tsx` stays under ~50 lines.
+- Prefer doing the TypeScript conversion of a file **when** it moves into its feature folder, to avoid touching it twice.
+
+---
+
 ## 4. Risks / watch-list
 | Risk | Mitigation |
 |---|---|
 | SEO loss on blogs/agencies | Identical slugs, 301s, compare sitemap before/after |
+| Redirect list drift (HIDDEN_PATHS etc. lives in `next.config.js`) | Move to one shared constant/Sanity site setting; test redirects in CI |
 | Payment/tracking regressions (just shipped Meta CAPI) | Don't touch purchase flow until last; E2E test with Paystack test keys |
 | HTML → Portable Text conversion artifacts | Spot-check top 20 posts by traffic; keep old HTML in a hidden field as fallback |
 | `fr` translations for migrated content | Decide per type whether fr is required; don't block migration on it |
@@ -186,4 +249,4 @@ src/app/
 | Supabase content tables removed | ⏳ (transactional tables stay) |
 
 ## Suggested sequence
-1. Sanity foundation → 2. Blog → 3. Certified agencies → 4. Masterclasses/events/summit/awards/careers/small content → 5. TS setup + high-priority typing (parallel) → 6. App Router branch → 7. Cleanup.
+1. Sanity foundation → 2. Blog → 3. Certified agencies → 4. Masterclasses/events/summit/awards/careers/small content → 5. TS setup + high-priority typing (parallel) → 6. App Router branch → 7. Feature-based folder restructure (Section 3b) → 8. Cleanup.
