@@ -271,20 +271,34 @@ Rules (copied from the growthpad approach):
 
 ---
 
-## 3c. Long-page refactor audit (2026-11-15)
-**Finding: 41 of the 49 page files are over 100 lines** (growthpad convention: route files are thin, sections live in `features/<x>/components`). Biggest: `summit` 1,696 · `summit/travel-guide` 1,649 · `summit/exhibitors` 1,609 · `paan-awards` 1,549 · `ai-invoice-generator` 1,289 · `paan-awards/categories` 1,217 · `masterclasses/[slug]` 1,157 · `index` 1,034 · `summit/purchase-ticket` 1,046 · `paan-ambassador` 965 · `pdf-editor` 942. Most of the bulk is not logic but **copy-pasted boilerplate**, so a few shared pieces remove far more lines than splitting pages by hand:
-| Repeated pattern | Where | Proposed extraction | Status |
+## 3c. Refactor audit: files over 1,000 lines (2026-11-15)
+**9 pages and 2 components are over 1,000 lines** (the next largest page is 965). Why each is big, and the fix. The same fixes are tracked once, because the causes repeat:
+
+| Lines | File | Why it is big | Fix |
 |---|---|---|---|
-| IntersectionObserver "section-visible" block + `sectionRefs` (~25 lines each) | 22 files (23 use `sectionRefs`) | `useSectionObserver(refs)` hook | ⏳ |
-| Canvas connecting-dots hero animation (~200 lines each) | `index`, `academy/index`, `components/agencies/AgencyProfile` | `useConnectingDots()` hook / one `<DotsCanvas />` (a `ConnectingDots` component already exists) | ⏳ |
-| reCAPTCHA setup (site-key check, ref, token state) | 17 files | `useRecaptcha()` / `<RecaptchaField />` | ⏳ |
-| `useFixedHeader` + scroll helpers wired per page | 31 files | Part of the shared layout (App Router `layout.tsx`) | ⏳ |
-| Contact modal + form state | `AgencyProfile`, `contact-us`, 12+ `*Modal.js` | Shared `Modal` shell (exists) + `components/common/Form*` (exist) → one `useContactForm` | ⏳ |
-| Components declared **inside** the page component (re-created and remounted on every render) | `careers.js` (6), `faqs.js`, `clients.js` | Move to section files; fixes unnecessary remounts | ⏳ |
-| Inline `<svg>` blobs | `contact-us` (9), `paan-ambassador` (8), `clients` (8), `academy` (7) | `@iconify/react` icons / icon components | ⏳ |
-| Large marketing pages with no shared structure | `about` 610, `clients` 651, `contact-us` 707, `careers` 705, `paan-ambassador` 965, `paan-ma-program` 682, `expression-of-interest` 651 | Split into section components (Hero, Benefits, CTA…) under `features/<x>/components`; page ≤ ~100 lines | ⏳ |
-| Self-contained tools | `ai-*` generators (1,289 / 673 / 125), `pdf-editor` (942) | Confirm they are still used (cleanup E); if kept, treat as their own features | ⏳ |
-**When:** do each page's refactor in the same change as its TypeScript conversion (rule above), and before/while it moves into its feature folder (3b), using the byte-identical-HTML check so each step is provably safe. The three hooks (`useSectionObserver`, `useConnectingDots`, `useRecaptcha`) first: they shrink 30+ pages at once.
+| 1,696 | `pages/summit.js` | 12 inline `<section>`s (≈1,280 lines of JSX) + 418 lines of state/effects. Only 5 of the sections use `components/summit/*`; **11 finished section components in that folder are unused**, i.e. the split was started and never finished | Reuse the existing section components; move agenda/speakers/sessions to Sanity (Phase 1.5); page ≈ 100 lines |
+| 1,649 | `pages/summit/travel-guide.js` | 8 sections of hardcoded content + 5 inline SVGs | Content → Sanity `travelExperience` (1.5); sections → components |
+| 1,609 | `pages/summit/exhibitors.js` | Exhibitor list/packages hardcoded in JSX | `exhibitor` documents (1.5) → page becomes a map over data |
+| 1,549 | `pages/paan-awards.js` | 10 sections, 619 lines of logic (11 `useState`), category data inline | Awards content → Sanity (1.5); application-modal state → one hook |
+| 1,217 | `pages/paan-awards/categories.js` | 702 lines of logic (14 `useState`) + inline category data | `awardCategory` documents (1.5); filter/selection logic → hook |
+| 1,289 | `pages/ai-invoice-generator.js` | A whole invoice builder in one page (582 lines logic) **and an unused 859-line near-copy in `components/AIInvoiceGenerator.js`** | Confirm the tool is still used (cleanup E); if kept: one implementation, split into form / preview / PDF, currency + payment-term option lists → `src/data` |
+| 1,157 | `pages/masterclasses/[slug].js` | 508 lines of **checkout logic** (Paystack config, promo codes, 9 `useState`) + 650 lines of markup | `useMasterclassCheckout()` hook + sections (Hero, Pricing card, Instructor, Outcomes). **Payment path: refactor only with the byte-identical check + a Paystack test-mode purchase** |
+| 1,046 | `pages/summit/purchase-ticket.js` | 786 lines of logic: 21 `useState`, 7 effects (a multi-step wizard) | State machine / `useReducer` + `useTicketCheckout()`; the `*Step` components already exist. Payment path: same caution as above |
+| 1,034 | `pages/index.js` (home) | Almost pure markup: 13 sections ≈ 1,000 lines, only 38 lines of logic, plus the ~200-line canvas animation | One component per section in `features/home/components`; `useConnectingDots()` hook; page ≈ 40 lines |
+| 1,294 | `components/PAANAwardsApplicationModal.js` | Huge form with its own country list and option lists inline | Shared `src/data/countries.ts` + `CountrySelect`; form fields in `components/common/Form*` |
+| 1,255 | `components/TicketPurchaseForm.js` | Legacy single-form ticket flow (only used by `TicketPurchaseButton`), own country list | Likely superseded by the step-based flow: confirm, then delete (cleanup B) or fold into it |
+
+**Shared causes (fix once, shrinks many files):**
+| Repeated pattern | Where | Extraction | Status |
+|---|---|---|---|
+| **Country list copy-pasted** (about 100 lines each) | `PAANAwardsApplicationModal`, `ExhibitionApplicationModal`, `CategoryNominationModal`, `TicketPurchaseForm`, `summit/speaker-application`, `summit/exhibition-application`; a shared `common/CountrySelect` exists but only 2 components use it | `src/data/countries.ts` + `CountrySelect` everywhere (≈600 lines removed) | ⏳ |
+| Canvas connecting-dots hero animation (~200 lines each) | `index`, `academy/index`, `components/agencies/AgencyProfile` | `useConnectingDots()` hook / one `<DotsCanvas />` | ⏳ |
+| IntersectionObserver "section-visible" block + `sectionRefs` | 22 files | `useSectionObserver(refs)` hook | ⏳ |
+| reCAPTCHA setup (key check, ref, token state) | 17 files | `useRecaptcha()` / `<RecaptchaField />` | ⏳ |
+| Components declared inside the page component (remounted on every render) | `careers.js` (6), `faqs.js`, `clients.js` | Move to section files | ⏳ |
+| Duplicate page-vs-component implementations | `ai-invoice-generator` (+ `AIInvoiceGenerator`), `ai-brief-builder` (+ `AIBriefBuilder`) | Keep one; delete the other (cleanup B/E) | ⏳ |
+
+**Order:** (1) the shared extractions above, because they cut lines from the big files and from dozens of smaller ones; (2) Phase 1.5 moves summit/awards content to Sanity, which is what actually shrinks the five summit/awards pages; (3) `index`, then the two payment pages last and only with a test-mode purchase. Each page is converted to TypeScript in the same change (rule in section 2) and verified with the byte-identical-HTML method. Target after the move to feature folders (3b): route files under ~100 lines.
 
 ---
 
@@ -311,8 +325,8 @@ Rules (copied from the growthpad approach):
 ## Suggested sequence
 1. ✅ Sanity foundation → ✅ Blog → ✅ Certified agencies → ✅ Events → ✅ Masterclasses → ✅ Careers → ✅ `src/data` content
 2. **Preview deploy** (also: Sanity webhook + `SANITY_REVALIDATE_SECRET` + CORS) and verify in production
-3. **TypeScript catch-up pass** on the 27 touched `.js` files + the three shared hooks (3c)
+3. **TypeScript catch-up pass** on the 27 touched `.js` files + the shared hooks/data from 3c (`countries.ts`, `useSectionObserver`, `useConnectingDots`, `useRecaptcha`)
 4. **Phase 1.5**: Summit & Awards → Sanity (pages still hidden)
-5. Long-page refactor + TS conversion, page by page (3c), alongside…
+5. Refactor the 11 files over 1,000 lines (3c) with their TypeScript conversion: shared extractions first (countries, hooks), then home, then the two payment pages last…
 6. **App Router** branch (section 3), then **feature-folder restructure** (3b)
 7. **Phase 1.4 cleanup**: delete old/unused files, directories, tables, dependencies (after production has been stable for a week)
