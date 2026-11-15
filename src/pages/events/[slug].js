@@ -1,21 +1,14 @@
-import { useRouter } from 'next/router';
 import SEO from "@/components/SEO";
 import Header from "../../layouts/header";
 import Footer from "../../layouts/footer";
 import EventDetail from "@/components/EventDetail";
-import { eventsData } from "@/data/eventsData";
+import { getEventBySlug, getEventSlugByLegacyId, getEventSlugs, getRelatedEvents } from "@/lib/eventService";
 import Link from 'next/link';
 import { Icon } from '@iconify/react';
 import Image from 'next/image';
 
-const EventDetailPage = () => {
-  const router = useRouter();
-  const { id } = router.query;
-
-  // Find the event by ID
-  const allEvents = [...eventsData.upcoming, ...eventsData.past];
-  const event = allEvents.find(e => e.id === parseInt(id));
-  const isPast = eventsData.past.some(e => e.id === parseInt(id));
+const EventDetailPage = ({ event, relatedEvents = [] }) => {
+  const isPast = event?.status === 'past';
 
   if (!event) {
     return (
@@ -95,11 +88,9 @@ const EventDetailPage = () => {
           </h2>
           
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
-            {allEvents
-              .filter(e => e.id !== event.id && e.category === event.category)
-              .slice(0, 3)
+            {relatedEvents
               .map((relatedEvent) => (
-                <div key={relatedEvent.id} className="bg-white rounded-xl shadow-lg overflow-hidden hover:shadow-xl transition-shadow duration-300">
+                <div key={relatedEvent.sanityId} className="bg-white rounded-xl shadow-lg overflow-hidden hover:shadow-xl transition-shadow duration-300">
                   <div className="relative h-48">
                     <Image
                       src={relatedEvent.image}
@@ -120,7 +111,7 @@ const EventDetailPage = () => {
                       })}
                     </p>
                     <Link
-                      href={`/events/${relatedEvent.id}`}
+                      href={`/events/${relatedEvent.slug}`}
                       className="text-paan-red hover:text-paan-red/80 font-semibold text-sm transition-colors"
                     >
                       View Details →
@@ -146,5 +137,22 @@ const EventDetailPage = () => {
     </>
   );
 };
+
+export async function getStaticPaths() {
+  const slugs = await getEventSlugs();
+  return { paths: slugs.map((slug) => ({ params: { slug } })), fallback: 'blocking' };
+}
+
+export async function getStaticProps({ params }) {
+  const { slug } = params;
+  // Old links were /events/<number>: permanently redirect them to the slug URL.
+  if (/^\d+$/.test(slug)) {
+    const target = await getEventSlugByLegacyId(Number(slug));
+    return target ? { redirect: { destination: `/events/${target}`, permanent: true } } : { notFound: true, revalidate: 60 };
+  }
+  const event = await getEventBySlug(slug);
+  if (!event) return { notFound: true, revalidate: 60 };
+  return { props: { event, relatedEvents: await getRelatedEvents(event) }, revalidate: 3600 };
+}
 
 export default EventDetailPage;

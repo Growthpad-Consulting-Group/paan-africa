@@ -144,7 +144,7 @@ const EventCard = ({ event, isPast = false }) => {
                 </a>
               )}
               <Link
-                href={`/events/${event.id}`}
+                href={`/events/${event.slug}`}
                 className="px-3 sm:px-4 py-2 rounded-full font-semibold text-xs sm:text-sm transition-all duration-300 bg-gray-200 text-gray-600 hover:bg-gray-300 text-center"
               >
                 Details

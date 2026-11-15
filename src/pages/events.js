@@ -3,29 +3,31 @@ import SEO from "@/components/SEO";
 import Header from "@/layouts/standard-header";
 import Footer from "@/layouts/footer";
 import EventCard from "@/components/EventCard";
-import { eventsData, eventCategories, eventLocations } from "@/data/eventsData";
+import { getEvents } from "@/lib/eventService";
 import { Icon } from '@iconify/react';
 import Image from 'next/image';
 import { useAppTranslations } from '../hooks/useTranslations';
 
-const EventsPage = () => {
+const EventsPage = ({ upcoming = [], past = [] }) => {
   const { t } = useAppTranslations();
+  const eventCategories = [...new Set([...upcoming, ...past].map((e) => e.category).filter(Boolean))];
+  const eventLocations = [...new Set([...upcoming, ...past].map((e) => e.location).filter(Boolean))];
   const [activeTab, setActiveTab] = useState('all');
   const [selectedCategory, setSelectedCategory] = useState(t('events.filters.allEvents'));
   const [selectedLocation, setSelectedLocation] = useState(t('events.filters.allLocations'));
   const [filteredEvents, setFilteredEvents] = useState([
-    ...eventsData.upcoming,
-    ...eventsData.past
+    ...upcoming,
+    ...past
   ]);
 
   useEffect(() => {
     let events;
     if (activeTab === 'upcoming') {
-      events = eventsData.upcoming;
+      events = upcoming;
     } else if (activeTab === 'past') {
-      events = eventsData.past;
+      events = past;
     } else {
-      events = [...eventsData.upcoming, ...eventsData.past];
+      events = [...upcoming, ...past];
     }
     
     if (selectedCategory !== t('events.filters.allEvents')) {
@@ -81,7 +83,7 @@ const EventsPage = () => {
             <div className="grid grid-cols-1 sm:grid-cols-3 gap-4 sm:gap-6 mt-8 sm:mt-12">
               <div className="bg-white/10 backdrop-blur-sm rounded-xl p-4 sm:p-6 border border-white/20">
                 <div className="text-2xl sm:text-3xl font-bold text-paan-yellow mb-2">
-                  {eventsData.upcoming.length}
+                  {upcoming.length}
                 </div>
                 <div className="text-sm sm:text-base text-white/90">{t('events.hero.stats.upcomingEvents')}</div>
               </div>
@@ -225,5 +227,15 @@ const EventsPage = () => {
     </>
   );
 };
+
+export async function getStaticProps() {
+  try {
+    const { upcoming, past } = await getEvents();
+    return { props: { upcoming, past }, revalidate: 3600 };
+  } catch (error) {
+    console.error('Error loading events from Sanity:', error);
+    return { props: { upcoming: [], past: [] }, revalidate: 60 };
+  }
+}
 
 export default EventsPage;
