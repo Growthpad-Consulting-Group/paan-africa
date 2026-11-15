@@ -230,11 +230,15 @@ const nextConfig = {
 
   async redirects() {
     return [
-      ...HIDDEN_PATHS.map((source) => ({
-        source,
-        destination: "/",
-        permanent: false,
-      })),
+      // SHOW_HIDDEN_PAGES=1 is for LOCAL verification builds only (lets us render and compare the
+      // cancelled summit/awards pages). Never set it in production: the pages must stay redirected.
+      ...(process.env.SHOW_HIDDEN_PAGES === "1"
+        ? []
+        : HIDDEN_PATHS.map((source) => ({
+            source,
+            destination: "/",
+            permanent: false,
+          }))),
       {
         source: "/:path*",
         has: [

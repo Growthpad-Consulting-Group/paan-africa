@@ -74,10 +74,6 @@ const SummitPage = () => {
   // const [currentJuryIndex, setCurrentJuryIndex] = useState(0);
   // const [visibleJury, setVisibleJury] = useState(3);
 
-  // Sessions carousel state
-  const [currentSessionIndex, setCurrentSessionIndex] = useState(0);
-  const [visibleSessions, setVisibleSessions] = useState(3);
-
   // Awards toggle state
   const [awardType, setAwardType] = useState('agency'); // 'agency' or 'freelancer'
   
@@ -92,11 +88,6 @@ const SummitPage = () => {
   // const getVisibleJury = () => {
   //   return jury.slice(currentJuryIndex, currentJuryIndex + visibleJury);
   // };
-
-  // Get visible sessions
-  const getVisibleSessions = () => {
-    return sessions.slice(currentSessionIndex, currentSessionIndex + visibleSessions);
-  };
 
   // Jury data - Commented out
   // const jury = [
@@ -119,58 +110,6 @@ const SummitPage = () => {
   //     image: "https://ik.imagekit.io/nkmvdjnna/PAAN/awards/jury/1.png",
   //   },
   // ];
-
-  // Sessions/Special Features data
-  const sessions = [
-    {
-      id: 1,
-      title: "Creator Crawl",
-      description: "An evening tour of Nairobi's creative hotspots designed for networking and collaboration.",
-      image: "https://ik.imagekit.io/nkmvdjnna/PAAN/summit/creator-crawl.png",
-      icon: "mdi:handshake",
-      category: "Networking"
-    },
-    {
-      id: 2,
-      title: "City Excursions",
-      description: "Curated cultural and innovation hub visits to immerse participants in Nairobi's vibrant ecosystem.",
-      image: "https://ik.imagekit.io/nkmvdjnna/PAAN/summit/city-excursions.png",
-      icon: "mdi:tools",
-      category: "Experience"
-    },
-    {
-      id: 3,
-      title: "Investor Roundtables",
-      description: "Invite-only sessions connecting startups, creators, and investors for candid deal-making discussions.",
-      image: "https://ik.imagekit.io/nkmvdjnna/PAAN/summit/investor-roundtable.png",
-      icon: "mdi:map-marker",
-      category: "Investment"
-    },
-    {
-      id: 4,
-      title: "Creator Crawl",
-      description: "An evening tour of Nairobi's creative hotspots designed for networking and collaboration.",
-      image: "https://ik.imagekit.io/nkmvdjnna/PAAN/summit/creator-crawl.png",
-      icon: "mdi:handshake",
-      category: "Networking"
-    },
-    {
-      id: 5,
-      title: "City Excursions",
-      description: "Curated cultural and innovation hub visits to immerse participants in Nairobi's vibrant ecosystem.",
-      image: "https://ik.imagekit.io/nkmvdjnna/PAAN/summit/city-excursions.png",
-      icon: "mdi:tools",
-      category: "Experience"
-    },
-    {
-      id: 6,
-      title: "Investor Roundtables",
-      description: "Invite-only sessions connecting startups, creators, and investors for candid deal-making discussions.",
-      image: "https://ik.imagekit.io/nkmvdjnna/PAAN/summit/investor-roundtable.png",
-      icon: "mdi:map-marker",
-      category: "Investment"
-    },
-  ];
 
   // Award categories - Matching structure from PAANAwardsApplicationModal
   const awardCategories = [
@@ -1545,6 +1484,5 @@ const SummitPage = () => {
     </>
   );
 };
-
 
 export default SummitPage;

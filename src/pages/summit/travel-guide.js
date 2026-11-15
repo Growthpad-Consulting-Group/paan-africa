@@ -102,127 +102,6 @@ const TravelGuide = () => {
     termSheets: 0
   });
 
-  // Speakers carousel state
-  const [currentSpeakerIndex, setCurrentSpeakerIndex] = useState(0);
-  const [visibleSpeakers, setVisibleSpeakers] = useState(3);
-
-  // Sessions carousel state
-  const [currentSessionIndex, setCurrentSessionIndex] = useState(0);
-  const [visibleSessions, setVisibleSessions] = useState(3);
-
-  // Navigation functions for speakers
-  const nextSpeakers = () => {
-    setCurrentSpeakerIndex((prev) => 
-      prev + visibleSpeakers >= speakers.length ? 0 : prev + 1
-    );
-  };
-
-  const prevSpeakers = () => {
-    setCurrentSpeakerIndex((prev) => 
-      prev === 0 ? Math.max(0, speakers.length - visibleSpeakers) : prev - 1
-    );
-  };
-
-  // Navigation functions for sessions
-  const nextSessions = () => {
-    setCurrentSessionIndex((prev) => 
-      prev + visibleSessions >= sessions.length ? 0 : prev + 1
-    );
-  };
-
-  const prevSessions = () => {
-    setCurrentSessionIndex((prev) => 
-      prev === 0 ? Math.max(0, sessions.length - visibleSessions) : prev - 1
-    );
-  };
-
-  // Get visible speakers
-  const getVisibleSpeakers = () => {
-    return speakers.slice(currentSpeakerIndex, currentSpeakerIndex + visibleSpeakers);
-  };
-
-  // Get visible sessions
-  const getVisibleSessions = () => {
-    return sessions.slice(currentSessionIndex, currentSessionIndex + visibleSessions);
-  };
-
-  // Speakers data
-  const speakers = [
-    {
-      id: 1,
-      name: "Mark Doe",
-      title: "CEO, Company",
-      image: "https://ik.imagekit.io/nkmvdjnna/PAAN/summit/speakers/1.png",
-      linkedin: "https://linkedin.com/in/markdoe"
-    },
-    {
-      id: 2,
-      name: "Sarah Johnson",
-      title: "Creative Director, Design Studio",
-      image: "https://ik.imagekit.io/nkmvdjnna/PAAN/summit/speakers/2.png",
-      linkedin: "https://linkedin.com/in/sarahjohnson"
-    },
-    {
-      id: 3,
-      name: "David Kim",
-      title: "Tech Innovation Lead, Startup Inc",
-      image: "https://ik.imagekit.io/nkmvdjnna/PAAN/summit/speakers/3.png",
-      linkedin: "https://linkedin.com/in/davidkim"
-    },
-  ];
-
-  // Sessions/Special Features data
-  const sessions = [
-    {
-      id: 1,
-      title: "Creator Crawl",
-      description: "An evening tour of Nairobi's creative hotspots designed for networking and collaboration.",
-      image: "https://ik.imagekit.io/nkmvdjnna/PAAN/summit/creator-crawl.png",
-      icon: "mdi:handshake",
-      category: "Networking"
-    },
-    {
-      id: 2,
-      title: "City Excursions",
-      description: "Curated cultural and innovation hub visits to immerse participants in Nairobi's vibrant ecosystem.",
-      image: "https://ik.imagekit.io/nkmvdjnna/PAAN/summit/city-excursions.png",
-      icon: "mdi:tools",
-      category: "Experience"
-    },
-    {
-      id: 3,
-      title: "Investor Roundtables",
-      description: "Invite-only sessions connecting startups, creators, and investors for candid deal-making discussions.",
-      image: "https://ik.imagekit.io/nkmvdjnna/PAAN/summit/investor-roundtable.png",
-      icon: "mdi:map-marker",
-      category: "Investment"
-    },
-    {
-      id: 4,
-      title: "Creator Crawl",
-      description: "An evening tour of Nairobi's creative hotspots designed for networking and collaboration.",
-      image: "https://ik.imagekit.io/nkmvdjnna/PAAN/summit/creator-crawl.png",
-      icon: "mdi:handshake",
-      category: "Networking"
-    },
-    {
-      id: 5,
-      title: "City Excursions",
-      description: "Curated cultural and innovation hub visits to immerse participants in Nairobi's vibrant ecosystem.",
-      image: "https://ik.imagekit.io/nkmvdjnna/PAAN/summit/city-excursions.png",
-      icon: "mdi:tools",
-      category: "Experience"
-    },
-    {
-      id: 6,
-      title: "Investor Roundtables",
-      description: "Invite-only sessions connecting startups, creators, and investors for candid deal-making discussions.",
-      image: "https://ik.imagekit.io/nkmvdjnna/PAAN/summit/investor-roundtable.png",
-      icon: "mdi:map-marker",
-      category: "Investment"
-    },
-  ];
-
   // Count up animation effect
   useEffect(() => {
     if (isVisible) {
@@ -461,7 +340,6 @@ const TravelGuide = () => {
 
         {/* Spacer to maintain layout flow */}
         <div className="h-screen"></div>
-
 
          {/* Visa requirements section */}
          <motion.div 

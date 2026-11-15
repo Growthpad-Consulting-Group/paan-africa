@@ -84,7 +84,6 @@ const RelatedPosts = ({ posts, loading, authorRef }: Props) => {
 
   // Only show the first related post
   const post = posts[0];
-  console.log('RelatedPosts: Rendering with post:', post);
 
   return (
     <div 
