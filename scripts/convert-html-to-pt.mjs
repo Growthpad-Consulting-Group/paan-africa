@@ -4,6 +4,7 @@
  *   node scripts/convert-html-to-pt.mjs                # DRY RUN: convert + verify every post, write nothing
  *   node scripts/convert-html-to-pt.mjs --write        # patch `body` ONLY on posts that pass verification
  *   node scripts/convert-html-to-pt.mjs --slug=my-post # limit to one post
+ *   --force                                            # also re-convert posts that already have a body (overwrites it!)
  *
  * `rawHtml` is never modified or removed, so a post can be reverted by unsetting `body`.
  * A post passes when the rendered result has identical text, link targets and counts of
@@ -19,6 +20,7 @@ import { renderPortableText } from '../src/lib/portableText.ts'
 import { sanitizeBlogHtml } from '../src/utils/sanitizeBlogHtml.js'
 
 const WRITE = process.argv.includes('--write')
+const FORCE = process.argv.includes('--force')
 const ONLY = process.argv.find((a) => a.startsWith('--slug='))?.split('=')[1]
 
 for (const l of readFileSync(new URL('../.env.local', import.meta.url), 'utf8').split('\n')) {
@@ -26,6 +28,7 @@ for (const l of readFileSync(new URL('../.env.local', import.meta.url), 'utf8').
   if (i > 0 && !l.startsWith('#')) process.env[l.slice(0, i).trim()] ??= l.slice(i + 1).trim().replace(/^['"]|['"]$/g, '')
 }
 const sanity = createClient({
+  perspective: 'raw',
   projectId: process.env.NEXT_PUBLIC_SANITY_PROJECT_ID,
   dataset: process.env.NEXT_PUBLIC_SANITY_DATASET,
   apiVersion: '2025-01-01',
@@ -90,7 +93,40 @@ const rules = [
     },
   },
 ]
-const convert = (html) => htmlToBlocks(`<div>${html}</div>`, bodyType, { parseHtml, rules })
+/** Studio only allows spans inside a text block: hoist inline objects (images) into their own blocks. */
+function hoist(blocks) {
+  const out = []
+  for (const b of blocks) {
+    if (b._type !== 'block' || !b.children?.some((c) => c._type !== 'span')) { out.push(b); continue }
+    let run = []
+    const flush = () => {
+      if (run.some((c) => c.text?.trim())) out.push({ ...b, _key: key(), children: run })
+      run = []
+    }
+    for (const c of b.children) {
+      if (c._type === 'span') run.push(c)
+      else { flush(); out.push(c) }
+    }
+    flush()
+  }
+  return out
+}
+const convert = (html) => hoist(htmlToBlocks(`<div>${html}</div>`, bodyType, { parseHtml, rules }))
+
+/** Structural validity, mirroring Studio's rules for this schema. */
+function structure(blocks) {
+  const problems = []
+  const keys = new Set()
+  for (const b of blocks) {
+    if (!b._key || keys.has(b._key)) problems.push(`duplicate/missing _key ${b._key}`)
+    keys.add(b._key)
+    if (b._type === 'block') {
+      for (const c of b.children ?? []) if (c._type !== 'span') problems.push(`non-span child "${c._type}" in text block`)
+    } else if (!['imageUrl', 'tableBlock'].includes(b._type)) problems.push(`unknown block type ${b._type}`)
+    if (b._type === 'tableBlock') for (const r of b.rows) for (const c of r.cells) for (const cb of c.content) for (const cc of cb.children ?? []) if (cc._type !== 'span') problems.push('non-span in table cell')
+  }
+  return problems
+}
 
 // ── Verification ─────────────────────────────────────────────────────────────
 const decode = (s) => s.replace(/&#x([0-9a-f]+);/gi, (_, h) => String.fromCodePoint(parseInt(h, 16))).replace(/&#(\d+);/g, (_, d) => String.fromCodePoint(+d)).replace(/&nbsp;/g, ' ').replace(/&amp;/g, '&').replace(/&lt;/g, '<').replace(/&gt;/g, '>').replace(/&quot;/g, '"').replace(/&#39;/g, "'")
@@ -116,19 +152,31 @@ function verify(origHtml, newHtml) {
 
 // ── Main ─────────────────────────────────────────────────────────────────────
 const posts = await sanity.fetch(
-  `*[_type=="post" && defined(rawHtml) && rawHtml != "" ${ONLY ? '&& slug.current == $s' : ''}]{_id,title,"slug":slug.current,rawHtml,body}`,
+  `*[_type=="post" && !(_id in path("drafts.**")) && defined(rawHtml) && rawHtml != "" ${ONLY ? '&& slug.current == $s' : ''}]{_id,title,"slug":slug.current,rawHtml,body}`,
   ONLY ? { s: ONLY } : {}
 )
+// Studio creates a `drafts.<id>` copy whenever someone opens a post. A stale draft would hide (and on publish, undo) our fix.
+const drafts = Object.fromEntries((await sanity.fetch(`*[_type=="post" && _id in path("drafts.**")]{_id, body}`)).map((d) => [d._id, d]))
 console.log(`${WRITE ? 'WRITE' : 'DRY RUN'} | ${posts.length} post(s)`)
 let pass = 0, fail = 0, skipped = 0
 for (const p of posts) {
-  if (p.body?.length) { skipped++; continue }
+  if (p.body?.length && !FORCE) { skipped++; continue }
   try {
     const blocks = convert(p.rawHtml)
-    const problems = verify(sanitizeBlogHtml(p.rawHtml), sanitizeBlogHtml(renderPortableText(blocks)))
+    const problems = [...structure(blocks), ...verify(sanitizeBlogHtml(p.rawHtml), sanitizeBlogHtml(renderPortableText(blocks)))]
     if (problems.length) { fail++; console.log(`FAIL ${p.slug}\n     ${problems.join('\n     ')}`); continue }
     pass++
-    if (WRITE) { await sanity.patch(p._id).set({ body: blocks }).commit(); console.log(`WROTE ${p.slug} (${blocks.length} blocks)`) }
+    if (WRITE) {
+      await sanity.patch(p._id).set({ body: blocks }).commit()
+      console.log(`WROTE ${p.slug} (${blocks.length} blocks)`)
+      const d = drafts[`drafts.${p._id}`]
+      if (d) {
+        if (JSON.stringify(d.body ?? null) === JSON.stringify(p.body ?? null)) {
+          await sanity.patch(d._id).set({ body: blocks }).commit()
+          console.log(`      also updated unedited Studio draft ${d._id}`)
+        } else console.log(`      WARNING: ${d._id} has edits that differ from the published body; draft NOT touched. Review it in Studio.`)
+      }
+    }
   } catch (e) { fail++; console.log(`ERROR ${p.slug}: ${e.message}`) }
 }
 console.log(`\npass: ${pass}  fail: ${fail}  already-converted: ${skipped}${WRITE ? '' : '  (nothing written)'}`)
