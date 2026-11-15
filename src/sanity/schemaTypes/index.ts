@@ -1,4 +1,8 @@
 import type { SchemaTypeDefinition } from 'sanity'
+import post from './post'
+import author from './author'
+import category from './category'
+import blockContent from './blockContent'
 
-// Phase 1.1+ adds: post, category, author, agency, event, masterclass, ...
-export const schemaTypes: SchemaTypeDefinition[] = []
+// Next phases add: agency, event, masterclass, siteSettings, ...
+export const schemaTypes: SchemaTypeDefinition[] = [post, author, category, blockContent]
