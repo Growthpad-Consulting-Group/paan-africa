@@ -86,8 +86,8 @@ function bodyHtml(p: RawPost): string {
 }
 
 function image(p: RawPost): string {
-  if (p.mainImageUrl) return p.mainImageUrl
   if (p.mainImage?.asset) return urlFor(p.mainImage).width(1600).auto('format').url()
+  if (p.mainImageUrl) return p.mainImageUrl
   return FALLBACK_IMAGE
 }
 
