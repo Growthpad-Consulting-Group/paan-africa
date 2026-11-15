@@ -13,15 +13,26 @@ async function readRaw(req: NextApiRequest): Promise<string> {
 
 /** Sanity document type -> paths to revalidate. Extend as schemas are added. */
 function pathsFor({ _type, slug }: Payload): string[] {
+  const withSlug = (base: string) => (slug ? [`${base}/${slug}`] : [])
   switch (_type) {
     case 'post':
-      return ['/blogs', ...(slug ? [`/blogs/${slug}`] : []), '/sitemap-blogs.xml']
+      return ['/blogs', ...withSlug('/blogs'), '/sitemap-blogs.xml']
     case 'agency':
-      return ['/', '/certified-agencies', ...(slug ? [`/certified-agencies/${slug}`] : [])]
+      return ['/', '/certified-agencies', ...withSlug('/certified-agencies')]
     case 'event':
-      return ['/', '/events', ...(slug ? [`/events/${slug}`] : [])]
-    case 'siteSettings':
-      return ['/']
+      return ['/events', ...withSlug('/events')]
+    case 'masterclass':
+    case 'masterclassSeries':
+      return ['/masterclasses', ...(_type === 'masterclass' ? withSlug('/masterclasses') : [])]
+    case 'jobPosting':
+      return ['/careers']
+    // Summit and awards content (the pages are currently hidden behind redirects)
+    case 'summitSpeaker':
+    case 'summitSession':
+    case 'summitTrack':
+      return ['/summit']
+    case 'awardGroup':
+      return ['/paan-awards', '/paan-awards/categories']
     default:
       return []
   }
