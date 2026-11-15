@@ -10,6 +10,7 @@ import ScrollToTop from "@/components/ScrollToTop";
 import Head from "next/head";
 import TicketPurchaseButton from "@/components/TicketPurchaseButton";
 import { motion } from "framer-motion";
+import { getExhibitorBooths } from "@/lib/summitService";
 
 // Animation variants - defined outside component for global access
 const fadeInUp = {
@@ -73,7 +74,7 @@ const fadeInScale = {
   transition: { duration: 0.5, ease: "easeOut" }
 };
 
-const Exhibitors = () => {
+const Exhibitors = ({ booths = [] }) => {
   const sectionRefs = {
     home: useRef(null),
     about: useRef(null),
@@ -101,49 +102,8 @@ const Exhibitors = () => {
     termSheets: 0
   });
 
-  // Booth data
-  const boothData = {
-    1: { id: 1, number: 1, status: 'Available', size: '3×3', price: 'USD 1,000', type: 'Standard' },
-    2: { id: 2, number: 2, status: 'Available', size: '3×3', price: 'USD 1,000', type: 'Standard' },
-    3: { id: 3, number: 3, status: 'Reserved', size: '3×3', price: 'USD 1,000', type: 'Standard' },
-    4: { id: 4, number: 4, status: 'Available', size: '3×3', price: 'USD 1,000', type: 'Standard' },
-    5: { id: 5, number: 5, status: 'Available', size: '3×3', price: 'USD 1,000', type: 'Standard' },
-    6: { id: 6, number: 6, status: 'Available', size: '3×6', price: 'USD 1,800', type: 'Standard' },
-    7: { id: 7, number: 7, status: 'Available', size: '3×3', price: 'USD 1,000', type: 'Standard' },
-    8: { id: 8, number: 8, status: 'Available', size: '3×3', price: 'USD 1,000', type: 'Standard' },
-    9: { id: 9, number: 9, status: 'Available', size: '3×3', price: 'USD 1,000', type: 'Standard' },
-    10: { id: 10, number: 10, status: 'Available', size: 'Pavilion', price: 'RFQ', type: 'Pavilion' },
-    11: { id: 11, number: 11, status: 'Booked', size: '3×3', price: 'USD 1,000', type: 'Standard' },
-    12: { id: 12, number: 12, status: 'Available', size: '3×3', price: 'USD 1,000', type: 'Standard' },
-    13: { id: 13, number: 13, status: 'Available', size: '3×3', price: 'USD 1,000', type: 'Standard' },
-    14: { id: 14, number: 14, status: 'Available', size: '3×6', price: 'USD 1,800', type: 'Standard' },
-    15: { id: 15, number: 15, status: 'Available', size: '3×3', price: 'USD 1,000', type: 'Standard' },
-    16: { id: 16, number: 16, status: 'Booked', size: '3×6', price: 'USD 1,800', type: 'Standard' },
-    17: { id: 17, number: 17, status: 'Available', size: '3×3', price: 'USD 1,000', type: 'Standard' },
-    18: { id: 18, number: 18, status: 'Available', size: '3×6', price: 'USD 1,800', type: 'Standard' },
-    19: { id: 19, number: 19, status: 'Available', size: '3×3', price: 'USD 1,000', type: 'Standard' },
-    20: { id: 20, number: 20, status: 'Available', size: '3×3', price: 'USD 1,000', type: 'Standard' },
-    21: { id: 21, number: 21, status: 'Available', size: '3×3', price: 'USD 1,000', type: 'Standard' },
-    22: { id: 22, number: 22, status: 'Available', size: '3×3', price: 'USD 1,000', type: 'Standard' },
-    23: { id: 23, number: 23, status: 'Reserved', size: '3×3', price: 'USD 1,000', type: 'Standard' },
-    24: { id: 24, number: 24, status: 'Available', size: '3×3', price: 'USD 1,000', type: 'Standard' },
-    25: { id: 25, number: 25, status: 'Available', size: '3×3', price: 'USD 1,000', type: 'Standard' },
-    26: { id: 26, number: 26, status: 'Booked', size: '3×3', price: 'USD 1,000', type: 'Standard' },
-    27: { id: 27, number: 27, status: 'Available', size: '3×3', price: 'USD 1,000', type: 'Standard' },
-    28: { id: 28, number: 28, status: 'Available', size: '3×3', price: 'USD 1,000', type: 'Standard' },
-    29: { id: 29, number: 29, status: 'Available', size: '3×3', price: 'USD 1,000', type: 'Standard' },
-    30: { id: 30, number: 30, status: 'Available', size: '3×3', price: 'USD 1,000', type: 'Standard' },
-    31: { id: 31, number: 31, status: 'Booked', size: '3×3', price: 'USD 1,000', type: 'Standard' },
-    32: { id: 32, number: 32, status: 'Available', size: '3×3', price: 'USD 1,000', type: 'Standard' },
-    33: { id: 33, number: 33, status: 'Available', size: 'Pavilion', price: 'RFQ', type: 'Pavilion' },
-    34: { id: 34, number: 34, status: 'Available', size: '3×3', price: 'USD 1,000', type: 'Standard' },
-    35: { id: 35, number: 35, status: 'Available', size: '3×3', price: 'USD 1,000', type: 'Standard' },
-    36: { id: 36, number: 36, status: 'Booked', size: '3×6', price: 'USD 1,800', type: 'Standard' },
-    37: { id: 37, number: 37, status: 'Available', size: 'Pavilion', price: 'RFQ', type: 'Pavilion' },
-    38: { id: 38, number: 38, status: 'Available', size: '3×3', price: 'USD 1,000', type: 'Standard' },
-    39: { id: 39, number: 39, status: 'Available', size: '3×3', price: 'USD 1,000', type: 'Standard' },
-    40: { id: 40, number: 40, status: 'Available', size: '3×3', price: 'USD 1,000', type: 'Standard' }
-  };
+  // Booths come from Sanity (Exhibition Booth documents), indexed by booth number
+  const boothData = Object.fromEntries(booths.map((booth) => [booth.number, booth]));
 
   // Play click sound
   const playClickSound = () => {
@@ -1483,6 +1443,15 @@ const BoothInfoModal = ({ booth, onClose }) => {
       </motion.div>
     </div>
   );
+}
+
+export async function getStaticProps() {
+  try {
+    return { props: { booths: await getExhibitorBooths() }, revalidate: 3600 };
+  } catch (error) {
+    console.error('Error loading booths from Sanity:', error);
+    return { props: { booths: [] }, revalidate: 60 };
+  }
 }
 
 export default Exhibitors;

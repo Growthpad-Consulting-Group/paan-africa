@@ -96,3 +96,13 @@ export const getSummitExperience = (id: string, edition = SUMMIT_EDITION) =>
     `*[_type == "summitExperience" && edition == $edition && experienceId == $id][0]{${EXPERIENCE_FIELDS}}`,
     { edition, id }
   )
+
+// ── Exhibition floor ────────────────────────────────────────────────────────
+
+export type ExhibitorBooth = { id: number; number: number; status: 'Available' | 'Reserved' | 'Booked'; size: string | null; price: string | null; type: 'Standard' | 'Pavilion' }
+
+export const getExhibitorBooths = (edition = SUMMIT_EDITION) =>
+  sanityFetch<ExhibitorBooth[]>(
+    `*[_type == "exhibitorBooth" && edition == $edition] | order(number asc){ "id": number, number, status, size, price, type }`,
+    { edition }
+  )
