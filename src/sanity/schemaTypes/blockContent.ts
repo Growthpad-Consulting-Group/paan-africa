@@ -62,6 +62,81 @@ export default defineType({
     }),
     defineArrayMember({
       type: 'object',
+      name: 'imageUrl',
+      title: 'Image (external URL)',
+      description: 'Image hosted on ImageKit or another CDN. Used by migrated posts.',
+      fields: [
+        { name: 'url', type: 'url', title: 'Image URL', validation: (Rule) => Rule.required() },
+        { name: 'alt', type: 'string', title: 'Alternative Text' },
+        { name: 'caption', type: 'string', title: 'Caption' },
+      ],
+      preview: { select: { title: 'alt', subtitle: 'url' } },
+    }),
+    defineArrayMember({
+      type: 'object',
+      name: 'tableBlock',
+      title: 'Table',
+      fields: [
+        {
+          name: 'rows',
+          type: 'array',
+          title: 'Rows',
+          of: [
+            {
+              type: 'object',
+              name: 'tableRow',
+              title: 'Row',
+              fields: [
+                {
+                  name: 'cells',
+                  type: 'array',
+                  title: 'Cells',
+                  of: [
+                    {
+                      type: 'object',
+                      name: 'tableCell',
+                      title: 'Cell',
+                      fields: [
+                        {
+                          name: 'content',
+                          type: 'array',
+                          title: 'Content',
+                          of: [
+                            {
+                              type: 'block',
+                              styles: [{ title: 'Normal', value: 'normal' }],
+                              lists: [{ title: 'Bullet', value: 'bullet' }, { title: 'Numbered', value: 'number' }],
+                              marks: {
+                                decorators: [
+                                  { title: 'Strong', value: 'strong' },
+                                  { title: 'Emphasis', value: 'em' },
+                                  { title: 'Underline', value: 'underline' },
+                                ],
+                                annotations: [
+                                  { name: 'link', type: 'object', title: 'URL', fields: [{ name: 'href', type: 'url', title: 'URL' }] },
+                                ],
+                              },
+                            },
+                          ],
+                        },
+                      ],
+                      preview: { select: { title: 'content.0.children.0.text' } },
+                    },
+                  ],
+                },
+              ],
+              preview: { select: { title: 'cells.0.content.0.children.0.text' } },
+            },
+          ],
+        },
+      ],
+      preview: {
+        select: { rows: 'rows' },
+        prepare: ({ rows }) => ({ title: 'Table', subtitle: `${rows?.length ?? 0} rows` }),
+      },
+    }),
+    defineArrayMember({
+      type: 'object',
       name: 'callout',
       title: 'Callout Box',
       fields: [

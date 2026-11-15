@@ -1,4 +1,4 @@
-import { toHTML } from '@portabletext/to-html'
+import { renderPortableText } from '@/lib/portableText'
 import type { PortableTextBlock } from '@portabletext/types'
 import { sanityFetch } from '@/sanity/client'
 import { urlFor } from '@/sanity/image'
@@ -78,14 +78,9 @@ const stripHtml = (html: string) => html.replace(/<[^>]*>/g, ' ').replace(/\s+/g
 /** Legacy posts keep their HTML (tables, inline images); new posts use Portable Text. */
 function bodyHtml(p: RawPost): string {
   if (p.body && p.body.length > 0) {
-    return toHTML(p.body, {
-      components: {
-        types: {
-          image: ({ value }) =>
-            `<img src="${urlFor(value).width(1200).auto('format').url()}" alt="${value.alt ?? ''}" />`,
-        },
-      },
-    })
+    return sanitizeBlogHtml(
+      renderPortableText(p.body, { sanityImageUrl: (v) => urlFor(v).width(1200).auto('format').url() })
+    )
   }
   return sanitizeBlogHtml(p.rawHtml ?? '')
 }

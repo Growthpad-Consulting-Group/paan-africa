@@ -65,8 +65,8 @@ export default defineType({
     }),
     defineField({
       name: 'rawHtml',
-      title: 'Legacy HTML Body',
-      description: 'Migrated HTML from the old system. Rendered as-is until converted to rich text above.',
+      title: 'Legacy HTML Body (backup)',
+      description: 'Original HTML from the old system, kept as a backup. Only shown on the site if the rich-text Body above is empty.',
       type: 'text',
       group: 'content',
       hidden: ({ document }) => Boolean(document?.body && Array.isArray(document.body) && (document.body as unknown[]).length > 0),
