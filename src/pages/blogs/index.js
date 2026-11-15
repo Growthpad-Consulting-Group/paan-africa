@@ -5,123 +5,31 @@ import { useRouter } from 'next/router';
 import { Icon } from '@iconify/react';
 import Header from '@/layouts/standard-header';
 import Footer from '@/layouts/footer';
-import { usePublicBlog } from '@/hooks/usePublicBlog';
 import { toast } from 'react-hot-toast';
 import ScrollToTop from "@/components/ScrollToTop";
 import SEO from '@/components/SEO';
-import { supabase } from "@/lib/supabase";
-import { calculateReadTime } from '@/utils/readTime';
+import { getAllPosts } from '@/lib/blogService';
 import Pagination from '@/components/common/Pagination';
 
-export async function getServerSideProps() {
+export async function getStaticProps() {
   try {
-    // Fetch blogs with categories and tags
-    const { data: blogsData, error: blogsError } = await supabase
-      .from("blogs")
-      .select(`
-        *,
-        category:blog_categories(name),
-        tags:blog_post_tags(
-          tag:blog_tags(name)
-        )
-      `)
-      .eq("is_published", true)
-      .order("created_at", { ascending: false });
-
-    if (blogsError) throw blogsError;
-
-    if (!blogsData || blogsData.length === 0) {
-      return {
-        props: {
-          initialBlogs: {
-            featuredPost: null,
-            regularPosts: [],
-            blogs: []
-          }
-        }
-      };
-    }
-
-    // Get unique author IDs from all blogs
-    const authorIds = [...new Set(blogsData.map(blog => blog.author))].filter(Boolean);
-
-    // Fetch all authors in one query
-    const { data: authorsData, error: authorsError } = await supabase
-      .from("hr_users")
-      .select('id, name')
-      .in('id', authorIds);
-
-    if (authorsError) throw authorsError;
-
-    // Create a map of author IDs to names
-    const authorMap = new Map(
-      (authorsData || []).map(author => [author.id, author.name])
-    );
-
-    // Transform the data
-    const transformedData = blogsData.map((blog) => {
-      const cleanContent = blog.article_body 
-        ? blog.article_body
-            .replace(/<[^>]*>/g, '')
-            .replace(/\s+/g, ' ')
-            .trim()
-        : '';
-      
-      const contentSnippet = cleanContent.length > 150 
-        ? cleanContent.substring(0, 150) + '...' 
-        : cleanContent;
-
-      return {
-        id: blog.id,
-        slug: blog.slug || '',
-        title: blog.article_name || 'Untitled',
-        excerpt: contentSnippet || 'No content available',
-        image: blog.article_image || '/assets/images/opengraph.png',
-        date: blog.created_at ? new Date(blog.created_at).toLocaleDateString("en-US", {
-          year: "numeric",
-          month: "long",
-          day: "numeric",
-        }) : 'No date',
-        author: authorMap.get(blog.author) || 'Unknown Author',
-        readTime: calculateReadTime(blog.article_body),
-        featured: blog.is_featured || false,
-        category: blog.category?.name || 'Uncategorized',
-        tags: blog.tags?.map((t) => t.tag.name) || [],
-        article_body: blog.article_body || '',
-        meta_description: blog.meta_description || '',
-        article_category: blog.category?.name || 'Uncategorized',
-        article_tags: blog.tags?.map((t) => t.tag.name) || [],
-        article_image: blog.article_image || '/assets/images/opengraph.png',
-        created_at: blog.created_at,
-        updated_at: blog.updated_at
-      };
-    });
-
-    // Find the first featured post
-    const featured = transformedData.find(blog => blog.featured);
-    // Get all non-featured posts
-    const regular = transformedData.filter(blog => !blog.featured);
-
+    const blogs = await getAllPosts();
+    const featuredPost = blogs.find((b) => b.featured) || null;
     return {
       props: {
         initialBlogs: {
-          featuredPost: featured || null,
-          regularPosts: regular || [],
-          blogs: transformedData
-        }
-      }
+          featuredPost,
+          regularPosts: blogs.filter((b) => !b.featured),
+          blogs,
+        },
+      },
+      revalidate: 3600,
     };
   } catch (error) {
-    console.error('Error in getServerSideProps:', error);
+    console.error('Error loading blogs from Sanity:', error);
     return {
-      props: {
-        initialBlogs: {
-          featuredPost: null,
-          regularPosts: [],
-          blogs: [],
-          error: error.message
-        }
-      }
+      props: { initialBlogs: { featuredPost: null, regularPosts: [], blogs: [], error: error.message } },
+      revalidate: 60,
     };
   }
 }
@@ -129,7 +37,8 @@ export async function getServerSideProps() {
 const Blogs = ({ initialBlogs }) => {
   const router = useRouter();
   const { category, search, sort } = router.query;
-  const { featuredPost, regularPosts, loading, error } = usePublicBlog(initialBlogs);
+  const { featuredPost, regularPosts, error } = initialBlogs;
+  const loading = false;
   
   // Add detailed debug logs
   useEffect(() => {

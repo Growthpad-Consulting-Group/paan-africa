@@ -93,7 +93,7 @@ const RelatedPosts = ({ posts, loading, authorRef }) => {
         </button>
         
         <Link 
-          href={`/blog/${post.slug}`} 
+          href={`/blogs/${post.slug}`} 
           className="group block"
           onClick={(e) => {
             // Close the related post when clicking the link

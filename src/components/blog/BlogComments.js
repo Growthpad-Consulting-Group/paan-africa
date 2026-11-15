@@ -1,12 +1,12 @@
 import { useState, useEffect, useRef } from "react";
-import { usePublicBlog } from "@/hooks/usePublicBlog";
+import { useBlogComments } from "@/hooks/useBlogComments";
 import { toast } from "react-hot-toast";
 import { Icon } from "@iconify/react";
 import ReCAPTCHA from "react-google-recaptcha";
 import CommentCount from './CommentCount';
 
 const BlogComments = ({ blogId, comments, commentsLoading, commentsError, onCommentAdded }) => {
-  const { addComment, fetchComments } = usePublicBlog();
+  const { addComment, fetchComments } = useBlogComments();
   const [formData, setFormData] = useState({
     name: "",
     email: "",

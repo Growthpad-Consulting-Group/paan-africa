@@ -56,13 +56,15 @@ Modelled on the CCSA tracker (`call-center-solutions-africa/docs/MIGRATION.md`).
 ### Phase 1.1 — Blog (first, mirrors CCSA)
 | Area | Status | Notes |
 |---|---|---|
-| Schemas: `post`, `category`, `author`, `tag` | ⏳ | Portable Text body; map `is_published` → draft/publish workflow |
-| Export script: Supabase `blogs` + `blog_categories` + `blog_tags` + `hr_users` → NDJSON → `sanity dataset import` | ⏳ | Convert stored HTML → Portable Text (`@sanity/block-tools` or `@portabletext/block-tools`); keep slugs identical; upload images to Sanity assets |
-| `src/lib/blogService` (GROQ) replaces `usePublicBlog` | ⏳ | Hook is client-side Supabase fetching today |
-| Update `blogs/index`, `blogs/[slug]`, `RelatedPosts`, `TableOfContents`, `BlogAuthor` | ⏳ | `sanitizeBlogHtml` / `readTime` util reworked for Portable Text |
-| `BlogComments` + `CommentCount` | ⏳ | Keep on Supabase; re-key `blog_id` → Sanity post `_id` (migration SQL) |
-| `sitemap-blogs.xml.js` | ⏳ | Query Sanity instead of Supabase |
-| 301 redirect audit | ⏳ | Slugs must be unchanged; verify in Search Console |
+| Schemas: `post`, `category`, `author` (tags are strings on the post) | ✅ | Portable Text `body` for new posts; legacy HTML in `rawHtml` |
+| Export script: Supabase `blogs` + `blog_categories` + `blog_tags` + `hr_users` → NDJSON → `sanity dataset import` | ✅ | Done 2026-11-15: 53 posts, 1 author, 3 categories imported; parity check vs Supabase = 100% (slugs, bodies, published flags). **Decision: HTML kept as-is, NOT converted to Portable Text** — posts use tables, inline images and styled spans that conversion would lose. Images stay on ImageKit (`mainImageUrl`) |
+| `src/lib/blogService` (GROQ) replaces `usePublicBlog` | ✅ | Hook is client-side Supabase fetching today |
+| Update `blogs/index`, `blogs/[slug]`, `RelatedPosts`, `TableOfContents`, `BlogAuthor` | ✅ | `sanitizeBlogHtml` / `readTime` util reworked for Portable Text |
+| `BlogComments` + `CommentCount` | 🔄 | Stay on Supabase via `useBlogComments`, keyed by `legacyId`. **Gap:** posts created natively in Sanity have no `legacyId`, so comments are hidden for them. Fix = add `post_slug` column to `blog_comments`, backfill from `blogs.slug`, key by slug (needs SQL run + approval) |
+| `sitemap-blogs.xml.js` | ✅ | Query Sanity instead of Supabase |
+| 301 redirect audit | ✅ | Slugs unchanged, URLs unchanged → none needed. Still verify in Search Console after deploy |
+| Cutover checks | ⏳ | Set `SANITY_REVALIDATE_SECRET` + Sanity webhook; add CORS origins; deploy preview and diff 5 top posts; then remove blog code from Supabase (`blogs`, `blog_*` tables stay until verified in prod) |
+| Known pre-existing issues found | ⏳ | `africas-future-of-digital-advertising` has a 1.7 MB base64 image in the body (upload as a real image); `[slug]` subscribe form posts to non-existent `/api/subscribe` (real route is `/api/subscribe-newsletter`); `RelatedPosts` linked to `/blog/` (fixed → `/blogs/`) |
 
 ### Phase 1.2 — Certified Agencies (highest code-reduction win)
 Seven near-identical ~850-line pages (`aquila, liftup, media_seal, nitro121, omni-options, penquin, xperia_agency` = 6,000 lines).

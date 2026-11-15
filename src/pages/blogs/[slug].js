@@ -1,4 +1,4 @@
-import { usePublicBlog } from "@/hooks/usePublicBlog";
+import { useBlogComments } from "@/hooks/useBlogComments";
 import { useRouter } from "next/router";
 import Image from "next/image";
 import { Icon } from "@iconify/react";
@@ -12,10 +12,8 @@ import TableOfContents from '@/components/blog/TableOfContents';
 import BlogAuthor from '@/components/blog/BlogAuthor';
 import RelatedPosts from '@/components/blog/RelatedPosts';
 import Head from 'next/head';
-import { supabase } from "@/lib/supabase";
+import { getAllSlugs, getPostBySlug, getRelatedPosts } from "@/lib/blogService";
 import ScrollToTop from "@/components/ScrollToTop";
-import { calculateReadTime } from '@/utils/readTime';
-import { sanitizeBlogHtml } from '@/utils/sanitizeBlogHtml';
 import { formatBlogSeoTitle } from '@/utils/formatSeoTitle';
 
 // ─── Social Share Icons ────────────────────────────────────────────────────────
@@ -214,99 +212,41 @@ const formatDate = (dateString) => {
   return `Published on ${day}${ordinal(day)} ${month}, ${year}`;
 };
 
-// ─── getServerSideProps ────────────────────────────────────────────────────────
-export async function getServerSideProps(context) {
-  const { slug } = context.params;
+// ─── getStaticProps / getStaticPaths (ISR; refreshed by the Sanity webhook) ───
+export async function getStaticPaths() {
+  const slugs = await getAllSlugs();
+  return { paths: slugs.map((slug) => ({ params: { slug } })), fallback: 'blocking' };
+}
 
+export async function getStaticProps({ params }) {
+  const { slug } = params;
   try {
-    const { data: blogData, error: blogError } = await supabase
-      .from("blogs")
-      .select(`
-        *,
-        category:blog_categories(name),
-        tags:blog_post_tags(
-          tag:blog_tags(name)
-        )
-      `)
-      .eq("slug", slug)
-      .eq("is_published", true)
-      .single();
-
-    if (blogError) throw blogError;
-
-    if (!blogData) {
-      return { props: { blog: null, error: 'Blog not found', pageSlug: slug } };
-    }
-
-    const { data: authorData } = await supabase
-      .from("hr_users")
-      .select('id, name')
-      .eq('id', blogData.author)
-      .single();
-
-    const sanitizedBody = sanitizeBlogHtml(blogData.article_body || '');
-
-    const transformedBlog = {
-      ...blogData,
-      article_body: sanitizedBody,
-      article_category: blogData.category?.name || 'Uncategorized',
-      article_tags: blogData.tags?.map((t) => t.tag.name) || [],
-      author: authorData?.name || 'Unknown Author',
-      read_time: calculateReadTime(sanitizedBody),
-      meta_title: blogData.meta_title || blogData.article_name,
-      meta_description: blogData.meta_description || '',
-      meta_keywords: blogData.meta_keywords || '',
-      focus_keyword: blogData.focus_keyword || ''
-    };
-
-    return { props: { blog: transformedBlog, error: null, pageSlug: slug } };
+    const blog = await getPostBySlug(slug);
+    if (!blog) return { notFound: true, revalidate: 60 };
+    const relatedPosts = await getRelatedPosts(blog);
+    return { props: { blog, relatedPosts, error: null, pageSlug: slug }, revalidate: 3600 };
   } catch (error) {
-    console.error('Error in getServerSideProps:', error);
-    return { props: { blog: null, error: error.message, pageSlug: slug } };
+    console.error('Error loading blog post from Sanity:', error);
+    throw error;
   }
 }
 
 // ─── Page Component ────────────────────────────────────────────────────────────
-export default function BlogPost({ blog: initialBlog, error: serverError, pageSlug }) {
+export default function BlogPost({ blog, relatedPosts = [], error, pageSlug }) {
   const router = useRouter();
   const slug = pageSlug || router.query.slug;
-  const {
-    currentBlog,
-    loading,
-    error: clientError,
-    fetchBlogBySlug,
-    comments,
-    fetchComments,
-    commentsLoading,
-    commentsError,
-    relatedPosts,
-    relatedPostsLoading
-  } = usePublicBlog();
+  const { comments, fetchComments, commentsLoading, commentsError } = useBlogComments();
+  const relatedPostsLoading = false;
   const [currentUrl, setCurrentUrl] = useState('');
   const [subscribeForm, setSubscribeForm] = useState({ name: '', email: '' });
   const [subscribeStatus, setSubscribeStatus] = useState({ loading: false, message: '', error: false });
   const hasFetchedRef = useRef(false);
   const authorRef = useRef(null);
 
-  const blog = currentBlog || initialBlog;
-  const error = clientError || serverError;
 
   useEffect(() => {
-    if (slug && slug !== 'index') {
-      hasFetchedRef.current = false;
-      fetchBlogBySlug(slug);
-    }
-  }, [slug, fetchBlogBySlug]);
-
-  useEffect(() => {
-    console.log('Comments state in [slug].js:', {
-      comments,
-      isArray: Array.isArray(comments),
-      length: comments?.length,
-      type: typeof comments,
-      stringified: JSON.stringify(comments)
-    });
-  }, [comments]);
+    if (blog?.id) fetchComments(blog.id);
+  }, [blog?.id, fetchComments]);
 
   useEffect(() => {
     setCurrentUrl(window.location.href);
@@ -314,7 +254,7 @@ export default function BlogPost({ blog: initialBlog, error: serverError, pageSl
 
   if (!slug || slug === 'index') return null;
 
-  if (loading && !initialBlog) {
+  if (router.isFallback) {
     return (
       <>
         <Header />

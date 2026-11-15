@@ -1,25 +1,10 @@
-import { createClient } from '@supabase/supabase-js';
-
-// Initialize Supabase client
-const supabase = createClient(
-  process.env.NEXT_PUBLIC_SUPABASE_URL,
-  process.env.SUPABASE_SERVICE_KEY
-);
+import { getBlogSitemapEntries } from '@/lib/blogService';
 
 const SitemapBlogs = () => null;
 
 export const getServerSideProps = async ({ res }) => {
   try {
-    // Fetch all published blog posts
-    const { data: blogs, error } = await supabase
-      .from('blogs')
-      .select('slug, created_at, updated_at')
-      .eq('is_published', true);
-
-    if (error) {
-      console.error('Error fetching blogs:', error);
-      return res.status(500).json({ error: 'Failed to fetch blogs' });
-    }
+    const blogs = await getBlogSitemapEntries();
 
     // Generate sitemap XML for blog posts only
     const sitemap = generateBlogSitemap(blogs || []);
@@ -56,7 +41,7 @@ function generateBlogSitemap(blogs) {
 
   // Add blog posts
   blogs.forEach(blog => {
-    const lastmod = new Date(blog.updated_at || blog.created_at).toISOString();
+    const lastmod = new Date(blog.updatedAt).toISOString();
     xml += `
   <url>
     <loc>${baseUrl}/blogs/${blog.slug}</loc>
