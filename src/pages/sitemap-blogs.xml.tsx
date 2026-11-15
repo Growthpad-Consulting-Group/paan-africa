@@ -1,8 +1,9 @@
+import type { GetServerSideProps } from 'next';
 import { getBlogSitemapEntries } from '@/lib/blogService';
 
 const SitemapBlogs = () => null;
 
-export const getServerSideProps = async ({ res }) => {
+export const getServerSideProps: GetServerSideProps = async ({ res }) => {
   try {
     const blogs = await getBlogSitemapEntries();
 
@@ -21,14 +22,16 @@ export const getServerSideProps = async ({ res }) => {
     };
   } catch (error) {
     console.error('Error serving sitemap:', error);
-    res.status(500).json({ error: 'Internal server error' });
+    res.statusCode = 500;
+    res.setHeader('Content-Type', 'application/json');
+    res.end(JSON.stringify({ error: 'Internal server error' }));
     return {
       props: {},
     };
   }
 };
 
-function generateBlogSitemap(blogs) {
+function generateBlogSitemap(blogs: { slug: string; updatedAt: string }[]) {
   const baseUrl = 'https://paan.africa';
   
   let xml = `<?xml version="1.0" encoding="UTF-8"?>
@@ -40,7 +43,7 @@ function generateBlogSitemap(blogs) {
         xmlns:video="http://www.google.com/schemas/sitemap-video/1.1">`;
 
   // Add blog posts
-  blogs.forEach(blog => {
+  blogs.forEach((blog) => {
     const lastmod = new Date(blog.updatedAt).toISOString();
     xml += `
   <url>

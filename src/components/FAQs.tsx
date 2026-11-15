@@ -3,11 +3,9 @@ import { faqCategories as buttons, faqs as faqData } from '@/data/faqs';
 
 const FAQs = () => {
   const [activeButton, setActiveButton] = useState("About PAAN");
-  const [openFAQ, setOpenFAQ] = useState(null);
+  const [openFAQ, setOpenFAQ] = useState<number | null>(null);
 
-
-
-  const toggleFAQ = (index) => {
+  const toggleFAQ = (index: number) => {
     setOpenFAQ(openFAQ === index ? null : index);
   };
 

@@ -2,8 +2,16 @@ import { useEffect, useState } from 'react';
 import Link from 'next/link';
 import Image from 'next/image';
 import { Icon } from '@iconify/react';
+import type { RefObject } from 'react';
+import type { BlogListItem } from '@/lib/blogService';
 
-const RelatedPosts = ({ posts, loading, authorRef }) => {
+type Props = {
+  posts?: BlogListItem[] | null;
+  loading?: boolean;
+  authorRef: RefObject<HTMLElement | null>;
+};
+
+const RelatedPosts = ({ posts, loading, authorRef }: Props) => {
   const [isVisible, setIsVisible] = useState(false);
   const [hasManuallyClosed, setHasManuallyClosed] = useState(false);
 
@@ -95,7 +103,7 @@ const RelatedPosts = ({ posts, loading, authorRef }) => {
         <Link 
           href={`/blogs/${post.slug}`} 
           className="group block"
-          onClick={(e) => {
+          onClick={() => {
             // Close the related post when clicking the link
             handleClose();
           }}

@@ -1,27 +1,32 @@
 import { useState, useEffect } from 'react';
+import type { GetStaticPropsResult } from 'next';
 import SEO from "@/components/SEO";
 import Header from "@/layouts/standard-header";
 import Footer from "@/layouts/footer";
 import EventCard from "@/components/EventCard";
-import { getEvents } from "@/lib/eventService";
+import { getEvents, type EventItem } from "@/lib/eventService";
 import { Icon } from '@iconify/react';
 import Image from 'next/image';
 import { useAppTranslations } from '../hooks/useTranslations';
 
-const EventsPage = ({ upcoming = [], past = [] }) => {
+type Tab = 'all' | 'upcoming' | 'past';
+type Props = { upcoming: EventItem[]; past: EventItem[] };
+
+const EventsPage = ({ upcoming = [], past = [] }: Props) => {
   const { t } = useAppTranslations();
-  const eventCategories = [...new Set([...upcoming, ...past].map((e) => e.category).filter(Boolean))];
-  const eventLocations = [...new Set([...upcoming, ...past].map((e) => e.location).filter(Boolean))];
-  const [activeTab, setActiveTab] = useState('all');
+  const isText = (v: string | null): v is string => Boolean(v);
+  const eventCategories = [...new Set([...upcoming, ...past].map((e) => e.category).filter(isText))];
+  const eventLocations = [...new Set([...upcoming, ...past].map((e) => e.location).filter(isText))];
+  const [activeTab, setActiveTab] = useState<Tab>('all');
   const [selectedCategory, setSelectedCategory] = useState(t('events.filters.allEvents'));
   const [selectedLocation, setSelectedLocation] = useState(t('events.filters.allLocations'));
-  const [filteredEvents, setFilteredEvents] = useState([
+  const [filteredEvents, setFilteredEvents] = useState<EventItem[]>([
     ...upcoming,
     ...past
   ]);
 
   useEffect(() => {
-    let events;
+    let events: EventItem[];
     if (activeTab === 'upcoming') {
       events = upcoming;
     } else if (activeTab === 'past') {
@@ -41,7 +46,7 @@ const EventsPage = ({ upcoming = [], past = [] }) => {
     setFilteredEvents(events);
   }, [activeTab, selectedCategory, selectedLocation, t]);
 
-  const handleTabChange = (tab) => {
+  const handleTabChange = (tab: Tab) => {
     setActiveTab(tab);
     setSelectedCategory(t('events.filters.allEvents'));
     setSelectedLocation(t('events.filters.allLocations'));
@@ -228,7 +233,7 @@ const EventsPage = ({ upcoming = [], past = [] }) => {
   );
 };
 
-export async function getStaticProps() {
+export async function getStaticProps(): Promise<GetStaticPropsResult<Props>> {
   try {
     const { upcoming, past } = await getEvents();
     return { props: { upcoming, past }, revalidate: 3600 };

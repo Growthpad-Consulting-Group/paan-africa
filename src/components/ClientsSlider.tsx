@@ -1,7 +1,8 @@
-import { useState, useRef } from "react";
+import { useRef } from "react";
 import { Icon } from "@iconify/react";
 import Image from "next/image";
 import { Swiper, SwiperSlide } from 'swiper/react';
+import type { Swiper as SwiperInstance } from 'swiper';
 import { Navigation, EffectCoverflow } from 'swiper/modules';
 
 // Swiper styles
@@ -10,9 +11,8 @@ import 'swiper/css/navigation';
 import 'swiper/css/effect-coverflow';
 import { clientBenefitCards as cards } from '@/data/clients';
 
-export default function ClientsSlider({ openModal }) {
-  const swiperRef = useRef(null);
-
+export default function ClientsSlider({ openModal }: { openModal?: () => void }) {
+  const swiperRef = useRef<SwiperInstance | null>(null);
 
   return (
     <>
@@ -69,7 +69,7 @@ export default function ClientsSlider({ openModal }) {
                   <Image
                     src={card.image}
                     fill
-                    alt={card.title}
+                    alt={card.title ?? ""}
                     className="object-cover"
                   />
                   

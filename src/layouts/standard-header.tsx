@@ -1,13 +1,17 @@
 import { useState, useEffect } from 'react';
 import LanguageSwitch from '@/components/LanguageSwitch';
 import { ChevronDown, Menu, X, ChevronRight } from 'lucide-react';
+import { mainNavigation as menuItems, type NavLink } from '@/data/navigation';
 
-const Header = () => {
+/** Pages pass these, but the header currently ignores them; kept so callers type-check. */
+type HeaderProps = { navLinkColor?: string; transparent?: boolean; openModal?: () => void };
+
+const Header = (_props: HeaderProps) => {
   const [isScrolled, setIsScrolled] = useState(false);
-  const [activeDropdown, setActiveDropdown] = useState(null);
+  const [activeDropdown, setActiveDropdown] = useState<string | null>(null);
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
-  const [expandedMobileSection, setExpandedMobileSection] = useState(null);
-  const [hoverTimeout, setHoverTimeout] = useState(null);
+  const [expandedMobileSection, setExpandedMobileSection] = useState<string | null>(null);
+  const [hoverTimeout, setHoverTimeout] = useState<ReturnType<typeof setTimeout> | null>(null);
   const [currentPath, setCurrentPath] = useState('/');
 
   useEffect(() => {
@@ -48,33 +52,8 @@ const Header = () => {
     };
   }, [isMobileMenuOpen]);
 
-  const menuItems = {
-    'Join Us': [
-      { label: 'Agency Membership', href: '/pricing' },
-      { label: 'For Freelancers', href: '/freelancers' },
-      { label: 'For Clients', href: '/clients' },
-      { label: 'For Partners', href: '/partners' },
-      { label: 'Careers', href: '/careers' },
-    ],
-    'Programs': [
-      { label: 'Masterclasses', href: '/masterclasses' },
-      { label: 'PAAN Academy', href: '/academy' },
-      { label: 'Ambassadors', href: '/paan-ambassador' },    
-      { label: 'M&A', href: '/paan-ma-program' },
-    ],
-    'Events': [
-      { label: 'Webinars', href: '/events' },
-    ],
-    'Resources': [
-      { label: 'Portal', href: 'https://member-portal.paan.africa/' },
-      { label: 'Apply to Join Us', href: 'https://membership.paan.africa/' },
-      { label: 'AI Brief Builder', href: '/ai-brief-builder' },
-      { label: 'FAQs', href: '/faqs' },
-      { label: 'PAAN Insights', href: '/blogs' },
-    ],
-  };  
 
-  const handleMouseEnter = (item) => {
+  const handleMouseEnter = (item: string) => {
     if (hoverTimeout) {
       clearTimeout(hoverTimeout);
       setHoverTimeout(null);
@@ -103,7 +82,7 @@ const Header = () => {
     }
   };
 
-  const toggleMobileSection = (section) => {
+  const toggleMobileSection = (section: string) => {
     setExpandedMobileSection(expandedMobileSection === section ? null : section);
   };
 
@@ -113,7 +92,7 @@ const Header = () => {
   };
 
   // Helper function to check if we're on the home page
-  let isHomePage;
+  let isHomePage = false;
   
   if(currentPath === '/'){
     isHomePage = true;
@@ -130,17 +109,17 @@ const Header = () => {
 
 
   // Helper function to check if a menu item is active
-  const isMenuActive = (href) => {
+  const isMenuActive = (href: string) => {
     return currentPath === href;
   };
 
   // Helper function to check if any submenu item is active
-  const isSubmenuActive = (subItems) => {
-    return subItems.some(item => currentPath === item.href);
+  const isSubmenuActive = (subItems: NavLink[]) => {
+    return subItems.some((item) => currentPath === item.href);
   };
 
   // Helper function to get menu item classes
-  const getMenuItemClasses = (href = null, isDropdown = false, subItems = null) => {
+  const getMenuItemClasses = (href: string | null = null, isDropdown = false, subItems: NavLink[] | null = null) => {
     const isActive = href ? isMenuActive(href) : (subItems ? isSubmenuActive(subItems) : false);
     
     const baseClasses = `px-3 py-2 text-sm font-medium transition-all duration-200 rounded-full whitespace-nowrap`;

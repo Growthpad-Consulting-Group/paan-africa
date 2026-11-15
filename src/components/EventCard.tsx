@@ -3,8 +3,9 @@ import { Icon } from '@iconify/react';
 import Link from 'next/link';
 import { useState } from 'react';
 import TicketPurchaseButton from './TicketPurchaseButton';
+import type { EventItem } from '@/lib/eventService';
 
-const EventCard = ({ event, isPast = false }) => {
+const EventCard = ({ event, isPast = false }: { event: EventItem; isPast?: boolean }) => {
   const [copied, setCopied] = useState(false);
 
   const handleCopyPasscode = () => {
@@ -14,7 +15,7 @@ const EventCard = ({ event, isPast = false }) => {
       setTimeout(() => setCopied(false), 1500);
     }
   };
-  const formatDate = (dateString) => {
+  const formatDate = (dateString: string) => {
     const date = new Date(dateString);
     return date.toLocaleDateString('en-US', {
       weekday: 'long',
@@ -24,8 +25,8 @@ const EventCard = ({ event, isPast = false }) => {
     });
   };
 
-  const getCategoryColor = (category) => {
-    const colors = {
+  const getCategoryColor = (category: string) => {
+    const colors: Record<string, string> = {
       'Summit': 'bg-paan-red text-white',
       'Workshop': 'bg-paan-blue text-paan-dark-blue',
       'Webinar': 'bg-paan-green text-white',
@@ -150,14 +151,14 @@ const EventCard = ({ event, isPast = false }) => {
                 Details
               </Link>
             </div>
-          ) : (
+          ) : event.registrationUrl ? (
               <Link
                 href={event.registrationUrl}
                 className="px-4 sm:px-6 py-2 rounded-full font-semibold text-xs sm:text-sm transition-all duration-300 bg-paan-red text-white hover:bg-paan-red/90 hover:scale-105 w-full sm:w-auto text-center"
               >
                 Register Now
               </Link>
-            ) 
+            ) : null
           }
         </div>
 

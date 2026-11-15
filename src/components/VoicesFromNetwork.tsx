@@ -2,12 +2,11 @@
 
 import { useCallback, useEffect, useState } from "react";
 import { Icon } from "@iconify/react";
-import { networkVoices as VIDEOS } from "@/data/testimonials";
-
+import { networkVoices as VIDEOS, type NetworkVoice } from "@/data/testimonials";
 
 const VIDEOS_PER_VIEW = 3;
 
-function getEmbedUrl(videoId, { autoplay = false, muted = false } = {}) {
+function getEmbedUrl(videoId: string, { autoplay = false, muted = false }: { autoplay?: boolean; muted?: boolean } = {}) {
   const params = new URLSearchParams({
     controls: "1",
     rel: "0",
@@ -19,7 +18,7 @@ function getEmbedUrl(videoId, { autoplay = false, muted = false } = {}) {
   return `https://www.youtube.com/embed/${videoId}?${params.toString()}`;
 }
 
-function VideoCard({ video, onPlay }) {
+function VideoCard({ video, onPlay }: { video: NetworkVoice; onPlay: () => void }) {
   const [thumbQuality, setThumbQuality] = useState("maxresdefault");
   const thumbnail = `https://img.youtube.com/vi/${video.id}/${thumbQuality}.jpg`;
 
@@ -51,9 +50,9 @@ function VideoCard({ video, onPlay }) {
   );
 }
 
-function VideoModal({ video, onClose }) {
+function VideoModal({ video, onClose }: { video: NetworkVoice; onClose: () => void }) {
   useEffect(() => {
-    const handleKeyDown = (event) => {
+    const handleKeyDown = (event: KeyboardEvent) => {
       if (event.key === "Escape") onClose();
     };
     document.addEventListener("keydown", handleKeyDown);
@@ -97,7 +96,7 @@ function VideoModal({ video, onClose }) {
 
 export default function VoicesFromNetwork() {
   const [startIndex, setStartIndex] = useState(0);
-  const [activeVideo, setActiveVideo] = useState(null);
+  const [activeVideo, setActiveVideo] = useState<NetworkVoice | null>(null);
 
   const maxStartIndex = Math.max(0, VIDEOS.length - VIDEOS_PER_VIEW);
   const canGoPrev = startIndex > 0;

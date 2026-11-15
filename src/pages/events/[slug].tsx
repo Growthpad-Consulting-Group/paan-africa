@@ -1,13 +1,16 @@
+import type { GetStaticPaths, GetStaticProps } from 'next';
 import SEO from "@/components/SEO";
 import Header from "../../layouts/header";
 import Footer from "../../layouts/footer";
 import EventDetail from "@/components/EventDetail";
-import { getEventBySlug, getEventSlugByLegacyId, getEventSlugs, getRelatedEvents } from "@/lib/eventService";
+import { getEventBySlug, getEventSlugByLegacyId, getEventSlugs, getRelatedEvents, type EventItem } from "@/lib/eventService";
 import Link from 'next/link';
 import { Icon } from '@iconify/react';
 import Image from 'next/image';
 
-const EventDetailPage = ({ event, relatedEvents = [] }) => {
+type Props = { event: EventItem; relatedEvents: EventItem[] };
+
+const EventDetailPage = ({ event, relatedEvents = [] }: Props) => {
   const isPast = event?.status === 'past';
 
   if (!event) {
@@ -138,13 +141,13 @@ const EventDetailPage = ({ event, relatedEvents = [] }) => {
   );
 };
 
-export async function getStaticPaths() {
+export const getStaticPaths: GetStaticPaths = async () => {
   const slugs = await getEventSlugs();
   return { paths: slugs.map((slug) => ({ params: { slug } })), fallback: 'blocking' };
-}
+};
 
-export async function getStaticProps({ params }) {
-  const { slug } = params;
+export const getStaticProps: GetStaticProps<Props, { slug: string }> = async ({ params }) => {
+  const { slug } = params!;
   // Old links were /events/<number>: permanently redirect them to the slug URL.
   if (/^\d+$/.test(slug)) {
     const target = await getEventSlugByLegacyId(Number(slug));
@@ -153,6 +156,6 @@ export async function getStaticProps({ params }) {
   const event = await getEventBySlug(slug);
   if (!event) return { notFound: true, revalidate: 60 };
   return { props: { event, relatedEvents: await getRelatedEvents(event) }, revalidate: 3600 };
-}
+};
 
 export default EventDetailPage;

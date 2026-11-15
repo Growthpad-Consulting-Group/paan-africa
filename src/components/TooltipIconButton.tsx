@@ -1,5 +1,16 @@
-// components/TooltipIconButton.jsx
+// components/TooltipIconButton.tsx
+import type { ReactNode } from "react";
 import { Icon } from "@iconify/react";
+
+type Props = {
+  /** Iconify icon name; ignored when `children` is given */
+  icon?: string;
+  label: string;
+  onClick?: () => void;
+  mode?: string;
+  className?: string;
+  children?: ReactNode;
+};
 
 const TooltipIconButton = ({
   icon,
@@ -8,7 +19,7 @@ const TooltipIconButton = ({
   mode = "light",
   className = "",
   children,
-}) => {
+}: Props) => {
   return (
     <div className="relative group">
       <button
@@ -18,7 +29,7 @@ const TooltipIconButton = ({
         } ${className}`}
         aria-label={label}
       >
-        {children || <Icon icon={icon} className="h-5 w-5" />}
+        {children || <Icon icon={icon as string} className="h-5 w-5" />}
       </button>
       <div
         className={`

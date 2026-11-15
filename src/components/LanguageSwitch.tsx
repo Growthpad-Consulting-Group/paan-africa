@@ -3,11 +3,13 @@ import { Icon } from "@iconify/react";
 import toast from "react-hot-toast";
 import TooltipIconButton from "@/components/TooltipIconButton";
 
-const LanguageSwitch = ({ mode }) => {
-  const dropdownRef = useRef(null);
-  const selectRef = useRef(null);
+type Props = { mode?: 'dark' | 'light' | string; className?: string };
+
+const LanguageSwitch = ({ mode }: Props) => {
+  const dropdownRef = useRef<HTMLDivElement | null>(null);
+  const selectRef = useRef<HTMLSelectElement | null>(null);
   const initialLoadRef = useRef(true);
-  const googleTranslateElRef = useRef(null);
+  const googleTranslateElRef = useRef<HTMLDivElement | null>(null);
 
   const languages = [
     { name: "English", flag: "flag:us-1x1", code: "en" },
@@ -18,7 +20,7 @@ const LanguageSwitch = ({ mode }) => {
     // { name: "Akan", flag: "flag:gh-1x1", code: "ak" },
   ];
 
-  const toastMessages = {
+  const toastMessages: Record<string, string> = {
     en: "Translated to English",
     fr: "Traduit en Français",
     sw: "Umetafsiriwa kwa Kiswahili",
@@ -108,7 +110,7 @@ const LanguageSwitch = ({ mode }) => {
       if (window.__paanGoogleTranslateInitialized) {
         const globalSelect = document.querySelector(".goog-te-combo");
         if (globalSelect) {
-          selectRef.current = globalSelect;
+          selectRef.current = globalSelect as HTMLSelectElement;
           setWidgetInitialized(true);
         }
         return;
@@ -132,7 +134,7 @@ const LanguageSwitch = ({ mode }) => {
 
       // Observe globally for the google select to appear
       const tryAttachSelect = () => {
-        const globalSelect = document.querySelector(".goog-te-combo");
+        const globalSelect = document.querySelector<HTMLSelectElement>(".goog-te-combo");
         if (globalSelect) {
           selectRef.current = globalSelect;
           setWidgetInitialized(true);
@@ -210,8 +212,8 @@ const LanguageSwitch = ({ mode }) => {
   useEffect(() => {
     if (typeof window === "undefined") return;
 
-    const handleClickOutside = (event) => {
-      if (dropdownRef.current && !dropdownRef.current.contains(event.target)) {
+    const handleClickOutside = (event: MouseEvent) => {
+      if (dropdownRef.current && !dropdownRef.current.contains(event.target as Node)) {
         setIsOpen(false);
       }
     };
@@ -240,7 +242,7 @@ const LanguageSwitch = ({ mode }) => {
     };
   }, []);
 
-  const handleLanguageSelect = (language) => {
+  const handleLanguageSelect = (language: (typeof languages)[number]) => {
     setSelectedLanguage(language.name);
     if (typeof window !== "undefined") {
       window.localStorage.setItem("selectedLanguage", language.name);

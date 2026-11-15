@@ -2,16 +2,15 @@
 
 import Image from 'next/image';
 import styles from './AgencyLogosMarquee.module.css';
-import { freeMemberLogos as agencyLogosRight } from '@/data/members';
+import { freeMemberLogos as agencyLogosRight, type MemberLogo } from '@/data/members';
+import type { AgencyLogo } from '@/lib/agencyService';
 
-const AgencyLogosMarquee = ({ agencies = [] }) => {
+const AgencyLogosMarquee = ({ agencies = [] }: { agencies?: AgencyLogo[] }) => {
   // Certified agencies (managed in Sanity: Certified Agency documents, ordered by "Display order")
-  const agencyLogosLeft = agencies.map((a, i) => ({ id: i + 1, name: a.name, logo: a.logoUrl }));
-
-  // Agency logos array for right-sliding marquee
+  const agencyLogosLeft: MemberLogo[] = agencies.map((a, i) => ({ id: i + 1, name: a.name, logo: a.logoUrl }));
 
   // Create logo items for rendering
-  const renderLogoItems = (logos) => 
+  const renderLogoItems = (logos: MemberLogo[]) => 
     logos.map((agency) => (
       <div key={agency.id} className={styles.logoItem}>
         <div className={styles.logoContainer}>

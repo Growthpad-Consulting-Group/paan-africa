@@ -25,12 +25,12 @@ const Footer = () => {
   }, []);
 
   // Function to handle smooth scrolling with offset for fixed header
-  const handleScroll = (e, href) => {
+  const handleScroll = (e: React.MouseEvent, href: string) => {
     e.preventDefault();
     const targetId = href.replace("#", "");
     const element = document.getElementById(targetId);
     if (element) {
-      const headerHeight = document.querySelector("nav").offsetHeight;
+      const headerHeight = (document.querySelector("nav") as HTMLElement).offsetHeight;
       const elementPosition =
         element.getBoundingClientRect().top + window.scrollY;
       window.scrollTo({

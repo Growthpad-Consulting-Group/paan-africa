@@ -2,8 +2,6 @@ import Image from 'next/image';
 import { clientLogos as agencyLogos } from '@/data/clients';
 
 export default function AgencyLogosGrid() {
-  // Sample agency logos - replace with your actual logos
-
   return (
     <section className=" w-full bg-white py-14">
       <div className="mx-auto max-w-6xl">

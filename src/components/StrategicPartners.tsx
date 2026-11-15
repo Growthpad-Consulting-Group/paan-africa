@@ -8,7 +8,6 @@ import { strategicPartners as partners } from '@/data/partners';
 const StrategicPartners = () => {
   const { t } = useAppTranslations();
 
-
   // Create a single array with logos for rendering
   const renderItems = partners.map((partner, index) => (
     <div key={index} className={styles.logoItem}>
@@ -24,8 +23,9 @@ const StrategicPartners = () => {
           className={styles.logo}
           onError={(e) => {
             // Fallback to placeholder if logo doesn't exist
-            e.target.style.display = 'none';
-            e.target.nextSibling.style.display = 'flex';
+            const img = e.target as HTMLImageElement;
+            img.style.display = 'none';
+            (img.nextSibling as HTMLElement).style.display = 'flex';
           }}
         />
         {/* Fallback placeholder */}

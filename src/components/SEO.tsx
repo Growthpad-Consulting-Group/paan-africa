@@ -1,6 +1,24 @@
 import Head from "next/head";
 import { useRouter } from "next/router"; // Import useRouter for dynamic URL
 
+export type SEOProps = {
+  title?: string;
+  description?: string;
+  keywords?: string;
+  image?: string;
+  noindex?: boolean;
+  imageWidth?: number;
+  imageHeight?: number;
+  ogTitle?: string;
+  ogDescription?: string;
+  ogImage?: string;
+  twitterCard?: string;
+  twitterTitle?: string;
+  twitterDescription?: string;
+  twitterImage?: string;
+  canonicalUrl?: string;
+};
+
 const SEO = ({
   title = "Pan-African Agency Network (PAAN)",
   description = "Discover the Pan-African Agency Network (PAAN), a dynamic alliance of creative and tech agencies across Africa and the diaspora. Join us to unlock global opportunities, access exclusive resources, and collaborate with top talent to redefine Africa's creative and technological footprint. Explore our membership tiers, services, and upcoming events today!",
@@ -17,10 +35,8 @@ const SEO = ({
   twitterDescription,
   twitterImage,
   canonicalUrl
-}) => {
+}: SEOProps) => {
   const router = useRouter();
-  
-  
 
   // Construct the full URL for the current page if not provided
   const finalCanonicalUrl = canonicalUrl || `https://paan.africa${router.asPath === "/" ? "" : router.asPath.split("?")[0]}`;

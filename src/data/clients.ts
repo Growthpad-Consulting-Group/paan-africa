@@ -1,6 +1,7 @@
 // Moved out of the component so content can be edited without touching UI code.
 
-export type ClientBenefitCard = { description: string; image: string };
+/** `title` is read by the slider but the current slides have none (it renders an empty heading). */
+export type ClientBenefitCard = { title?: string; description: string; image: string };
 export type LogoItem = { id: number; name: string; logo: string };
 
 /** Slides on the For Clients page. */
