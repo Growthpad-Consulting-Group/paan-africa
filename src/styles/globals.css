@@ -311,6 +311,11 @@ html {
   font-size: 0 !important;
 }
 
+/* Google Translate shifts the page down when its (hidden) banner appears; keep the page in place */
+body {
+  top: 0 !important;
+}
+
 /* Christmas Effects Animations */
 @keyframes twinkle {
   0%, 100% { 
