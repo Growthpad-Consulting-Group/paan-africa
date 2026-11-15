@@ -142,7 +142,9 @@ Any `.js` file that is edited as part of this migration is renamed to `.ts`/`.ts
 | Pages (rewritten) | `masterclasses/[slug]`, `masterclasses/index`, `index` (home), `careers`, `events`, `events/[slug]`, `blogs/index`, `blogs/[slug]`, `academy/index`, `contact-us`, `faqs`, `sitemap-blogs.xml` |
 | Layouts | `standard-header`, `footer`, `paan-academy-footer` |
 | Components / hooks | `blog/BlogComments`, `blog/RelatedPosts`, `CareerApplicationModal`, `EventCard`, `VoicesFromNetwork`, `StrategicPartners`, `ClientsSlider`, `FAQs`, `ContactSection`, `AgencyLogosMarquee`, `AgencyLogosGrid`, `hooks/useBlogComments` |
-| Status | ⏳ do as one catch-up pass (verify each page byte-identical with the baseline method used in Phase 1.3) |
+| Status | ✅ **Done 2026-11-15.** All 27 converted (+ `SEO`, `LanguageSwitch`, `TooltipIconButton`, `Pagination`, `ContactParallax` that they depend on). Properly typed where small; large legacy markup (`AgencyProfile`, `MemberTiers`, the 6 summit/award forms) keeps `// @ts-nocheck` with typed props. Verified: 18 of 19 sampled pages byte-identical, 1 differs only by `alt=""` on the client slider images. New: `src/types/globals.d.ts`, `utils/errors.ts`, `data/navigation.ts`, `data/countries.ts` |
+
+**Bugs surfaced by the type checker during the catch-up (fixed unless noted):** an upcoming event with no registration link would have crashed its card; the blog sitemap's error path called a non-existent `res.status()`; the contact page's membership button set `window.href` (a no-op: it never navigated, now `window.location.href`, a visible fix); the masterclass page crashed on an empty outcomes/why-attend list; two scroll-to buttons threw when their target section was absent. **Still open (needs a decision):** (1) both blog "subscribe" forms are broken: the post page posts to a non-existent `/api/subscribe`, and the blog index handler never calls any API but shows a success toast (the real route is `/api/subscribe-newsletter`); (2) blog comments send a reCAPTCHA token that nothing verifies server-side (comments insert straight into Supabase); (3) the standard header ignores `navLinkColor` / `transparent` / `openModal`, which pages still pass.
 
 ### Setup
 | Task | Status |
@@ -291,10 +293,10 @@ Rules (copied from the growthpad approach):
 **Shared causes (fix once, shrinks many files):**
 | Repeated pattern | Where | Extraction | Status |
 |---|---|---|---|
-| **Country list copy-pasted** (about 100 lines each) | `PAANAwardsApplicationModal`, `ExhibitionApplicationModal`, `CategoryNominationModal`, `TicketPurchaseForm`, `summit/speaker-application`, `summit/exhibition-application`; a shared `common/CountrySelect` exists but only 2 components use it | `src/data/countries.ts` + `CountrySelect` everywhere (≈600 lines removed) | ⏳ |
-| Canvas connecting-dots hero animation (~200 lines each) | `index`, `academy/index`, `components/agencies/AgencyProfile` | `useConnectingDots()` hook / one `<DotsCanvas />` | ⏳ |
-| IntersectionObserver "section-visible" block + `sectionRefs` | 22 files | `useSectionObserver(refs)` hook | ⏳ |
-| reCAPTCHA setup (key check, ref, token state) | 17 files | `useRecaptcha()` / `<RecaptchaField />` | ⏳ |
+| **Country list copy-pasted** (23 entries, identical in all six) | `PAANAwardsApplicationModal`, `ExhibitionApplicationModal`, `CategoryNominationModal`, `TicketPurchaseForm`, `summit/speaker-application`, `summit/exhibition-application`; a shared `common/CountrySelect` exists but only 2 components use it | ✅ `src/data/countries.ts` wired into all 6 files (identical lists, so no behaviour change). **Correction:** this removes ≈150 lines, not the ≈600 first estimated. `CountrySelect` is still only used by 2 summit step components | ✅ |
+| Canvas connecting-dots hero animation (125 lines each, verified identical) | `index`, `academy/index`, `components/agencies/AgencyProfile` | ✅ `hooks/useConnectingDots.ts` (≈375 lines removed) | ✅ |
+| IntersectionObserver "section-visible" block + `sectionRefs` | 22 files | ✅ `hooks/useSectionObserver.ts`, applied to 5 (`careers`, `contact-us`, `faqs`, `academy`, `AgencyProfile`; the home page's copy was dead/commented out and was deleted). **17 files left**: apply as each is converted | 🔄 |
+| reCAPTCHA setup (key check, ref, token state) | 17 files | ✅ `hooks/useRecaptcha.ts`, applied to 3 (`CareerApplicationModal`, `contact-us`, `AgencyProfile`). **14 left**: apply as each is converted | 🔄 |
 | Components declared inside the page component (remounted on every render) | `careers.js` (6), `faqs.js`, `clients.js` | Move to section files | ⏳ |
 | Duplicate page-vs-component implementations | `ai-invoice-generator` (+ `AIInvoiceGenerator`), `ai-brief-builder` (+ `AIBriefBuilder`) | Keep one; delete the other (cleanup B/E) | ⏳ |
 
@@ -325,7 +327,7 @@ Rules (copied from the growthpad approach):
 ## Suggested sequence
 1. ✅ Sanity foundation → ✅ Blog → ✅ Certified agencies → ✅ Events → ✅ Masterclasses → ✅ Careers → ✅ `src/data` content
 2. **Preview deploy** (also: Sanity webhook + `SANITY_REVALIDATE_SECRET` + CORS) and verify in production
-3. **TypeScript catch-up pass** on the 27 touched `.js` files + the shared hooks/data from 3c (`countries.ts`, `useSectionObserver`, `useConnectingDots`, `useRecaptcha`)
+3. ✅ **TypeScript catch-up pass** on the 27 touched files + shared hooks/data (`countries.ts`, `useSectionObserver`, `useConnectingDots`, `useRecaptcha`): done 2026-11-15
 4. **Phase 1.5**: Summit & Awards → Sanity (pages still hidden)
 5. Refactor the 11 files over 1,000 lines (3c) with their TypeScript conversion: shared extractions first (countries, hooks), then home, then the two payment pages last…
 6. **App Router** branch (section 3), then **feature-folder restructure** (3b)
