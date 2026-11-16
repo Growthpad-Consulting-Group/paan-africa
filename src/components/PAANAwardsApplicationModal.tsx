@@ -1,4 +1,3 @@
-// @ts-nocheck  (legacy markup; slated for the Phase 1.5 rewrite - props to be typed then)
 "use client";
 
 import { useState, useRef, useEffect } from 'react';
@@ -8,8 +7,9 @@ import ReCAPTCHA from 'react-google-recaptcha';
 import PaystackScript from './PaystackScript';
 import Modal, { ModalHeader } from './Modal';
 import { countries } from '@/data/countries';
+import type { FieldChange } from "@/types/forms";
 
-const PAANAwardsApplicationModal = ({ isOpen, onClose }) => {
+const PAANAwardsApplicationModal = ({ isOpen, onClose }: { isOpen: boolean; onClose: () => void }) => {
   const [formData, setFormData] = useState({
     // Personal Information
     fullName: '',
@@ -25,13 +25,13 @@ const PAANAwardsApplicationModal = ({ isOpen, onClose }) => {
     yearsExperience: '',
     
     // Award Category Selection
-    selectedCategories: [],
+    selectedCategories: [] as string[],
     
     // Project/Work Information
     projectTitle: '',
     projectDescription: '',
     projectUrl: '',
-    projectImages: [],
+    projectImages: [] as File[],
     
     // Additional Information
     whyApply: '',
@@ -47,11 +47,11 @@ const PAANAwardsApplicationModal = ({ isOpen, onClose }) => {
     agreeToDataProcessing: false
   });
 
-  const [errors, setErrors] = useState({});
+  const [errors, setErrors] = useState<Record<string, string>>({});
   const [isSubmitting, setIsSubmitting] = useState(false);
-  const [recaptchaToken, setRecaptchaToken] = useState(null);
+  const [recaptchaToken, setRecaptchaToken] = useState<string | null>(null);
   const [paystackReady, setPaystackReady] = useState(false);
-  const recaptchaRef = useRef(null);
+  const recaptchaRef = useRef<ReCAPTCHA>(null);
 
   // Check if reCAPTCHA site key is available
   const recaptchaSiteKey = process.env.NEXT_PUBLIC_RECAPTCHA_SITE_KEY;
@@ -335,7 +335,7 @@ const PAANAwardsApplicationModal = ({ isOpen, onClose }) => {
   };
 
   // Pricing configuration
-  const pricing = {
+  const pricing: Record<string, { pricePerCategory: number; slashedPrice: number; currency: string; description: string; earlyBirdDeadline?: string }> = {
     agency: {
       pricePerCategory: isEarlyBird() ? 130 : 200,
       slashedPrice: isEarlyBird() ? 200 : 250,
@@ -378,7 +378,7 @@ const PAANAwardsApplicationModal = ({ isOpen, onClose }) => {
     return basePrice * 0.25; // 25% discount amount
   };
 
-  const handleInputChange = (e) => {
+  const handleInputChange = (e: FieldChange) => {
     const { name, value, type, checked } = e.target;
     
     if (name.startsWith('socialMedia.')) {
@@ -406,7 +406,7 @@ const PAANAwardsApplicationModal = ({ isOpen, onClose }) => {
     }
   };
 
-  const handleCategoryToggle = (categoryId) => {
+  const handleCategoryToggle = (categoryId: string) => {
     setFormData(prev => ({
       ...prev,
       selectedCategories: prev.selectedCategories.includes(categoryId)
@@ -415,15 +415,15 @@ const PAANAwardsApplicationModal = ({ isOpen, onClose }) => {
     }));
   };
 
-  const handleFileUpload = (e) => {
-    const files = Array.from(e.target.files);
+  const handleFileUpload = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const files = Array.from(e.target.files ?? []);
     setFormData(prev => ({
       ...prev,
       projectImages: [...prev.projectImages, ...files]
     }));
   };
 
-  const removeImage = (index) => {
+  const removeImage = (index: number) => {
     setFormData(prev => ({
       ...prev,
       projectImages: prev.projectImages.filter((_, i) => i !== index)
@@ -431,7 +431,7 @@ const PAANAwardsApplicationModal = ({ isOpen, onClose }) => {
   };
 
   const validateForm = () => {
-    const newErrors = {};
+    const newErrors: Record<string, string> = {};
 
     // Required fields validation
     if (!formData.fullName.trim()) newErrors.fullName = 'Full name is required';
@@ -528,7 +528,7 @@ const PAANAwardsApplicationModal = ({ isOpen, onClose }) => {
           }
         ]
       },
-      callback: function(response) {
+      callback: function(response: any) {
         if (response.status === 'success') {
           // Send application data to secretariat
           fetch('/api/send-awards-application', {
@@ -603,7 +603,7 @@ const PAANAwardsApplicationModal = ({ isOpen, onClose }) => {
     }
   };
 
-  const handleRecaptchaChange = (token) => {
+  const handleRecaptchaChange = (token: string | null) => {
     setRecaptchaToken(token);
   };
 
@@ -1188,7 +1188,7 @@ const PAANAwardsApplicationModal = ({ isOpen, onClose }) => {
               <div className="flex justify-center">
                 <ReCAPTCHA
                   ref={recaptchaRef}
-                  sitekey={recaptchaSiteKey}
+                  sitekey={recaptchaSiteKey ?? ''}
                   onChange={handleRecaptchaChange}
                 />
               </div>

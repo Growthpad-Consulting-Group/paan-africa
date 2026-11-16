@@ -144,7 +144,7 @@ const CareerApplicationModal = ({ isOpen, onClose, positions = [], defaultPositi
         });
         setRecaptchaToken(null);
         if (recaptchaRef.current) {
-          recaptchaRef.current.reset();
+          recaptchaRef.current?.reset();
         }
       }, 2000);
     } catch (err) {

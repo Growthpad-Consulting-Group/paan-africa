@@ -6,7 +6,6 @@ import Footer from "@/layouts/footer";
 import ScrollToTop from "@/components/ScrollToTop";
 import PaystackScript from "@/components/PaystackScript";
 import PAANAwardsApplicationModal from "@/components/PAANAwardsApplicationModal";
-import CategoryNominationModal from "@/components/CategoryNominationModal";
 import Hero from "@/components/PaanAwardsHero";
 import CollaborationSection from "@/components/awards/CollaborationSection";
 import AwardsAboutSection from "@/components/awards/AwardsAboutSection";
@@ -35,7 +34,6 @@ const PaanAwardsPage = () => {
   useSectionObserver(sectionRefs);
 
   const [isApplicationModalOpen, setIsApplicationModalOpen] = useState(false);
-  const [isNominationModalOpen, setIsNominationModalOpen] = useState(false);
 
   const scrollToSection = (sectionId: string) => {
     document.getElementById(sectionId)?.scrollIntoView({ behavior: 'smooth' });
@@ -179,12 +177,6 @@ const PaanAwardsPage = () => {
         <PAANAwardsApplicationModal 
           isOpen={isApplicationModalOpen}
           onClose={() => setIsApplicationModalOpen(false)}
-        />
-        
-        {/* Category Nomination Modal */}
-        <CategoryNominationModal 
-          isOpen={isNominationModalOpen}
-          onClose={() => setIsNominationModalOpen(false)}
         />
       </main>
     </>

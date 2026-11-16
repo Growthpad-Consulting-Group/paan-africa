@@ -1,4 +1,3 @@
-// @ts-nocheck  (legacy markup; slated for the Phase 1.5 rewrite - props to be typed then)
 import { useState, useRef, useEffect } from 'react';
 import SummitCancelledBanner from "@/components/summit/SummitCancelledBanner";
 import { useRouter } from 'next/router';
@@ -12,6 +11,7 @@ import SummitFooter from "@/layouts/summit-footer";
 import ScrollToTop from "@/components/ScrollToTop";
 import Head from "next/head";
 import { countries } from '@/data/countries';
+import type { FieldChange } from "@/types/forms";
 
 const ExhibitionApplication = () => {
   const router = useRouter();
@@ -26,15 +26,15 @@ const ExhibitionApplication = () => {
     companySize: '',
     boothSize: '',
     exhibitionGoals: '',
-    addons: [],
+    addons: [] as string[],
     consent: false
   });
 
-  const [errors, setErrors] = useState({});
+  const [errors, setErrors] = useState<Record<string, string>>({});
   const [isSubmitting, setIsSubmitting] = useState(false);
-  const [recaptchaToken, setRecaptchaToken] = useState(null);
-  const recaptchaRef = useRef(null);
-  const [selectedBooth, setSelectedBooth] = useState(null);
+  const [recaptchaToken, setRecaptchaToken] = useState<string | null>(null);
+  const recaptchaRef = useRef<ReCAPTCHA>(null);
+  const [selectedBooth, setSelectedBooth] = useState<{ number: string; size: string; price: string; type: string } | null>(null);
 
   // Auto-select booth information from URL parameters
   useEffect(() => {
@@ -43,15 +43,15 @@ const ExhibitionApplication = () => {
       
       if (booth) {
         setSelectedBooth({
-          number: booth,
-          size: size,
-          price: price,
-          type: type
+          number: booth as string,
+          size: size as string,
+          price: price as string,
+          type: type as string
         });
         
         setFormData(prev => ({
           ...prev,
-          boothSize: size || '',
+          boothSize: (size as string) || '',
           exhibitionGoals: `I am interested in booking Booth ${booth} (${size || ''} - ${price || ''}) for the PAAN Summit 2026. ${type ? `This is a ${type} booth.` : ''}`
         }));
       }
@@ -106,14 +106,14 @@ const ExhibitionApplication = () => {
     { id: 'accessibility', label: 'Accessibility Accommodations', icon: 'mdi:wheelchair-accessibility' }
   ];
 
-  const handleChange = (e) => {
+  const handleChange = (e: FieldChange) => {
     const { name, value, type, checked } = e.target;
     
     if (type === 'checkbox') {
       if (name === 'consent') {
         setFormData(prev => ({
           ...prev,
-          [name]: checked
+          [name]: !!checked
         }));
       } else {
         // Handle addons checkboxes
@@ -141,7 +141,7 @@ const ExhibitionApplication = () => {
   };
 
   // Handle reCAPTCHA change
-  const handleRecaptchaChange = (token) => {
+  const handleRecaptchaChange = (token: string | null) => {
     setRecaptchaToken(token);
     setErrors(prev => ({
       ...prev,
@@ -150,7 +150,7 @@ const ExhibitionApplication = () => {
   };
 
   const validateForm = () => {
-    const newErrors = {};
+    const newErrors: Record<string, string> = {};
     
     // Required fields validation
     if (!formData.companyName.trim()) newErrors.companyName = 'Company name is required';
@@ -176,7 +176,7 @@ const ExhibitionApplication = () => {
     return newErrors;
   };
 
-  const handleSubmit = async (e) => {
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
 
     // Validate form
@@ -218,11 +218,11 @@ const ExhibitionApplication = () => {
           companySize: '',
           boothSize: '',
           exhibitionGoals: '',
-          addons: [],
+          addons: [] as string[],
           consent: false
         });
         setRecaptchaToken(null);
-        recaptchaRef.current.reset();
+        recaptchaRef.current?.reset();
       } else {
         toast.error(data.message || 'Failed to submit exhibition application.', { id: toastId });
       }
@@ -318,7 +318,7 @@ const ExhibitionApplication = () => {
       </Head>
 
       <main className="min-h-screen bg-gray-50">
-        <Header/>
+        <Header navLinkColor="text-white" />
         {/* Hero Section */}
         <div className="relative bg-gradient-to-br from-paan-dark-blue to-paan-blue pt-24 pb-16 sm:pt-40">
           <div className="absolute inset-0 bg-black/20"></div>
@@ -665,7 +665,7 @@ const ExhibitionApplication = () => {
                     value={formData.exhibitionGoals}
                     onChange={handleChange}
                     disabled={isSubmitting}
-                    rows="4"
+                    rows={4}
                     className={`w-full px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-paan-blue focus:border-transparent transition-colors resize-none ${
                       errors.exhibitionGoals ? 'border-red-500' : ''
                     } ${isSubmitting ? 'opacity-50' : ''}`}
@@ -755,7 +755,7 @@ const ExhibitionApplication = () => {
               <div className="flex justify-center">
                 <ReCAPTCHA
                   ref={recaptchaRef}
-                  sitekey={recaptchaSiteKey}
+                  sitekey={recaptchaSiteKey ?? ''}
                   onChange={handleRecaptchaChange}
                 />
               </div>

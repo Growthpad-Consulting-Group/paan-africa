@@ -1,11 +1,11 @@
-// @ts-nocheck  (legacy markup; slated for the Phase 1.5 rewrite - props to be typed then)
 "use client";
 
 import { useState, useEffect } from "react";
 import { Icon } from "@iconify/react";
 import { countries } from '@/data/countries';
+import type { FieldChange } from "@/types/forms";
 
-const TicketPurchaseForm = ({ onClose }) => {
+const TicketPurchaseForm = ({ onClose }: { onClose: () => void }) => {
   const [formData, setFormData] = useState({
     name: "",
     phone: "",
@@ -21,7 +21,7 @@ const TicketPurchaseForm = ({ onClose }) => {
     graduationYear: "",
     // Corporate Group specific fields
     teamSize: 5,
-    teamMembers: [],
+    teamMembers: [] as string[],
     // International Delegate specific fields
     passportNumber: "",
     visaRequired: "",
@@ -41,7 +41,7 @@ const TicketPurchaseForm = ({ onClose }) => {
     heardAbout: ""
   });
   const [isLoading, setIsLoading] = useState(false);
-  const [errors, setErrors] = useState({});
+  const [errors, setErrors] = useState<Record<string, string>>({});
   const [paystackReady, setPaystackReady] = useState(false);
 
   // Early Bird countdown timer state
@@ -78,7 +78,7 @@ const TicketPurchaseForm = ({ onClose }) => {
     
     const interval = setInterval(() => {
       const now = new Date();
-      const difference = targetDate - now;
+      const difference = targetDate.getTime() - now.getTime();
       
       if (difference <= 0) {
         clearInterval(interval);
@@ -230,7 +230,7 @@ const TicketPurchaseForm = ({ onClose }) => {
   ];
 
 
-  const handleInputChange = (e) => {
+  const handleInputChange = (e: FieldChange) => {
     const { name, value } = e.target;
     setFormData(prev => ({
       ...prev,
@@ -247,7 +247,7 @@ const TicketPurchaseForm = ({ onClose }) => {
 
 
   const validateForm = () => {
-    const newErrors = {};
+    const newErrors: Record<string, string> = {};
 
     if (!formData.name.trim()) {
       newErrors.name = "Name is required";
@@ -294,7 +294,7 @@ const TicketPurchaseForm = ({ onClose }) => {
     setIsLoading(true);
 
     // Get selected ticket
-    const selectedTicket = ticketOptions.find(ticket => ticket.id === formData.ticketType);
+    const selectedTicket = ticketOptions.find(ticket => ticket.id === formData.ticketType)!;
     
     // Use USD currency for all payments
     const currency = "USD";
@@ -303,7 +303,7 @@ const TicketPurchaseForm = ({ onClose }) => {
     let totalAmount = selectedTicket.price;
     if (formData.ticketType === "corporate-group" && formData.teamSize > 5) {
       const extraMembers = formData.teamSize - 5;
-      totalAmount += (selectedTicket.extraPrice * extraMembers);
+      totalAmount += ((selectedTicket.extraPrice ?? 0) * extraMembers);
     }
     
     // Convert to cents
@@ -447,7 +447,7 @@ const TicketPurchaseForm = ({ onClose }) => {
           }
         ]
       },
-      callback: function(response) {
+      callback: function(response: any) {
         if (response.status === 'success') {
           // Send ticket purchase data to secretariat
           fetch('/api/send-summit-ticket', {
@@ -609,7 +609,7 @@ const TicketPurchaseForm = ({ onClose }) => {
               </h3>
               <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                 <div className="space-y-3">
-                  {ticketOptions.find(t => t.id === formData.ticketType)?.features.slice(0, Math.ceil(ticketOptions.find(t => t.id === formData.ticketType)?.features.length / 2)).map((feature, index) => (
+                  {ticketOptions.find(t => t.id === formData.ticketType)?.features.slice(0, Math.ceil((ticketOptions.find(t => t.id === formData.ticketType)?.features.length ?? 0) / 2)).map((feature, index) => (
                     <div key={index} className="flex items-start gap-3">
                       <Icon icon="mdi:check-circle" className="w-5 h-5 text-green-600 mt-0.5 flex-shrink-0" />
                       <span className="text-sm text-gray-700">{feature}</span>
@@ -617,7 +617,7 @@ const TicketPurchaseForm = ({ onClose }) => {
                   ))}
                 </div>
                 <div className="space-y-3">
-                  {ticketOptions.find(t => t.id === formData.ticketType)?.features.slice(Math.ceil(ticketOptions.find(t => t.id === formData.ticketType)?.features.length / 2)).map((feature, index) => (
+                  {ticketOptions.find(t => t.id === formData.ticketType)?.features.slice(Math.ceil((ticketOptions.find(t => t.id === formData.ticketType)?.features.length ?? 0) / 2)).map((feature, index) => (
                     <div key={index} className="flex items-start gap-3">
                       <Icon icon="mdi:check-circle" className="w-5 h-5 text-green-600 mt-0.5 flex-shrink-0" />
                       <span className="text-sm text-gray-700">{feature}</span>
@@ -1230,11 +1230,11 @@ const TicketPurchaseForm = ({ onClose }) => {
                 <>
                   <Icon icon="mdi:credit-card" className="w-5 h-5" />
                   Pay {(() => {
-                    const selectedTicket = ticketOptions.find(t => t.id === formData.ticketType);
+                    const selectedTicket = ticketOptions.find(t => t.id === formData.ticketType)!;
                     let totalAmount = selectedTicket.price;
                     if (formData.ticketType === "corporate-group" && formData.teamSize > 5) {
                       const extraMembers = formData.teamSize - 5;
-                      totalAmount += (selectedTicket.extraPrice * extraMembers);
+                      totalAmount += ((selectedTicket.extraPrice ?? 0) * extraMembers);
                     }
                     return `$${totalAmount} USD`;
                   })()}

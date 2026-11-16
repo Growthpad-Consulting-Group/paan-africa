@@ -1,4 +1,3 @@
-// @ts-nocheck  (legacy markup; slated for the Phase 1.5 rewrite - props to be typed then)
 import { useState, useRef } from 'react';
 import SummitCancelledBanner from "@/components/summit/SummitCancelledBanner";
 import { Icon } from '@iconify/react';
@@ -10,6 +9,7 @@ import Header from '@/layouts/speaker-application-header';
 import Footer from '@/layouts/footer';
 import Image from 'next/image';
 import { countries } from '@/data/countries';
+import type { FieldChange } from "@/types/forms";
 
 // Animation variants - defined outside component for global access
 const fadeInUp = {
@@ -55,20 +55,20 @@ const SpeakerApplicationPage = () => {
     bio: '',
     sessionTitle: '',
     sessionType: '',
-    summitTracks: [],
+    summitTracks: [] as string[],
     sessionDescription: '',
     keyTakeaways: '',
     whyThisMatters: '',
-    targetAudience: [],
+    targetAudience: [] as string[],
     pastTalks: '',
     specialRequirements: '',
     consent: false
   });
 
-  const [errors, setErrors] = useState({});
+  const [errors, setErrors] = useState<Record<string, string>>({});
   const [isSubmitting, setIsSubmitting] = useState(false);
-  const [recaptchaToken, setRecaptchaToken] = useState(null);
-  const recaptchaRef = useRef(null);
+  const [recaptchaToken, setRecaptchaToken] = useState<string | null>(null);
+  const recaptchaRef = useRef<ReCAPTCHA>(null);
 
   // Check if reCAPTCHA site key is available
   const recaptchaSiteKey = process.env.NEXT_PUBLIC_RECAPTCHA_SITE_KEY;
@@ -104,21 +104,21 @@ const SpeakerApplicationPage = () => {
   ];
 
 
-  const handleChange = (e) => {
+  const handleChange = (e: FieldChange) => {
     const { name, value, type, checked } = e.target;
     
     if (type === 'checkbox') {
       if (name === 'summitTracks' || name === 'targetAudience') {
         setFormData(prev => ({
           ...prev,
-          [name]: checked 
+          [name]: !!checked 
             ? [...prev[name], value]
             : prev[name].filter(item => item !== value)
         }));
       } else {
         setFormData(prev => ({
           ...prev,
-          [name]: checked
+          [name]: !!checked
         }));
       }
     } else {
@@ -138,7 +138,7 @@ const SpeakerApplicationPage = () => {
   };
 
   // Handle reCAPTCHA change
-  const handleRecaptchaChange = (token) => {
+  const handleRecaptchaChange = (token: string | null) => {
     setRecaptchaToken(token);
     setErrors(prev => ({
       ...prev,
@@ -147,7 +147,7 @@ const SpeakerApplicationPage = () => {
   };
 
   const validateForm = () => {
-    const newErrors = {};
+    const newErrors: Record<string, string> = {};
     
     // Required fields validation
     if (!formData.fullName.trim()) newErrors.fullName = 'Full name is required';
@@ -186,7 +186,7 @@ const SpeakerApplicationPage = () => {
     return newErrors;
   };
 
-  const handleSubmit = async (e) => {
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
 
     // Validate form
@@ -227,17 +227,17 @@ const SpeakerApplicationPage = () => {
           bio: '',
           sessionTitle: '',
           sessionType: '',
-          summitTracks: [],
+          summitTracks: [] as string[],
           sessionDescription: '',
           keyTakeaways: '',
           whyThisMatters: '',
-          targetAudience: [],
+          targetAudience: [] as string[],
           pastTalks: '',
           specialRequirements: '',
           consent: false
         });
         setRecaptchaToken(null);
-        recaptchaRef.current.reset();
+        recaptchaRef.current?.reset();
       } else {
         toast.error(data.message || 'Failed to submit speaker application.', { id: toastId });
       }
@@ -523,7 +523,7 @@ const SpeakerApplicationPage = () => {
                       value={formData.bio}
                       onChange={handleChange}
                       disabled={isSubmitting}
-                      rows="6"
+                      rows={6}
                       className={`w-full px-3 sm:px-4 py-2 sm:py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-paan-blue focus:border-transparent transition-colors resize-none text-sm sm:text-base ${
                         errors.bio ? 'border-red-500' : ''
                       } ${isSubmitting ? 'opacity-50' : ''}`}
@@ -621,7 +621,7 @@ const SpeakerApplicationPage = () => {
                       value={formData.sessionDescription}
                       onChange={handleChange}
                       disabled={isSubmitting}
-                      rows="4"
+                      rows={4}
                       className={`w-full px-3 sm:px-4 py-2 sm:py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-paan-blue focus:border-transparent transition-colors resize-none text-sm sm:text-base ${
                         errors.sessionDescription ? 'border-red-500' : ''
                       } ${isSubmitting ? 'opacity-50' : ''}`}
@@ -646,7 +646,7 @@ const SpeakerApplicationPage = () => {
                       value={formData.keyTakeaways}
                       onChange={handleChange}
                       disabled={isSubmitting}
-                      rows="4"
+                      rows={4}
                       className={`w-full px-3 sm:px-4 py-2 sm:py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-paan-blue focus:border-transparent transition-colors resize-none text-sm sm:text-base ${
                         errors.keyTakeaways ? 'border-red-500' : ''
                       } ${isSubmitting ? 'opacity-50' : ''}`}
@@ -666,7 +666,7 @@ const SpeakerApplicationPage = () => {
                       value={formData.whyThisMatters}
                       onChange={handleChange}
                       disabled={isSubmitting}
-                      rows="4"
+                      rows={4}
                       className={`w-full px-3 sm:px-4 py-2 sm:py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-paan-blue focus:border-transparent transition-colors resize-none text-sm sm:text-base ${
                         errors.whyThisMatters ? 'border-red-500' : ''
                       } ${isSubmitting ? 'opacity-50' : ''}`}
@@ -733,7 +733,7 @@ const SpeakerApplicationPage = () => {
                       value={formData.specialRequirements}
                       onChange={handleChange}
                       disabled={isSubmitting}
-                      rows="3"
+                      rows={3}
                       className={`w-full px-3 sm:px-4 py-2 sm:py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-paan-blue focus:border-transparent transition-colors resize-none text-sm sm:text-base ${
                         isSubmitting ? 'opacity-50' : ''
                       }`}
@@ -767,7 +767,7 @@ const SpeakerApplicationPage = () => {
                 <div className="flex justify-center">
                   <ReCAPTCHA
                     ref={recaptchaRef}
-                    sitekey={recaptchaSiteKey}
+                    sitekey={recaptchaSiteKey ?? ''}
                     onChange={handleRecaptchaChange}
                   />
                 </div>
