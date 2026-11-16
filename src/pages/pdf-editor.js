@@ -3,9 +3,9 @@ import { PDFDocument, StandardFonts, degrees, rgb } from "pdf-lib";
 import { Icon } from "@iconify/react";
 import toast from "react-hot-toast";
 import SEO from "@/components/SEO";
-import Header from "@/layouts/standard-header";
-import Footer from "@/layouts/footer";
-import ScrollToTop from "@/components/ScrollToTop";
+import Header from "@/shared/layouts/standard-header";
+import Footer from "@/shared/layouts/footer";
+import ScrollToTop from "@/shared/components/ScrollToTop";
 
 const readAsArrayBuffer = (file) =>
   new Promise((resolve, reject) => {

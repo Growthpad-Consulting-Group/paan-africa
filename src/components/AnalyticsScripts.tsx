@@ -80,7 +80,7 @@ export default function AnalyticsScripts() {
       />
       {/* Meta Pixel NoScript fallback */}
       <noscript>
-        <img height="1" width="1" style={{ display: "none" }} alt="" src="https://www.facebook.com/tr?id=706159915533812&ev=PageView&noscript=1" />
+        <img height="1" width="1" style={{ display: "none" }} src="https://www.facebook.com/tr?id=706159915533812&ev=PageView&noscript=1" />
       </noscript>
       {/* Apollo Tracking Script updated */}
       <Script

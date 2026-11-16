@@ -1,6 +1,6 @@
 import SEO from "@/components/SEO";
-import Header from "../layouts/header";
-import Footer from "@/layouts/footer";
+import Header from "@/shared/layouts/header";
+import Footer from "@/shared/layouts/footer";
 import { useState, useEffect } from "react";
 import { toast } from "react-hot-toast";
 import { useRouter } from "next/router";

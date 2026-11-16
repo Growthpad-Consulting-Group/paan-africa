@@ -1,16 +1,16 @@
 import SEO from "@/components/SEO";
-import Header from "@/layouts/standard-header";
+import Header from "@/shared/layouts/standard-header";
 import Image from "next/image";
-import Footer from "@/layouts/footer";
+import Footer from "@/shared/layouts/footer";
 import { useEffect, useRef, useState } from "react";
-import { useFixedHeader } from '../../utils/scrollUtils';
+import { useFixedHeader } from '@/shared/lib/scrollUtils';
 import FreelanceBenefits from "@/components/FreelanceBenefits";
 import ReadyToApplySection from "@/components/ReadyToApplySection";
 import Marquee from "@/components/Marquee";
 import ContactSection from "@/components/ContactSection";
 import FreelancerHero from "@/components/FreelancerHero";
 import AgencyLogosGrid from "@/components/AgencyLogosGrid";
-import ScrollToTop from "@/components/ScrollToTop";
+import ScrollToTop from "@/shared/components/ScrollToTop";
 import { useAppTranslations } from '../hooks/useTranslations';
 
 const FreelancersPage = () => {

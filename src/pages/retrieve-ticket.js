@@ -1,8 +1,8 @@
 import React, { useState } from 'react';
 import Head from 'next/head';
 import Image from 'next/image';
-import Header from '../layouts/standard-header';
-import Footer from '../layouts/footer';
+import Header from '@/shared/layouts/standard-header';
+import Footer from '@/shared/layouts/footer';
 import SEO from '../components/SEO';
 
 const RetrieveTicketPage = () => {

@@ -1,8 +1,8 @@
 import { useState, useEffect } from 'react';
 import type { GetStaticPropsResult } from 'next';
 import SEO from "@/components/SEO";
-import Header from "@/layouts/standard-header";
-import Footer from "@/layouts/footer";
+import Header from "@/shared/layouts/standard-header";
+import Footer from "@/shared/layouts/footer";
 import EventCard from "@/components/EventCard";
 import { getEvents, type EventItem } from "@/lib/eventService";
 import { Icon } from '@iconify/react';

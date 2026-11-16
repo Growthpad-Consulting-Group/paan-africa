@@ -1,9 +1,9 @@
 import SEO from "@/components/SEO";
-import Header from "@/layouts/standard-header";
+import Header from "@/shared/layouts/standard-header";
 import Image from "next/image";
-import Footer from "@/layouts/footer";
+import Footer from "@/shared/layouts/footer";
 import { useEffect, useRef, useState } from "react";
-import ScrollToTop from "@/components/ScrollToTop";
+import ScrollToTop from "@/shared/components/ScrollToTop";
 import { motion } from "framer-motion";
 import { Icon } from "@iconify/react";
 import CareerApplicationModal from "@/components/CareerApplicationModal";

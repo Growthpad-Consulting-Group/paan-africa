@@ -1,6 +1,6 @@
 // pages/index.js
 import SEO from "@/components/SEO";
-import Header from "../layouts/standard-header";
+import Header from "@/shared/layouts/standard-header";
 import CustomSlider from "../components/CustomSlider";
 import Image from "next/image";
 import Link from "next/link";
@@ -9,9 +9,9 @@ import Tier1 from "@/components/Tier1";
 import Tier2 from "@/components/Tier2";
 import Tier3 from "@/components/Tier3";
 import OfferingTab from "@/components/OfferingTab";
-import Footer from "@/layouts/footer";
+import Footer from "@/shared/layouts/footer";
 import { useEffect, useRef, useState } from "react";
-import { useFixedHeader, handleScroll } from '../../utils/scrollUtils';
+import { useFixedHeader, handleScroll } from '@/shared/lib/scrollUtils';
 import { useAppTranslations } from '../hooks/useTranslations';
 import ContactSection from "@/components/ContactSection";
 import AgencyEnquiryModal from "@/components/AgencyEnquiryModal";
@@ -20,7 +20,7 @@ import VoicesFromNetwork from "@/components/VoicesFromNetwork";
 import AgencyLogosGrid from "@/components/AgencyLogosGrid";
 import AgencyLogosMarquee from "@/components/AgencyLogosMarquee";
 import { getAgencyLogos, type AgencyLogo } from "@/lib/agencyService";
-import ScrollToTop from "@/components/ScrollToTop";
+import ScrollToTop from "@/shared/components/ScrollToTop";
 import ConnectingDots from "@/components/ConnectingDots";
 import ProgramCard from "@/components/ProgramCard";
 import StrategicPartners from "@/components/StrategicPartners";

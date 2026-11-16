@@ -6,8 +6,8 @@ import { Icon } from '@iconify/react';
 import toast from 'react-hot-toast';
 
 // Components
-import Header from '../layouts/header';
-import Footer from '../layouts/footer';
+import Header from '@/shared/layouts/header';
+import Footer from '@/shared/layouts/footer';
 import SEO from '../components/SEO';
 import { FeaturedTalent, TalentLeaderboard } from '../components/BadgeSystem';
 

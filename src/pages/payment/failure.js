@@ -2,8 +2,8 @@ import { useRouter } from 'next/router';
 import { useEffect, useState } from 'react';
 import { Icon } from '@iconify/react';
 import Link from 'next/link';
-import Header from '@/layouts/standard-header';
-import Footer from '@/layouts/footer';
+import Header from '@/shared/layouts/standard-header';
+import Footer from '@/shared/layouts/footer';
 import SEO from '@/components/SEO';
 
 const PaymentFailurePage = () => {

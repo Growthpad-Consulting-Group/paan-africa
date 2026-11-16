@@ -1,12 +1,12 @@
 import SEO from "@/components/SEO";
-import PaanMaHeader from "@/layouts/standard-header";
+import PaanMaHeader from "@/shared/layouts/standard-header";
 import Image from "next/image";
-import Footer from "@/layouts/footer";
+import Footer from "@/shared/layouts/footer";
 import { useEffect, useRef, useState } from "react";
-import { useFixedHeader } from '../../utils/scrollUtils';
+import { useFixedHeader } from '@/shared/lib/scrollUtils';
 import EnquiryModal from "@/components/EnquiryModal";
 import MaConsultationModal from "@/components/MaConsultationModal";
-import ScrollToTop from "@/components/ScrollToTop";
+import ScrollToTop from "@/shared/components/ScrollToTop";
 import Accordion from "@/components/Accordion";
 import { motion } from "framer-motion";
 import { useAppTranslations } from '../hooks/useTranslations';

@@ -1,11 +1,11 @@
 // pages/index.js
 import SEO from "@/components/SEO";
-import Header from "@/layouts/standard-header";
-import Footer from "@/layouts/footer";
+import Header from "@/shared/layouts/standard-header";
+import Footer from "@/shared/layouts/footer";
 import { useEffect, useRef } from "react";
-import { useFixedHeader, handleScroll } from '../../utils/scrollUtils';
+import { useFixedHeader, handleScroll } from '@/shared/lib/scrollUtils';
 import MemberTiers from "@/components/MemberTiers";
-import ScrollToTop from "@/components/ScrollToTop";
+import ScrollToTop from "@/shared/components/ScrollToTop";
 
 const HomePage = () => {
   const sectionRefs = {

@@ -1,9 +1,9 @@
 import SEO from "@/components/SEO";
-import Header from "../layouts/standard-header";
-import Footer from "@/layouts/footer";
+import Header from "@/shared/layouts/standard-header";
+import Footer from "@/shared/layouts/footer";
 import { useEffect, useRef, useState, useMemo } from "react";
 import Parallax from "@/components/ContactParallax";
-import ScrollToTop from "@/components/ScrollToTop";
+import ScrollToTop from "@/shared/components/ScrollToTop";
 import { motion } from "framer-motion";
 import ReCAPTCHA from "react-google-recaptcha";
 import { useRouter } from "next/router";

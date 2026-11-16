@@ -1,9 +1,9 @@
 import { useState } from "react";
 import Head from "next/head";
 import SEO from "@/components/SEO";
-import PAANAwardsHeader from "@/layouts/paan-awards-header";
-import Footer from "@/layouts/footer";
-import ScrollToTop from "@/components/ScrollToTop";
+import PAANAwardsHeader from "@/shared/layouts/paan-awards-header";
+import Footer from "@/shared/layouts/footer";
+import ScrollToTop from "@/shared/components/ScrollToTop";
 import PAANAwardsApplicationModal from "@/components/PAANAwardsApplicationModal";
 import PaystackScript from "@/components/PaystackScript";
 import CategoriesHero from "@/components/awards/CategoriesHero";

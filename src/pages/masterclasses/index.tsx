@@ -1,12 +1,12 @@
 import SEO from "@/components/SEO";
-import Header from "../../layouts/standard-header";
-import Footer from "../../layouts/footer";
+import Header from "@/shared/layouts/standard-header";
+import Footer from "@/shared/layouts/footer";
 import Image from "next/image";
 import Link from "next/link";
 import { Icon } from "@iconify/react";
 import { useState, useEffect } from "react";
 import { motion } from "framer-motion";
-import ScrollToTop from "@/components/ScrollToTop";
+import ScrollToTop from "@/shared/components/ScrollToTop";
 import type { GetStaticPropsResult } from "next";
 import { getMasterclasses, getFeaturedSeries, type Masterclass, type MasterclassSeries } from "@/lib/masterclassService";
 

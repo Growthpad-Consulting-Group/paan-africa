@@ -1,6 +1,6 @@
 import Link from "next/link";
-import Header from "../layouts/header";
-import Footer from "../layouts/footer";
+import Header from "@/shared/layouts/header";
+import Footer from "@/shared/layouts/footer";
 import SEO from "@/components/SEO";
 
 const ThankYouPage = () => {

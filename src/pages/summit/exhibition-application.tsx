@@ -1,14 +1,14 @@
 import { useState, useRef, useEffect } from 'react';
 import SummitCancelledBanner from "@/components/summit/SummitCancelledBanner";
 import { useRouter } from 'next/router';
-import Header from "@/layouts/ticket-purchase-header";
+import Header from "@/shared/layouts/ticket-purchase-header";
 import { Icon } from '@iconify/react';
 import toast from 'react-hot-toast';
 import ReCAPTCHA from 'react-google-recaptcha';
 import { motion } from 'framer-motion';
 import SEO from "@/components/SEO";
-import SummitFooter from "@/layouts/summit-footer";
-import ScrollToTop from "@/components/ScrollToTop";
+import SummitFooter from "@/shared/layouts/summit-footer";
+import ScrollToTop from "@/shared/components/ScrollToTop";
 import Head from "next/head";
 import { countries } from '@/data/countries';
 import type { FieldChange } from "@/types/forms";

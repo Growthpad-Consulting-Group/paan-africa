@@ -211,13 +211,18 @@ src/app/
 ### Migration order
 1. ✅ Root layout (`app/layout.tsx`), `Providers`, shared `AnalyticsScripts`/`siteSchema`/`ServiceWorkerCleanup` (also used by `_app`), fonts, icons/manifest via metadata
 2. ✅ `privacy-policy`, `terms-and-conditions` (main markup identical; head differs only in tag attribute order and the modern `mobile-web-app-capable` tag)
-3. ⏳ Blogs (Sanity, ISR)
+3. ✅ Blogs (Sanity, ISR): `app/blogs`, `app/blogs/[slug]` (`generateStaticParams` + `revalidate = 3600`, `dynamicParams`), feature code in `features/blog/{components,lib}`. Index main markup identical; posts identical except `id="blog-author"` (replaces a ref) and extra head tags (author, og:locale, image alt, twitter:domain). **Verify on the preview:** the Sanity webhook (`/api/revalidate`, `res.revalidate`) refreshing an App Router path. `sitemap-blogs.xml` is still a Pages route until step 8
 4. ⏳ Certified agencies, masterclasses, events, careers
 5. ⏳ Home + marketing pages
 6. ⏳ Payment pages + retrieve-ticket + (hidden) summit pages (**last, highest risk** — keep Meta CAPI/GA4 purchase events verified before/after). While cancelled, summit/awards routes can be migrated as a pure redirect, not re-built
 7. ⏳ API routes → Route Handlers (Paystack webhook: verify raw-body signature handling changes)
 8. ⏳ Replace `sitemap.xml.js`/`sitemap-blogs.xml.js`/`next-sitemap` with `app/sitemap.ts`
 9. ⏳ Delete `src/pages/`
+
+### Conventions adopted during the migration (same as growthpad-website)
+- `src/app/**` holds thin route files (metadata + fetch + compose). UI and logic live in `src/features/<feature>/{components,lib,data}`; shared code in `src/shared/{components,layouts,hooks,lib}`. Done so far: `features/blog`, `features/legal`, `shared/layouts`, `shared/components/{ScrollToTop,Pagination,Icon}`, `shared/lib/{scrollUtils,portableText}`. The rest of section 3b happens route by route as each moves.
+- Every file touched is converted to `.ts`/`.tsx`.
+- Server components must not import `@iconify/react` or hook-using components directly: use `@/shared/components/Icon`, and put `"use client"` on interactive shared components. `tailwind.config.js` now scans all of `src/`.
 
 ### Key changes
 - `getServerSideProps` → ISR (`revalidate` + webhook tags), not dynamic rendering

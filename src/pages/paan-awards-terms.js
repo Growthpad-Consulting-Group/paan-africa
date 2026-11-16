@@ -1,6 +1,6 @@
 import SEO from "@/components/SEO";
-import PAANAwardsHeader from "../layouts/paan-awards-header";
-import Footer from "@/layouts/footer";
+import PAANAwardsHeader from "@/shared/layouts/paan-awards-header";
+import Footer from "@/shared/layouts/footer";
 import { motion } from "framer-motion";
 import { Icon } from "@iconify/react";
 

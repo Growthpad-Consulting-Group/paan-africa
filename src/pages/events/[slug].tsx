@@ -1,7 +1,7 @@
 import type { GetStaticPaths, GetStaticProps } from 'next';
 import SEO from "@/components/SEO";
-import Header from "../../layouts/header";
-import Footer from "../../layouts/footer";
+import Header from "@/shared/layouts/header";
+import Footer from "@/shared/layouts/footer";
 import EventDetail from "@/components/EventDetail";
 import { getEventBySlug, getEventSlugByLegacyId, getEventSlugs, getRelatedEvents, type EventItem } from "@/lib/eventService";
 import Link from 'next/link';

@@ -1,8 +1,8 @@
 import { useState, useEffect } from "react";
 import Head from "next/head";
 import { Icon } from "@iconify/react";
-import Header from "@/layouts/standard-header";
-import Footer from "@/layouts/footer";
+import Header from "@/shared/layouts/standard-header";
+import Footer from "@/shared/layouts/footer";
 import PaystackScript from "@/components/PaystackScript";
 import jsPDF from 'jspdf';
 import { validateMasterclassPromoCode } from "@/lib/masterclassPromoCodeService";

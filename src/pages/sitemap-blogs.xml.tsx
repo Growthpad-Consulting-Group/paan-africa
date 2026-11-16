@@ -1,5 +1,5 @@
 import type { GetServerSideProps } from 'next';
-import { getBlogSitemapEntries } from '@/lib/blogService';
+import { getBlogSitemapEntries } from '@/features/blog/lib/blogService';
 
 const SitemapBlogs = () => null;
 

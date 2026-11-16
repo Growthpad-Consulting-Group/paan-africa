@@ -1,7 +1,7 @@
 import type { RefObject } from "react";
 import { motion } from "framer-motion";
 import EventLocationAndDate from "@/components/summit/EventLocationAndDate";
-import { handleScroll } from "../../../utils/scrollUtils";
+import { handleScroll } from "@/shared/lib/scrollUtils";
 import { SUMMIT_CANCELLED } from "@/data/summit/status";
 import { staggerContainer, fadeInUp, scaleIn } from "@/components/summit/motion";
 import type { SummitEdition } from "@/lib/summitService";

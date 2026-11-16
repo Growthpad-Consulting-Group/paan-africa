@@ -1,11 +1,11 @@
 import SEO from "@/components/SEO";
-import Header from "../../layouts/paan-academy-header";
+import Header from "@/shared/layouts/paan-academy-header";
 import Image from "next/image";
-import Footer from "../../layouts/paan-academy-footer";
+import Footer from "@/shared/layouts/paan-academy-footer";
 import { useEffect, useRef, useState } from "react";
-import { useFixedHeader } from '../../../utils/scrollUtils';
+import { useFixedHeader } from '@/shared/lib/scrollUtils';
 import PAAacademyMarquee from "@/components/PAAacademyMarquee";
-import ScrollToTop from "@/components/ScrollToTop";
+import ScrollToTop from "@/shared/components/ScrollToTop";
 import ConnectingDots from "@/components/ConnectingDots";
 import AcademyEnquiryModal from "@/components/AcademyEnquiryModal";
 import Head from "next/head";

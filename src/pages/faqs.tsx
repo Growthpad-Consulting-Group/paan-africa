@@ -1,8 +1,8 @@
 import SEO from "@/components/SEO";
-import Header from "@/layouts/standard-header"; 
-import Footer from "@/layouts/footer";
+import Header from "@/shared/layouts/standard-header"; 
+import Footer from "@/shared/layouts/footer";
 import { useEffect, useRef, useState } from "react";
-import { useFixedHeader } from '../../utils/scrollUtils';
+import { useFixedHeader } from '@/shared/lib/scrollUtils';
 import FAQs from "@/components/FAQs";
 import Link from "next/link";
 import { useAppTranslations } from '../hooks/useTranslations';

@@ -1,13 +1,13 @@
 import SEO from "@/components/SEO";
-import Header from "@/layouts/standard-header"; 
-import Footer from "@/layouts/footer";
+import Header from "@/shared/layouts/standard-header"; 
+import Footer from "@/shared/layouts/footer";
 import { useEffect, useRef, useState } from "react";
-import { useFixedHeader } from '../../utils/scrollUtils';
+import { useFixedHeader } from '@/shared/lib/scrollUtils';
 import PartnerBenefits from "@/components/PartnersBenefits";
 import Steps from "@/components/steps";
 import Link from "next/link";
 import AgencyLogosGrid from "@/components/AgencyLogosGrid";
-import ScrollToTop from "@/components/ScrollToTop";
+import ScrollToTop from "@/shared/components/ScrollToTop";
 import AgencyEnquiryModal from "@/components/AgencyEnquiryModal";
 import Image from "next/image";
 import StatsSection from "@/components/StatsSection";

@@ -1,10 +1,10 @@
 import SEO from "@/components/SEO";
-import Header from "@/layouts/standard-header";
+import Header from "@/shared/layouts/standard-header";
 import Image from "next/image";
-import Footer from "@/layouts/footer";
+import Footer from "@/shared/layouts/footer";
 import { useEffect, useRef, useState } from "react";
-import { useFixedHeader, handleScroll } from '../../../utils/scrollUtils';
-import ScrollToTop from "@/components/ScrollToTop";
+import { useFixedHeader, handleScroll } from '@/shared/lib/scrollUtils';
+import ScrollToTop from "@/shared/components/ScrollToTop";
 import ConnectingDots from "@/components/ConnectingDots";
 import { motion } from "framer-motion";
 import { Icon } from '@iconify/react';
