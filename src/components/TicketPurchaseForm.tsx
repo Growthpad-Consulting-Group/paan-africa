@@ -4,9 +4,21 @@ import { useState, useEffect } from "react";
 import { Icon } from "@iconify/react";
 import { countries } from '@/data/countries';
 import type { FieldChange } from "@/types/forms";
+import type { TicketFormData, TicketOption } from "@/components/summit/ticket-form/types";
+import FormActions from "@/components/summit/ticket-form/FormActions";
+import EarlyBirdFields from "@/components/summit/ticket-form/EarlyBirdFields";
+import VipDelegateFields from "@/components/summit/ticket-form/VipDelegateFields";
+import AgencyGrowthFields from "@/components/summit/ticket-form/AgencyGrowthFields";
+import VirtualAccessFields from "@/components/summit/ticket-form/VirtualAccessFields";
+import InternationalDelegateFields from "@/components/summit/ticket-form/InternationalDelegateFields";
+import CorporateGroupFields from "@/components/summit/ticket-form/CorporateGroupFields";
+import StudentFields from "@/components/summit/ticket-form/StudentFields";
+import AttendeeDetailsFields from "@/components/summit/ticket-form/AttendeeDetailsFields";
+import SelectedTicketSummary from "@/components/summit/ticket-form/SelectedTicketSummary";
+import TicketTypeSelect from "@/components/summit/ticket-form/TicketTypeSelect";
 
 const TicketPurchaseForm = ({ onClose }: { onClose: () => void }) => {
-  const [formData, setFormData] = useState({
+  const [formData, setFormData] = useState<TicketFormData>({
     name: "",
     phone: "",
     country: "",
@@ -98,7 +110,7 @@ const TicketPurchaseForm = ({ onClose }: { onClose: () => void }) => {
   }, []);
 
   // Ticket options
-  const ticketOptions = [
+  const ticketOptions: TicketOption[] = [
     {
       id: "early-bird",
       name: "Early Bird Pass",
@@ -555,638 +567,45 @@ const TicketPurchaseForm = ({ onClose }: { onClose: () => void }) => {
         {/* Form */}
         <div className="p-6 space-y-6">
           {/* Ticket Selection */}
-          <div>
-            <h3 className="text-lg font-semibold text-paan-dark-blue mb-4">Select Your Ticket</h3>
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-              {ticketOptions.map((ticket) => (
-                <div
-                  key={ticket.id}
-                  className={`border-2 rounded-xl p-4 cursor-pointer transition-all duration-300 ${
-                    formData.ticketType === ticket.id
-                      ? "border-paan-red bg-paan-red/5"
-                      : "border-gray-200 hover:border-paan-blue"
-                  }`}
-                  onClick={() => setFormData(prev => ({ ...prev, ticketType: ticket.id, extraDelegates: 0 }))}
-                >
-                  <div className="text-center">
-                    <h4 className="font-bold text-paan-dark-blue mb-2">{ticket.name}</h4>
-                    <div className="mb-3">
-                      {ticket.originalPrice && (
-                        <div className="flex items-center justify-center gap-2 mb-1">
-                          <span className="text-lg text-gray-500 line-through">${ticket.originalPrice}</span>
-                          <span className="text-xs text-paan-red font-medium">
-                            Save {Math.round((1 - ticket.price / ticket.originalPrice) * 100)}%
-                          </span>
-                        </div>
-                      )}
-                      <span className="text-3xl font-bold text-paan-red">
-                        ${ticket.price}
-                      </span>
-                      <span className="text-gray-500 ml-1">
-                        USD
-                      </span>
-                    </div>
-                    <p className="text-sm text-gray-600 mb-3">{ticket.description}</p>
-                    {ticket.validUntil && (
-                      <p className="text-xs text-paan-red font-medium mb-3">Valid until {ticket.validUntil}</p>
-                    )}
-                    {ticket.extraPrice && (
-                      <p className="text-xs text-gray-500 mb-2">
-                        +${ticket.extraPrice} per extra delegate
-                      </p>
-                    )}
-                  </div>
-                </div>
-              ))}
-            </div>
-          </div>
+          <TicketTypeSelect ticketOptions={ticketOptions} formData={formData} setFormData={setFormData} />
 
           {/* Selected Ticket Benefits */}
           {formData.ticketType && (
-            <div className="bg-gray-50 border border-gray-200 rounded-xl p-6">
-              <h3 className="text-lg font-semibold text-paan-dark-blue mb-4">
-                {ticketOptions.find(t => t.id === formData.ticketType)?.name} - What's Included
-              </h3>
-              <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                <div className="space-y-3">
-                  {ticketOptions.find(t => t.id === formData.ticketType)?.features.slice(0, Math.ceil((ticketOptions.find(t => t.id === formData.ticketType)?.features.length ?? 0) / 2)).map((feature, index) => (
-                    <div key={index} className="flex items-start gap-3">
-                      <Icon icon="mdi:check-circle" className="w-5 h-5 text-green-600 mt-0.5 flex-shrink-0" />
-                      <span className="text-sm text-gray-700">{feature}</span>
-                    </div>
-                  ))}
-                </div>
-                <div className="space-y-3">
-                  {ticketOptions.find(t => t.id === formData.ticketType)?.features.slice(Math.ceil((ticketOptions.find(t => t.id === formData.ticketType)?.features.length ?? 0) / 2)).map((feature, index) => (
-                    <div key={index} className="flex items-start gap-3">
-                      <Icon icon="mdi:check-circle" className="w-5 h-5 text-green-600 mt-0.5 flex-shrink-0" />
-                      <span className="text-sm text-gray-700">{feature}</span>
-                    </div>
-                  ))}
-                </div>
-              </div>
-              
-              {/* Special Notes */}
-              {formData.ticketType === "early-bird" && (
-                <div className="mt-4 p-3 bg-yellow-50 border border-yellow-200 rounded-lg">
-                  <div className="flex items-center gap-2 mb-3">
-                    <Icon icon="mdi:clock-alert" className="w-5 h-5 text-yellow-600" />
-                    <span className="text-sm font-medium text-yellow-800">Limited Time Offer</span>
-                  </div>
-                  
-                  {/* Early Bird Countdown Timer */}
-                  {earlyBirdTimeLeft.days > 0 || earlyBirdTimeLeft.hours > 0 || earlyBirdTimeLeft.minutes > 0 || earlyBirdTimeLeft.seconds > 0 ? (
-                    <div className="mb-3 p-3 bg-yellow-100 rounded-lg">
-                      <div className="text-center">
-                        <p className="text-xs font-medium text-yellow-800 mb-2">Early Bird Offer Ends In:</p>
-                        <div className="flex justify-center gap-2 text-sm">
-                          <div className="bg-yellow-200 rounded px-2 py-1 min-w-[40px]">
-                            <div className="font-bold text-yellow-900">{earlyBirdTimeLeft.days}</div>
-                            <div className="text-xs text-yellow-700">Days</div>
-                          </div>
-                          <div className="bg-yellow-200 rounded px-2 py-1 min-w-[40px]">
-                            <div className="font-bold text-yellow-900">{earlyBirdTimeLeft.hours}</div>
-                            <div className="text-xs text-yellow-700">Hrs</div>
-                          </div>
-                          <div className="bg-yellow-200 rounded px-2 py-1 min-w-[40px]">
-                            <div className="font-bold text-yellow-900">{earlyBirdTimeLeft.minutes}</div>
-                            <div className="text-xs text-yellow-700">Min</div>
-                          </div>
-                          <div className="bg-yellow-200 rounded px-2 py-1 min-w-[40px]">
-                            <div className="font-bold text-yellow-900">{earlyBirdTimeLeft.seconds}</div>
-                            <div className="text-xs text-yellow-700">Sec</div>
-                          </div>
-                        </div>
-                      </div>
-                    </div>
-                  ) : (
-                    <div className="mb-3 p-3 bg-red-100 rounded-lg">
-                      <p className="text-center text-sm font-medium text-red-800">Early Bird Offer Has Ended</p>
-                    </div>
-                  )}
-                  
-                  <p className="text-sm text-yellow-700">
-                    Only 100 Early Bird passes available. Save 30% compared to regular pricing!
-                  </p>
-                </div>
-              )}
-              
-              {formData.ticketType === "corporate-group" && (
-                <div className="mt-4 p-3 bg-blue-50 border border-blue-200 rounded-lg">
-                  <div className="flex items-center gap-2">
-                    <Icon icon="mdi:account-group" className="w-5 h-5 text-blue-600" />
-                    <span className="text-sm font-medium text-blue-800">Perfect for Teams</span>
-                  </div>
-                  <p className="text-sm text-blue-700 mt-1">
-                    Base package includes 5 General Admission tickets. Add more delegates at $70 each for additional team members.
-                  </p>
-                </div>
-              )}
-              
-              {formData.ticketType === "virtual-access" && (
-                <div className="mt-4 p-3 bg-purple-50 border border-purple-200 rounded-lg">
-                  <div className="flex items-center gap-2">
-                    <Icon icon="mdi:monitor" className="w-5 h-5 text-purple-600" />
-                    <span className="text-sm font-medium text-purple-800">Remote Access</span>
-                  </div>
-                  <p className="text-sm text-purple-700 mt-1">
-                    Join from anywhere in the world! Perfect for international attendees or those who can't travel to Nairobi.
-                  </p>
-                </div>
-              )}
-              
-              {formData.ticketType === "international-delegate" && (
-                <div className="mt-4 p-3 bg-green-50 border border-green-200 rounded-lg">
-                  <div className="flex items-center gap-2">
-                    <Icon icon="mdi:airplane" className="w-5 h-5 text-green-600" />
-                    <span className="text-sm font-medium text-green-800">International Support</span>
-                  </div>
-                  <p className="text-sm text-green-700 mt-1">
-                    We'll help with visa applications, accommodation recommendations, and provide a welcome kit with African-inspired gifts.
-                  </p>
-                </div>
-              )}
-            </div>
+            <SelectedTicketSummary ticketOptions={ticketOptions} formData={formData} earlyBirdTimeLeft={earlyBirdTimeLeft} />
           )}
 
 
 
           {/* Form Fields */}
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-            {/* Name */}
-            <div>
-              <label className="block text-sm font-medium text-paan-dark-blue mb-2">
-                Full Name *
-              </label>
-              <input
-                type="text"
-                name="name"
-                value={formData.name}
-                onChange={handleInputChange}
-                className={`w-full px-4 py-3 border rounded-xl focus:ring-2 focus:ring-paan-blue focus:border-transparent transition-all ${
-                  errors.name ? "border-red-500" : "border-gray-300"
-                }`}
-                placeholder="Enter your full name"
-              />
-              {errors.name && <p className="text-red-500 text-sm mt-1">{errors.name}</p>}
-            </div>
-
-            {/* Email */}
-            <div>
-              <label className="block text-sm font-medium text-paan-dark-blue mb-2">
-                Email Address *
-              </label>
-              <input
-                type="email"
-                name="email"
-                value={formData.email}
-                onChange={handleInputChange}
-                className={`w-full px-4 py-3 border rounded-xl focus:ring-2 focus:ring-paan-blue focus:border-transparent transition-all ${
-                  errors.email ? "border-red-500" : "border-gray-300"
-                }`}
-                placeholder="Enter your email"
-              />
-              {errors.email && <p className="text-red-500 text-sm mt-1">{errors.email}</p>}
-            </div>
-
-            {/* Phone */}
-            <div>
-              <label className="block text-sm font-medium text-paan-dark-blue mb-2">
-                Phone Number *
-              </label>
-              <input
-                type="tel"
-                name="phone"
-                value={formData.phone}
-                onChange={handleInputChange}
-                className={`w-full px-4 py-3 border rounded-xl focus:ring-2 focus:ring-paan-blue focus:border-transparent transition-all ${
-                  errors.phone ? "border-red-500" : "border-gray-300"
-                }`}
-                placeholder="Enter your phone number"
-              />
-              {errors.phone && <p className="text-red-500 text-sm mt-1">{errors.phone}</p>}
-            </div>
-
-            {/* Country */}
-            <div>
-              <label className="block text-sm font-medium text-paan-dark-blue mb-2">
-                Country *
-              </label>
-              <select
-                name="country"
-                value={formData.country}
-                onChange={handleInputChange}
-                className={`w-full px-4 py-3 border rounded-xl focus:ring-2 focus:ring-paan-blue focus:border-transparent transition-all ${
-                  errors.country ? "border-red-500" : "border-gray-300"
-                }`}
-              >
-                <option value="">Select your country</option>
-                {countries.map((country) => (
-                  <option key={country} value={country}>
-                    {country}
-                  </option>
-                ))}
-              </select>
-              {errors.country && <p className="text-red-500 text-sm mt-1">{errors.country}</p>}
-            </div>
-
-            {/* Role */}
-            <div>
-              <label className="block text-sm font-medium text-paan-dark-blue mb-2">
-                Role/Position *
-              </label>
-              <select
-                name="role"
-                value={formData.role}
-                onChange={handleInputChange}
-                className={`w-full px-4 py-3 border rounded-xl focus:ring-2 focus:ring-paan-blue focus:border-transparent transition-all ${
-                  errors.role ? "border-red-500" : "border-gray-300"
-                }`}
-              >
-                <option value="">Select your role</option>
-                {roles.map((role) => (
-                  <option key={role} value={role}>
-                    {role}
-                  </option>
-                ))}
-              </select>
-              {errors.role && <p className="text-red-500 text-sm mt-1">{errors.role}</p>}
-            </div>
-
-            {/* Company */}
-            <div>
-              <label className="block text-sm font-medium text-paan-dark-blue mb-2">
-                Company/Organization *
-              </label>
-              <input
-                type="text"
-                name="company"
-                value={formData.company}
-                onChange={handleInputChange}
-                className={`w-full px-4 py-3 border rounded-xl focus:ring-2 focus:ring-paan-blue focus:border-transparent transition-all ${
-                  errors.company ? "border-red-500" : "border-gray-300"
-                }`}
-                placeholder="Enter your company name"
-              />
-              {errors.company && <p className="text-red-500 text-sm mt-1">{errors.company}</p>}
-            </div>
-          </div>
+          <AttendeeDetailsFields formData={formData} handleInputChange={handleInputChange} errors={errors} roles={roles} />
 
           {/* Ticket-Specific Input Fields */}
           {formData.ticketType === "student-creatives" && (
-            <div className="bg-blue-50 border border-blue-200 rounded-xl p-6">
-              <h3 className="text-lg font-semibold text-paan-dark-blue mb-4">Student Information</h3>
-              <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                <div>
-                  <label className="block text-sm font-medium text-paan-dark-blue mb-2">
-                    Student ID / Registration Number
-                  </label>
-                  <input
-                    type="text"
-                    name="studentId"
-                    value={formData.studentId}
-                    onChange={handleInputChange}
-                    className="w-full px-4 py-3 border border-gray-300 rounded-xl focus:ring-2 focus:ring-paan-blue focus:border-transparent transition-all"
-                    placeholder="Enter your student ID"
-                  />
-                </div>
-                <div>
-                  <label className="block text-sm font-medium text-paan-dark-blue mb-2">
-                    Institution/University
-                  </label>
-                  <input
-                    type="text"
-                    name="institution"
-                    value={formData.institution}
-                    onChange={handleInputChange}
-                    className="w-full px-4 py-3 border border-gray-300 rounded-xl focus:ring-2 focus:ring-paan-blue focus:border-transparent transition-all"
-                    placeholder="Enter your institution name"
-                  />
-                </div>
-                <div>
-                  <label className="block text-sm font-medium text-paan-dark-blue mb-2">
-                    Expected Graduation Year
-                  </label>
-                  <select
-                    name="graduationYear"
-                    value={formData.graduationYear}
-                    onChange={handleInputChange}
-                    className="w-full px-4 py-3 border border-gray-300 rounded-xl focus:ring-2 focus:ring-paan-blue focus:border-transparent transition-all"
-                  >
-                    <option value="">Select graduation year</option>
-                    <option value="2024">2024</option>
-                    <option value="2025">2025</option>
-                    <option value="2026">2026</option>
-                    <option value="2027">2027</option>
-                    <option value="2028">2028</option>
-                    <option value="2029">2029</option>
-                    <option value="2030">2030</option>
-                    <option value="graduated">Already Graduated</option>
-                  </select>
-                </div>
-              </div>
-            </div>
+            <StudentFields formData={formData} handleInputChange={handleInputChange} />
           )}
 
           {formData.ticketType === "corporate-group" && (
-            <div className="bg-green-50 border border-green-200 rounded-xl p-6">
-              <h3 className="text-lg font-semibold text-paan-dark-blue mb-4">Team Information</h3>
-              <div className="space-y-4">
-                <div>
-                  <label className="block text-sm font-medium text-paan-dark-blue mb-2">
-                    Total Team Size (including yourself)
-                  </label>
-                  <div className="flex items-center gap-4">
-                    <button
-                      onClick={() => setFormData(prev => ({ 
-                        ...prev, 
-                        teamSize: Math.max(5, prev.teamSize - 1) 
-                      }))}
-                      className="w-10 h-10 bg-paan-blue text-white rounded-lg hover:bg-paan-blue/90 transition-colors flex items-center justify-center"
-                    >
-                      <Icon icon="mdi:minus" className="w-5 h-5" />
-                    </button>
-                    <span className="text-2xl font-bold text-paan-dark-blue min-w-[3rem] text-center">
-                      {formData.teamSize}
-                    </span>
-                    <button
-                      onClick={() => setFormData(prev => ({ 
-                        ...prev, 
-                        teamSize: prev.teamSize + 1 
-                      }))}
-                      className="w-10 h-10 bg-paan-blue text-white rounded-lg hover:bg-paan-blue/90 transition-colors flex items-center justify-center"
-                    >
-                      <Icon icon="mdi:plus" className="w-5 h-5" />
-                    </button>
-                  </div>
-                  <p className="text-sm text-gray-600 mt-2">
-                    Minimum 5 team members. Each additional member costs $70 USD.
-                  </p>
-                </div>
-                <div>
-                  <label className="block text-sm font-medium text-paan-dark-blue mb-2">
-                    Team Members Names (Optional)
-                  </label>
-                  <textarea
-                    name="teamMembers"
-                    value={formData.teamMembers.join('\n')}
-                    onChange={(e) => setFormData(prev => ({ 
-                      ...prev, 
-                      teamMembers: e.target.value.split('\n').filter(name => name.trim()) 
-                    }))}
-                    className="w-full px-4 py-3 border border-gray-300 rounded-xl focus:ring-2 focus:ring-paan-blue focus:border-transparent transition-all"
-                    placeholder="Enter team member names (one per line)"
-                    rows={3}
-                  />
-                  <p className="text-sm text-gray-600 mt-1">
-                    You can add team member names now or provide them later via email.
-                  </p>
-                </div>
-              </div>
-            </div>
+            <CorporateGroupFields setFormData={setFormData} formData={formData} />
           )}
 
           {formData.ticketType === "international-delegate" && (
-            <div className="bg-purple-50 border border-purple-200 rounded-xl p-6">
-              <h3 className="text-lg font-semibold text-paan-dark-blue mb-4">International Travel Information</h3>
-              <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                <div>
-                  <label className="block text-sm font-medium text-paan-dark-blue mb-2">
-                    Passport Number
-                  </label>
-                  <input
-                    type="text"
-                    name="passportNumber"
-                    value={formData.passportNumber}
-                    onChange={handleInputChange}
-                    className="w-full px-4 py-3 border border-gray-300 rounded-xl focus:ring-2 focus:ring-paan-blue focus:border-transparent transition-all"
-                    placeholder="Enter your passport number"
-                  />
-                </div>
-                <div>
-                  <label className="block text-sm font-medium text-paan-dark-blue mb-2">
-                    Do you need a visa for Kenya?
-                  </label>
-                  <select
-                    name="visaRequired"
-                    value={formData.visaRequired}
-                    onChange={handleInputChange}
-                    className="w-full px-4 py-3 border border-gray-300 rounded-xl focus:ring-2 focus:ring-paan-blue focus:border-transparent transition-all"
-                  >
-                    <option value="">Select option</option>
-                    <option value="yes">Yes, I need a visa</option>
-                    <option value="no">No, I don't need a visa</option>
-                    <option value="unsure">I'm not sure</option>
-                  </select>
-                </div>
-                <div>
-                  <label className="block text-sm font-medium text-paan-dark-blue mb-2">
-                    Do you need accommodation assistance?
-                  </label>
-                  <select
-                    name="accommodationNeeded"
-                    value={formData.accommodationNeeded}
-                    onChange={handleInputChange}
-                    className="w-full px-4 py-3 border border-gray-300 rounded-xl focus:ring-2 focus:ring-paan-blue focus:border-transparent transition-all"
-                  >
-                    <option value="">Select option</option>
-                    <option value="yes">Yes, I need help finding accommodation</option>
-                    <option value="no">No, I'll arrange my own accommodation</option>
-                    <option value="recommendations">Just recommendations please</option>
-                  </select>
-                </div>
-                <div>
-                  <label className="block text-sm font-medium text-paan-dark-blue mb-2">
-                    Arrival Date
-                  </label>
-                  <input
-                    type="date"
-                    name="arrivalDate"
-                    value={formData.arrivalDate}
-                    onChange={handleInputChange}
-                    className="w-full px-4 py-3 border border-gray-300 rounded-xl focus:ring-2 focus:ring-paan-blue focus:border-transparent transition-all"
-                  />
-                </div>
-                <div>
-                  <label className="block text-sm font-medium text-paan-dark-blue mb-2">
-                    Departure Date
-                  </label>
-                  <input
-                    type="date"
-                    name="departureDate"
-                    value={formData.departureDate}
-                    onChange={handleInputChange}
-                    className="w-full px-4 py-3 border border-gray-300 rounded-xl focus:ring-2 focus:ring-paan-blue focus:border-transparent transition-all"
-                  />
-                </div>
-              </div>
-            </div>
+            <InternationalDelegateFields formData={formData} handleInputChange={handleInputChange} />
           )}
 
           {formData.ticketType === "virtual-access" && (
-            <div className="bg-gray-50 border border-gray-200 rounded-xl p-6">
-              <h3 className="text-lg font-semibold text-paan-dark-blue mb-4">Virtual Access Preferences</h3>
-              <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                <div>
-                  <label className="block text-sm font-medium text-paan-dark-blue mb-2">
-                    Timezone
-                  </label>
-                  <select
-                    name="timezone"
-                    value={formData.timezone}
-                    onChange={handleInputChange}
-                    className="w-full px-4 py-3 border border-gray-300 rounded-xl focus:ring-2 focus:ring-paan-blue focus:border-transparent transition-all"
-                  >
-                    <option value="">Select your timezone</option>
-                    <option value="GMT+3">GMT+3 (East Africa Time)</option>
-                    <option value="GMT+1">GMT+1 (West Africa Time)</option>
-                    <option value="GMT+2">GMT+2 (Central Africa Time)</option>
-                    <option value="GMT+0">GMT+0 (Greenwich Mean Time)</option>
-                    <option value="GMT-5">GMT-5 (Eastern Time)</option>
-                    <option value="GMT-8">GMT-8 (Pacific Time)</option>
-                    <option value="GMT+5:30">GMT+5:30 (India Standard Time)</option>
-                    <option value="GMT+8">GMT+8 (China Standard Time)</option>
-                    <option value="GMT+9">GMT+9 (Japan Standard Time)</option>
-                    <option value="GMT+10">GMT+10 (Australian Eastern Time)</option>
-                  </select>
-                </div>
-                <div>
-                  <label className="block text-sm font-medium text-paan-dark-blue mb-2">
-                    Preferred Language
-                  </label>
-                  <select
-                    name="preferredLanguage"
-                    value={formData.preferredLanguage}
-                    onChange={handleInputChange}
-                    className="w-full px-4 py-3 border border-gray-300 rounded-xl focus:ring-2 focus:ring-paan-blue focus:border-transparent transition-all"
-                  >
-                    <option value="">Select preferred language</option>
-                    <option value="english">English</option>
-                    <option value="french">French</option>
-                    <option value="arabic">Arabic</option>
-                    <option value="portuguese">Portuguese</option>
-                    <option value="swahili">Swahili</option>
-                  </select>
-                </div>
-              </div>
-            </div>
+            <VirtualAccessFields formData={formData} handleInputChange={handleInputChange} />
           )}
 
           {formData.ticketType === "agency-growth" && (
-            <div className="bg-orange-50 border border-orange-200 rounded-xl p-6">
-              <h3 className="text-lg font-semibold text-paan-dark-blue mb-4">Agency Information</h3>
-              <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                <div>
-                  <label className="block text-sm font-medium text-paan-dark-blue mb-2">
-                    Agency Size
-                  </label>
-                  <select
-                    name="agencySize"
-                    value={formData.agencySize}
-                    onChange={handleInputChange}
-                    className="w-full px-4 py-3 border border-gray-300 rounded-xl focus:ring-2 focus:ring-paan-blue focus:border-transparent transition-all"
-                  >
-                    <option value="">Select agency size</option>
-                    <option value="1-5">1-5 employees</option>
-                    <option value="6-20">6-20 employees</option>
-                    <option value="21-50">21-50 employees</option>
-                    <option value="51-100">51-100 employees</option>
-                    <option value="100+">100+ employees</option>
-                  </select>
-                </div>
-                <div>
-                  <label className="block text-sm font-medium text-paan-dark-blue mb-2">
-                    Years in Business
-                  </label>
-                  <select
-                    name="yearsInBusiness"
-                    value={formData.yearsInBusiness}
-                    onChange={handleInputChange}
-                    className="w-full px-4 py-3 border border-gray-300 rounded-xl focus:ring-2 focus:ring-paan-blue focus:border-transparent transition-all"
-                  >
-                    <option value="">Select years in business</option>
-                    <option value="0-1">0-1 years (Startup)</option>
-                    <option value="2-5">2-5 years</option>
-                    <option value="6-10">6-10 years</option>
-                    <option value="11-20">11-20 years</option>
-                    <option value="20+">20+ years</option>
-                  </select>
-                </div>
-              </div>
-            </div>
+            <AgencyGrowthFields formData={formData} handleInputChange={handleInputChange} />
           )}
 
           {formData.ticketType === "vip-delegate" && (
-            <div className="bg-yellow-50 border border-yellow-200 rounded-xl p-6">
-              <h3 className="text-lg font-semibold text-paan-dark-blue mb-4">VIP Preferences</h3>
-              <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                <div>
-                  <label className="block text-sm font-medium text-paan-dark-blue mb-2">
-                    Dietary Requirements
-                  </label>
-                  <select
-                    name="dietaryRequirements"
-                    value={formData.dietaryRequirements}
-                    onChange={handleInputChange}
-                    className="w-full px-4 py-3 border border-gray-300 rounded-xl focus:ring-2 focus:ring-paan-blue focus:border-transparent transition-all"
-                  >
-                    <option value="">Select dietary requirements</option>
-                    <option value="none">No special requirements</option>
-                    <option value="vegetarian">Vegetarian</option>
-                    <option value="vegan">Vegan</option>
-                    <option value="halal">Halal</option>
-                    <option value="kosher">Kosher</option>
-                    <option value="gluten-free">Gluten-free</option>
-                    <option value="allergies">Food allergies (specify in notes)</option>
-                  </select>
-                </div>
-                <div>
-                  <label className="block text-sm font-medium text-paan-dark-blue mb-2">
-                    Accessibility Needs
-                  </label>
-                  <select
-                    name="accessibilityNeeds"
-                    value={formData.accessibilityNeeds}
-                    onChange={handleInputChange}
-                    className="w-full px-4 py-3 border border-gray-300 rounded-xl focus:ring-2 focus:ring-paan-blue focus:border-transparent transition-all"
-                  >
-                    <option value="">Select accessibility needs</option>
-                    <option value="none">No special needs</option>
-                    <option value="wheelchair">Wheelchair access required</option>
-                    <option value="hearing">Hearing assistance needed</option>
-                    <option value="visual">Visual assistance needed</option>
-                    <option value="mobility">Mobility assistance needed</option>
-                    <option value="other">Other (specify in notes)</option>
-                  </select>
-                </div>
-              </div>
-            </div>
+            <VipDelegateFields formData={formData} handleInputChange={handleInputChange} />
           )}
 
           {formData.ticketType === "early-bird" && (
-            <div className="bg-green-50 border border-green-200 rounded-xl p-6">
-              <h3 className="text-lg font-semibold text-paan-dark-blue mb-4">Early Bird Information</h3>
-              <div>
-                <label className="block text-sm font-medium text-paan-dark-blue mb-2">
-                  How did you hear about PAAN Summit 2026?
-                </label>
-                <select
-                  name="heardAbout"
-                  value={formData.heardAbout}
-                  onChange={handleInputChange}
-                  className="w-full px-4 py-3 border border-gray-300 rounded-xl focus:ring-2 focus:ring-paan-blue focus:border-transparent transition-all"
-                >
-                  <option value="">Select option</option>
-                  <option value="social-media">Social Media</option>
-                  <option value="email">Email Newsletter</option>
-                  <option value="website">PAAN Website</option>
-                  <option value="referral">Friend/Colleague Referral</option>
-                  <option value="partner">Partner Organization</option>
-                  <option value="search">Search Engine</option>
-                  <option value="other">Other</option>
-                </select>
-              </div>
-            </div>
+            <EarlyBirdFields formData={formData} handleInputChange={handleInputChange} />
           )}
 
           {/* Terms and Conditions */}
@@ -1204,44 +623,7 @@ const TicketPurchaseForm = ({ onClose }: { onClose: () => void }) => {
           </div>
 
           {/* Payment Button */}
-          <div className="flex flex-col sm:flex-row gap-4">
-            <button
-              onClick={onClose}
-              className="flex-1 px-6 py-3 border border-gray-300 text-gray-700 rounded-xl hover:bg-gray-50 transition-colors font-medium"
-            >
-              Cancel
-            </button>
-            <button
-              onClick={handlePaystackPayment}
-              disabled={isLoading || !paystackReady}
-              className="flex-1 bg-paan-red text-white px-6 py-3 rounded-xl hover:bg-paan-red/90 transition-colors font-medium flex items-center justify-center gap-2 disabled:opacity-50 disabled:cursor-not-allowed"
-            >
-              {isLoading ? (
-                <>
-                  <Icon icon="mdi:loading" className="w-5 h-5 animate-spin" />
-                  Processing...
-                </>
-              ) : !paystackReady ? (
-                <>
-                  <Icon icon="mdi:loading" className="w-5 h-5 animate-spin" />
-                  Loading Payment System...
-                </>
-              ) : (
-                <>
-                  <Icon icon="mdi:credit-card" className="w-5 h-5" />
-                  Pay {(() => {
-                    const selectedTicket = ticketOptions.find(t => t.id === formData.ticketType)!;
-                    let totalAmount = selectedTicket.price;
-                    if (formData.ticketType === "corporate-group" && formData.teamSize > 5) {
-                      const extraMembers = formData.teamSize - 5;
-                      totalAmount += ((selectedTicket.extraPrice ?? 0) * extraMembers);
-                    }
-                    return `$${totalAmount} USD`;
-                  })()}
-                </>
-              )}
-            </button>
-          </div>
+          <FormActions onClose={onClose} handlePaystackPayment={handlePaystackPayment} isLoading={isLoading} paystackReady={paystackReady} ticketOptions={ticketOptions} formData={formData} />
         </div>
       </div>
     </div>

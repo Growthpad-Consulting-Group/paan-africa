@@ -9,9 +9,18 @@ import Modal, { ModalHeader } from './Modal';
 import { countries } from '@/data/countries';
 import type { FieldChange } from "@/types/forms";
 import { useRecaptcha } from "@/hooks/useRecaptcha";
+import type { AwardFormData, AwardCategory, AwardPricing } from "@/components/awards/application/types";
+import FormActions from "@/components/awards/application/FormActions";
+import PaymentSummary from "@/components/awards/application/PaymentSummary";
+import TermsFields from "@/components/awards/application/TermsFields";
+import AdditionalInfoFields from "@/components/awards/application/AdditionalInfoFields";
+import ProjectInfoFields from "@/components/awards/application/ProjectInfoFields";
+import CategorySelectionFields from "@/components/awards/application/CategorySelectionFields";
+import ProfessionalInfoFields from "@/components/awards/application/ProfessionalInfoFields";
+import PersonalInfoFields from "@/components/awards/application/PersonalInfoFields";
 
 const PAANAwardsApplicationModal = ({ isOpen, onClose }: { isOpen: boolean; onClose: () => void }) => {
-  const [formData, setFormData] = useState({
+  const [formData, setFormData] = useState<AwardFormData>({
     // Personal Information
     fullName: '',
     email: '',
@@ -327,7 +336,7 @@ const PAANAwardsApplicationModal = ({ isOpen, onClose }: { isOpen: boolean; onCl
   };
 
   // Pricing configuration
-  const pricing: Record<string, { pricePerCategory: number; slashedPrice: number; currency: string; description: string; earlyBirdDeadline?: string }> = {
+  const pricing: Record<string, AwardPricing> = {
     agency: {
       pricePerCategory: isEarlyBird() ? 130 : 200,
       slashedPrice: isEarlyBird() ? 200 : 250,
@@ -733,447 +742,22 @@ const PAANAwardsApplicationModal = ({ isOpen, onClose }: { isOpen: boolean; onCl
 
           <form className="space-y-6">
             {/* Personal Information */}
-            <div className="bg-gray-50 p-6 rounded-xl">
-              <h3 className="text-lg font-semibold text-gray-900 mb-4">Personal Information</h3>
-              <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                <div>
-                  <label className="block text-sm font-medium text-gray-700 mb-1">
-                    Full Name *
-                  </label>
-                  <input
-                    type="text"
-                    name="fullName"
-                    value={formData.fullName}
-                    onChange={handleInputChange}
-                    className={`w-full px-3 py-2 border rounded-lg focus:ring-2 focus:ring-paan-red focus:border-paan-red ${
-                      errors.fullName ? 'border-red-500' : 'border-gray-300'
-                    }`}
-                    placeholder="Enter your full name"
-                  />
-                  {errors.fullName && <p className="text-red-500 text-xs mt-1">{errors.fullName}</p>}
-                </div>
-
-                <div>
-                  <label className="block text-sm font-medium text-gray-700 mb-1">
-                    Email Address *
-                  </label>
-                  <input
-                    type="email"
-                    name="email"
-                    value={formData.email}
-                    onChange={handleInputChange}
-                    className={`w-full px-3 py-2 border rounded-lg focus:ring-2 focus:ring-paan-red focus:border-paan-red ${
-                      errors.email ? 'border-red-500' : 'border-gray-300'
-                    }`}
-                    placeholder="Enter your email"
-                  />
-                  {errors.email && <p className="text-red-500 text-xs mt-1">{errors.email}</p>}
-                </div>
-
-                <div>
-                  <label className="block text-sm font-medium text-gray-700 mb-1">
-                    Phone Number *
-                  </label>
-                  <input
-                    type="tel"
-                    name="phone"
-                    value={formData.phone}
-                    onChange={handleInputChange}
-                    className={`w-full px-3 py-2 border rounded-lg focus:ring-2 focus:ring-paan-red focus:border-paan-red ${
-                      errors.phone ? 'border-red-500' : 'border-gray-300'
-                    }`}
-                    placeholder="Enter your phone number"
-                  />
-                  {errors.phone && <p className="text-red-500 text-xs mt-1">{errors.phone}</p>}
-                </div>
-
-                <div>
-                  <label className="block text-sm font-medium text-gray-700 mb-1">
-                    Country *
-                  </label>
-                  <select
-                    name="country"
-                    value={formData.country}
-                    onChange={handleInputChange}
-                    className={`w-full px-3 py-2 border rounded-lg focus:ring-2 focus:ring-paan-red focus:border-paan-red ${
-                      errors.country ? 'border-red-500' : 'border-gray-300'
-                    }`}
-                  >
-                    <option value="">Select your country</option>
-                    {countries.map(country => (
-                      <option key={country} value={country}>{country}</option>
-                    ))}
-                  </select>
-                  {errors.country && <p className="text-red-500 text-xs mt-1">{errors.country}</p>}
-                </div>
-              </div>
-            </div>
+            <PersonalInfoFields formData={formData} handleInputChange={handleInputChange} errors={errors} />
 
             {/* Professional Information */}
-            <div className="bg-gray-50 p-6 rounded-xl">
-              <h3 className="text-lg font-semibold text-gray-900 mb-4">Professional Information</h3>
-              <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                {formData.applicantType === 'agency' && (
-                  <div className="md:col-span-2">
-                    <label className="block text-sm font-medium text-gray-700 mb-1">
-                      Company Name *
-                    </label>
-                    <input
-                      type="text"
-                      name="companyName"
-                      value={formData.companyName}
-                      onChange={handleInputChange}
-                      className={`w-full px-3 py-2 border rounded-lg focus:ring-2 focus:ring-paan-red focus:border-paan-red ${
-                        errors.companyName ? 'border-red-500' : 'border-gray-300'
-                      }`}
-                      placeholder="Enter your company name"
-                    />
-                    {errors.companyName && <p className="text-red-500 text-xs mt-1">{errors.companyName}</p>}
-                  </div>
-                )}
-
-                <div className="md:col-span-2">
-                  <label className="block text-sm font-medium text-gray-700 mb-1">
-                    Website/Portfolio URL *
-                  </label>
-                  <input
-                    type="url"
-                    name="website"
-                    value={formData.website}
-                    onChange={handleInputChange}
-                    className={`w-full px-3 py-2 border rounded-lg focus:ring-2 focus:ring-paan-red focus:border-paan-red ${
-                      errors.website ? 'border-red-500' : 'border-gray-300'
-                    }`}
-                    placeholder="https://your-website.com"
-                  />
-                  {errors.website && <p className="text-red-500 text-xs mt-1">{errors.website}</p>}
-                </div>
-
-                <div>
-                  <label className="block text-sm font-medium text-gray-700 mb-1">
-                    Years of Experience *
-                  </label>
-                  <select
-                    name="yearsExperience"
-                    value={formData.yearsExperience}
-                    onChange={handleInputChange}
-                    className={`w-full px-3 py-2 border rounded-lg focus:ring-2 focus:ring-paan-red focus:border-paan-red ${
-                      errors.yearsExperience ? 'border-red-500' : 'border-gray-300'
-                    }`}
-                  >
-                    <option value="">Select experience level</option>
-                    {experienceLevels.map(level => (
-                      <option key={level} value={level}>{level}</option>
-                    ))}
-                  </select>
-                  {errors.yearsExperience && <p className="text-red-500 text-xs mt-1">{errors.yearsExperience}</p>}
-                </div>
-              </div>
-            </div>
+            <ProfessionalInfoFields formData={formData} handleInputChange={handleInputChange} errors={errors} experienceLevels={experienceLevels} />
 
             {/* Award Categories */}
-            <div className="bg-gray-50 p-6 rounded-xl">
-              <h3 className="text-lg font-semibold text-gray-900 mb-4">
-                Select Award Categories * (Choose all that apply)
-              </h3>
-              
-              <div className="space-y-6">
-                {filteredAwardCategories.map(categoryGroup => (
-                  <div key={categoryGroup.id} className="border border-gray-200 rounded-lg p-4">
-                    <div className="mb-4">
-                      <h4 className="text-lg font-semibold text-paan-dark-blue mb-2">
-                        {categoryGroup.name}
-                      </h4>
-                      <p className="text-sm text-gray-600 leading-relaxed">
-                        {categoryGroup.description}
-                      </p>
-                    </div>
-                    
-                    <div className="grid grid-cols-1 md:grid-cols-2 gap-3">
-                      {categoryGroup.subcategories.map(subcategory => (
-                        <div
-                          key={subcategory.id}
-                          className={`p-3 border-2 rounded-lg cursor-pointer transition-all ${
-                            formData.selectedCategories.includes(subcategory.id)
-                              ? 'border-paan-red bg-paan-red/10'
-                              : 'border-gray-300 hover:border-paan-red/50'
-                          }`}
-                          onClick={() => handleCategoryToggle(subcategory.id)}
-                        >
-                          <div className="flex items-start gap-3">
-                            <input
-                              type="checkbox"
-                              checked={formData.selectedCategories.includes(subcategory.id)}
-                              onChange={() => handleCategoryToggle(subcategory.id)}
-                              className="mt-1"
-                            />
-                            <div>
-                              <h5 className="font-medium text-gray-900 text-sm">{subcategory.name}</h5>
-                              <p className="text-xs text-gray-600 mt-1 leading-relaxed">{subcategory.description}</p>
-                            </div>
-                          </div>
-                        </div>
-                      ))}
-                    </div>
-                  </div>
-                ))}
-              </div>
-              
-              {errors.selectedCategories && <p className="text-red-500 text-xs mt-2">{errors.selectedCategories}</p>}
-              
-              {/* Important Award Information */}
-              {formData.applicantType === 'agency' && (
-                <div className="mt-6 p-4 bg-blue-50 border border-blue-200 rounded-lg">
-                  <div className="flex items-start gap-3">
-                    <Icon icon="mdi:trophy" className="w-6 h-6 text-blue-600 mt-0.5 flex-shrink-0" />
-                    <div>
-                      <h4 className="font-semibold text-blue-900 mb-2">Important Award Information</h4>
-                      <p className="text-sm text-blue-800">
-                        <strong>In every category, both the agency and client are honored with their own award as a mark of shared achievement.</strong>
-                        This means when you win, both your organization and your client receive recognition, celebrating the collaborative success of your partnership.
-                      </p>
-                    </div>
-                  </div>
-                </div>
-              )}
-            </div>
+            <CategorySelectionFields filteredAwardCategories={filteredAwardCategories} formData={formData} handleCategoryToggle={handleCategoryToggle} errors={errors} />
 
             {/* Project Information */}
-            <div className="bg-gray-50 p-6 rounded-xl">
-              <h3 className="text-lg font-semibold text-gray-900 mb-4">Project/Work Information</h3>
-              <div className="space-y-4">
-                <div>
-                  <label className="block text-sm font-medium text-gray-700 mb-1">
-                    Project Title *
-                  </label>
-                  <input
-                    type="text"
-                    name="projectTitle"
-                    value={formData.projectTitle}
-                    onChange={handleInputChange}
-                    className={`w-full px-3 py-2 border rounded-lg focus:ring-2 focus:ring-paan-red focus:border-paan-red ${
-                      errors.projectTitle ? 'border-red-500' : 'border-gray-300'
-                    }`}
-                    placeholder="Enter your project title"
-                  />
-                  {errors.projectTitle && <p className="text-red-500 text-xs mt-1">{errors.projectTitle}</p>}
-                </div>
-
-                <div>
-                  <label className="block text-sm font-medium text-gray-700 mb-1">
-                    Project Description *
-                  </label>
-                  <textarea
-                    name="projectDescription"
-                    value={formData.projectDescription}
-                    onChange={handleInputChange}
-                    rows={4}
-                    className={`w-full px-3 py-2 border rounded-lg focus:ring-2 focus:ring-paan-red focus:border-paan-red ${
-                      errors.projectDescription ? 'border-red-500' : 'border-gray-300'
-                    }`}
-                    placeholder="Describe your project, its impact, and why it deserves recognition"
-                  />
-                  {errors.projectDescription && <p className="text-red-500 text-xs mt-1">{errors.projectDescription}</p>}
-                </div>
-
-                <div>
-                  <label className="block text-sm font-medium text-gray-700 mb-1">
-                    Project URL (Optional)
-                  </label>
-                  <input
-                    type="url"
-                    name="projectUrl"
-                    value={formData.projectUrl}
-                    onChange={handleInputChange}
-                    className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-paan-red focus:border-paan-red"
-                    placeholder="https://your-project.com"
-                  />
-                </div>
-
-                <div>
-                  <label className="block text-sm font-medium text-gray-700 mb-1">
-                    Project Images (Optional)
-                  </label>
-                  <input
-                    type="file"
-                    multiple
-                    accept="image/*"
-                    onChange={handleFileUpload}
-                    className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-paan-red focus:border-paan-red"
-                  />
-                  {formData.projectImages.length > 0 && (
-                    <div className="mt-2 grid grid-cols-2 md:grid-cols-4 gap-2">
-                      {formData.projectImages.map((file, index) => (
-                        <div key={index} className="relative">
-                          <img
-                            src={URL.createObjectURL(file)}
-                            alt={`Project ${index + 1}`}
-                            className="w-full h-20 object-cover rounded-lg"
-                          />
-                          <button
-                            type="button"
-                            onClick={() => removeImage(index)}
-                            className="absolute -top-2 -right-2 bg-red-500 text-white rounded-full w-6 h-6 flex items-center justify-center text-xs"
-                          >
-                            ×
-                          </button>
-                        </div>
-                      ))}
-                    </div>
-                  )}
-                </div>
-              </div>
-            </div>
+            <ProjectInfoFields formData={formData} handleInputChange={handleInputChange} errors={errors} handleFileUpload={handleFileUpload} removeImage={removeImage} />
 
             {/* Additional Information */}
-            <div className="bg-gray-50 p-6 rounded-xl">
-              <h3 className="text-lg font-semibold text-gray-900 mb-4">Additional Information</h3>
-              <div className="space-y-4">
-                <div>
-                  <label className="block text-sm font-medium text-gray-700 mb-1">
-                    Why should you win this award? *
-                  </label>
-                  <textarea
-                    name="whyApply"
-                    value={formData.whyApply}
-                    onChange={handleInputChange}
-                    rows={4}
-                    className={`w-full px-3 py-2 border rounded-lg focus:ring-2 focus:ring-paan-red focus:border-paan-red ${
-                      errors.whyApply ? 'border-red-500' : 'border-gray-300'
-                    }`}
-                    placeholder="Tell us why you deserve to win this award..."
-                  />
-                  {errors.whyApply && <p className="text-red-500 text-xs mt-1">{errors.whyApply}</p>}
-                </div>
-
-                <div>
-                  <label className="block text-sm font-medium text-gray-700 mb-1">
-                    Previous Awards/Recognition (Optional)
-                  </label>
-                  <textarea
-                    name="previousAwards"
-                    value={formData.previousAwards}
-                    onChange={handleInputChange}
-                    rows={3}
-                    className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-paan-red focus:border-paan-red"
-                    placeholder="List any previous awards or recognition you've received"
-                  />
-                </div>
-
-                <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
-                  <div>
-                    <label className="block text-sm font-medium text-gray-700 mb-1">
-                      LinkedIn Profile
-                    </label>
-                    <input
-                      type="url"
-                      name="socialMedia.linkedin"
-                      value={formData.socialMedia.linkedin}
-                      onChange={handleInputChange}
-                      className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-paan-red focus:border-paan-red"
-                      placeholder="https://linkedin.com/in/yourprofile"
-                    />
-                  </div>
-                  <div>
-                    <label className="block text-sm font-medium text-gray-700 mb-1">
-                      Twitter Handle
-                    </label>
-                    <input
-                      type="text"
-                      name="socialMedia.twitter"
-                      value={formData.socialMedia.twitter}
-                      onChange={handleInputChange}
-                      className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-paan-red focus:border-paan-red"
-                      placeholder="@yourhandle"
-                    />
-                  </div>
-                  <div>
-                    <label className="block text-sm font-medium text-gray-700 mb-1">
-                      Instagram Handle
-                    </label>
-                    <input
-                      type="text"
-                      name="socialMedia.instagram"
-                      value={formData.socialMedia.instagram}
-                      onChange={handleInputChange}
-                      className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-paan-red focus:border-paan-red"
-                      placeholder="@yourhandle"
-                    />
-                  </div>
-                </div>
-              </div>
-            </div>
+            <AdditionalInfoFields formData={formData} handleInputChange={handleInputChange} errors={errors} />
 
             {/* Terms and Conditions */}
-            <div className="bg-gray-50 p-6 rounded-xl">
-              <h3 className="text-lg font-semibold text-gray-900 mb-4">Terms and Conditions</h3>
-              
-              {/* Pricing Information */}
-              <div className="mb-6 p-4 bg-white border border-gray-200 rounded-lg">
-                <h4 className="font-semibold text-gray-900 mb-3">Application Fees</h4>
-                <div className="space-y-3">
-                  {formData.applicantType === 'agency' ? (
-                    <div>
-                      <p className="text-sm text-gray-700">
-                        <strong>Agency Application:</strong>{' '}
-                        {pricing.agency.slashedPrice ? (
-                          <><s>{`$${pricing.agency.slashedPrice}`}</s> <span className="text-paan-red font-semibold">{`$${pricing.agency.pricePerCategory} USD`}</span> per category - Save {`$${pricing.agency.slashedPrice - pricing.agency.pricePerCategory}`}</>
-                        ) : (
-                          <><span className="text-paan-red font-semibold">{`$${pricing.agency.pricePerCategory} USD`}</span> per category</>
-                        )}
-                      </p>
-                      {isEarlyBird() && (
-                        <p className="text-sm text-yellow-600 font-semibold mt-1">
-                          🎉 Early Bird Pricing (Until Nov 25, 2025)
-                        </p>
-                      )}
-                    </div>
-                  ) : (
-                    <div>
-                      <p className="text-sm text-gray-700">
-                        <strong>Freelancer Application:</strong>{' '}
-                        <s>$50</s> <span className="text-paan-red font-semibold">$30 USD</span> per category - Save $20
-                      </p>
-                    </div>
-                  )}
-                  {formData.selectedCategories.length > 1 && (
-                    <p className="text-sm text-green-600 font-semibold">
-                      ✓ 25% multi-category discount applied!
-                    </p>
-                  )}
-                </div>
-              </div>
-              
-              <div className="space-y-4">
-                <div className="flex items-start gap-3">
-                  <input
-                    type="checkbox"
-                    name="agreeToTerms"
-                    checked={formData.agreeToTerms}
-                    onChange={handleInputChange}
-                    className="mt-1"
-                  />
-                  <label className="text-sm text-gray-700">
-                    I agree to the <a href="/paan-awards-terms" target="_blank" className="text-paan-red hover:underline">Terms and Conditions</a> and <a href="/paan-awards-terms" target="_blank" className="text-paan-red hover:underline">Award Guidelines</a> *
-                  </label>
-                </div>
-                {errors.agreeToTerms && <p className="text-red-500 text-xs">{errors.agreeToTerms}</p>}
-
-                <div className="flex items-start gap-3">
-                  <input
-                    type="checkbox"
-                    name="agreeToDataProcessing"
-                    checked={formData.agreeToDataProcessing}
-                    onChange={handleInputChange}
-                    className="mt-1"
-                  />
-                  <label className="text-sm text-gray-700">
-                    I consent to the processing of my personal data for the purpose of this award application *
-                  </label>
-                </div>
-                {errors.agreeToDataProcessing && <p className="text-red-500 text-xs">{errors.agreeToDataProcessing}</p>}
-              </div>
-            </div>
+            <TermsFields formData={formData} pricing={pricing} isEarlyBird={isEarlyBird} handleInputChange={handleInputChange} errors={errors} />
 
             {/* reCAPTCHA */}
             {recaptchaSiteKey && (
@@ -1187,92 +771,10 @@ const PAANAwardsApplicationModal = ({ isOpen, onClose }: { isOpen: boolean; onCl
             )}            
 
             {/* Payment Summary */}
-            <div className="bg-paan-dark-blue text-white p-6 rounded-xl">
-              <h3 className="text-lg font-semibold mb-4">Payment Summary</h3>
-              <div className="space-y-3">
-                <div className="flex justify-between items-center">
-                  <div>
-                    <p className="text-white/80">
-                      {formData.applicantType === 'agency' ? 'Agency Application Fee' : 'Freelancer Application Fee'}
-                      {formData.applicantType === 'agency' && isEarlyBird() && (
-                        <span className="ml-2 text-yellow-400 text-xs font-semibold">🎉 Early Bird</span>
-                      )}
-                    </p>
-                    <p className="text-sm text-white/60">
-                      {formData.selectedCategories.length} category(ies) ×
-                      {currentPricing.slashedPrice ? (
-                        <span> <s>${currentPricing.slashedPrice}</s> ${currentPricing.pricePerCategory} USD</span>
-                      ) : (
-                        <span> ${currentPricing.pricePerCategory} USD</span>
-                      )}
-                    </p>
-                  </div>
-                  <div className="text-right">
-                    <p className="text-lg font-semibold">
-                      {currentPricing.slashedPrice && (formData.applicantType === 'agency' || formData.applicantType === 'freelancer') ? (
-                        <span><s>${currentPricing.slashedPrice * formData.selectedCategories.length}</s> </span>
-                      ) : null}
-                      ${currentPricing.pricePerCategory * formData.selectedCategories.length} USD
-                    </p>
-                  </div>
-                </div>
-                
-                {formData.selectedCategories.length > 1 && (
-                  <div className="flex justify-between items-center border-t border-white/20 pt-3">
-                    <div>
-                      <p className="text-yellow-400 font-medium">Multi-Category Discount (25%)</p>
-                    </div>
-                    <div className="text-right">
-                      <p className="text-yellow-400 font-semibold">-${getDiscountAmount()} USD</p>
-                    </div>
-                  </div>
-                )}
-                
-                <div className="flex justify-between items-center border-t border-white/20 pt-3">
-                  <div>
-                    <p className="text-white font-medium">Total Amount</p>
-                  </div>
-                  <div className="text-right">
-                    <p className="text-2xl font-bold">${calculateTotalPrice()} USD</p>
-                    <p className="text-sm text-white/60">One-time payment</p>
-                  </div>
-                </div>
-              </div>
-            </div>
+            <PaymentSummary formData={formData} isEarlyBird={isEarlyBird} currentPricing={currentPricing} getDiscountAmount={getDiscountAmount} calculateTotalPrice={calculateTotalPrice} />
 
             {/* Action Buttons */}
-            <div className="flex flex-col sm:flex-row gap-4 pt-6">
-              <button
-                type="button"
-                onClick={onClose}
-                className="flex-1 bg-gray-300 text-gray-700 px-6 py-3 rounded-xl hover:bg-gray-400 transition-colors font-medium"
-              >
-                Cancel
-              </button>
-              <button
-                type="button"
-                onClick={handlePaystackPayment}
-                disabled={isSubmitting || !paystackReady}
-                className="flex-1 bg-paan-red text-white px-6 py-3 rounded-xl hover:bg-paan-red/90 transition-colors font-medium flex items-center justify-center gap-2 disabled:opacity-50 disabled:cursor-not-allowed"
-              >
-                {isSubmitting ? (
-                  <>
-                    <Icon icon="mdi:loading" className="w-5 h-5 animate-spin" />
-                    Processing...
-                  </>
-                ) : !paystackReady ? (
-                  <>
-                    <Icon icon="mdi:loading" className="w-5 h-5 animate-spin" />
-                    Loading Payment System...
-                  </>
-                ) : (
-                  <>
-                    <Icon icon="mdi:credit-card" className="w-5 h-5" />
-                    Pay ${calculateTotalPrice()} USD
-                  </>
-                )}
-              </button>
-            </div>
+            <FormActions onClose={onClose} handlePaystackPayment={handlePaystackPayment} isSubmitting={isSubmitting} paystackReady={paystackReady} calculateTotalPrice={calculateTotalPrice} />
           </form>
         </div>
     </Modal>
