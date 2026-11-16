@@ -205,16 +205,14 @@ const nextConfig = {
     qualities: [100, 75],
   },
   reactStrictMode: true,
-  experimental: {
-    // Optimize serverless function size by excluding large directories
-    outputFileTracingExcludes: {
-      // Exclude large public assets from ALL API routes
-      '/api/**': [
-        './public/assets/images/**',
-        './public/assets/videos/**',
-        './public/assets/documents/**',
-      ],
-    },
+  // Optimize serverless function size by excluding large directories
+  outputFileTracingExcludes: {
+    // Exclude large public assets from ALL API routes
+    '/api/**': [
+      './public/assets/images/**',
+      './public/assets/videos/**',
+      './public/assets/documents/**',
+    ],
   },
   turbopack: {},
   // Native module: must be loaded from node_modules instead of being bundled into the route
