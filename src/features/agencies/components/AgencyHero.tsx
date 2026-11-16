@@ -61,7 +61,7 @@ export default function AgencyHero({ sectionRefs, canvasRef, agency, t, L }: Pro
               transition={{ duration: 1, type: "spring" }}
             >
               <Image 
-                src="/assets/images/certified-members/badge.svg" 
+                src="/assets/images/certified-members-badge.svg" 
                 width={110} 
                 height={70} 
                 alt="PAAN Certified Member Badge" 

@@ -18,7 +18,7 @@ export default function AgencyHighlights({ t, tier, agency }: Props) {
           <div className="text-center">
             <div className="inline-flex items-center bg-white rounded-2xl px-6 py-4 shadow-lg border border-paan-blue/20">
               <Image 
-                src="/assets/images/certified-members/badge.svg" 
+                src="/assets/images/certified-members-badge.svg" 
                 width={40} 
                 height={40} 
                 alt="PAAN Badge" 
