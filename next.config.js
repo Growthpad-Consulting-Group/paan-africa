@@ -187,6 +187,10 @@ const nextConfig = {
       },
       {
         protocol: 'https',
+        hostname: 'cdn.sanity.io',
+      },
+      {
+        protocol: 'https',
         hostname: 'flagcdn.com',
       },
       {
@@ -201,36 +205,30 @@ const nextConfig = {
     qualities: [100, 75],
   },
   reactStrictMode: true,
-  experimental: {
-    // Optimize serverless function size by excluding large directories
-    outputFileTracingExcludes: {
-      // Exclude large public assets from ALL API routes
-      '/api/**': [
-        './public/assets/images/**',
-        './public/assets/videos/**',
-        './public/assets/documents/**',
-      ],
-    },
+  // Optimize serverless function size by excluding large directories
+  outputFileTracingExcludes: {
+    // Exclude large public assets from ALL API routes
+    '/api/**': [
+      './public/assets/images/**',
+      './public/assets/videos/**',
+      './public/assets/documents/**',
+    ],
   },
   turbopack: {},
-  
-  webpack: (config, { isServer }) => {
-    if (isServer) {
-      config.externals = config.externals || [];
-      config.externals.push({
-        '@napi-rs/canvas': 'commonjs @napi-rs/canvas'
-      });
-    }
-    return config;
-  },
+  // Native module: must be loaded from node_modules instead of being bundled into the route
+  serverExternalPackages: ['@napi-rs/canvas'],
 
   async redirects() {
     return [
-      ...HIDDEN_PATHS.map((source) => ({
-        source,
-        destination: "/",
-        permanent: false,
-      })),
+      // SHOW_HIDDEN_PAGES=1 is for LOCAL verification builds only (lets us render and compare the
+      // cancelled summit/awards pages). Never set it in production: the pages must stay redirected.
+      ...(process.env.SHOW_HIDDEN_PAGES === "1"
+        ? []
+        : HIDDEN_PATHS.map((source) => ({
+            source,
+            destination: "/",
+            permanent: false,
+          }))),
       {
         source: "/:path*",
         has: [

@@ -1,0 +1,27 @@
+// Countries offered in the application / registration forms. Single source for every form.
+
+export const countries: string[] = [
+  "Nigeria",
+  "Kenya",
+  "South Africa",
+  "Ghana",
+  "Egypt",
+  "Morocco",
+  "Tunisia",
+  "Algeria",
+  "Ethiopia",
+  "Uganda",
+  "Tanzania",
+  "Rwanda",
+  "Senegal",
+  "Ivory Coast",
+  "Cameroon",
+  "Angola",
+  "Zambia",
+  "Zimbabwe",
+  "Botswana",
+  "Namibia",
+  "Mauritius",
+  "Seychelles",
+  "Other",
+];
