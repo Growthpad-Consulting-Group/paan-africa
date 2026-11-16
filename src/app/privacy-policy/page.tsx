@@ -1,18 +1,20 @@
-// pages/privacy-policy.js
 import Link from 'next/link';
-import Header from '../layouts/header';
-import Footer from '../layouts/footer';
-import SEO from '@/components/SEO';
+import Header from '@/layouts/header';
+import Footer from '@/layouts/footer';
 import ScrollToTop from "@/components/ScrollToTop";
+
+import { buildMetadata } from '@/lib/seo';
+
+export const metadata = buildMetadata({
+  path: '/privacy-policy',
+  title: 'Privacy Policy | Pan-African Agency Network (PAAN)',
+  description: 'Learn how the Pan-African Agency Network (PAAN) collects, uses, and protects your personal information. Read our Privacy Policy for more details.',
+  keywords: 'PAAN, privacy policy, data protection, Pan-African Agency Network',
+});
 
 const PrivacyPolicy = () => {
   return (
     <>
-      <SEO
-        title="Privacy Policy | Pan-African Agency Network (PAAN)"
-        description="Learn how the Pan-African Agency Network (PAAN) collects, uses, and protects your personal information. Read our Privacy Policy for more details."
-        keywords="PAAN, privacy policy, data protection, Pan-African Agency Network"
-      />
       <main className="min-h-screen flex flex-col relative">
         <Header />
         <div className="flex-grow px-4 py-28 max-w-6xl mx-auto">

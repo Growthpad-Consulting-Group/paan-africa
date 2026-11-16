@@ -1,18 +1,20 @@
-// pages/terms-and-conditions.js
 import Link from 'next/link';
-import Header from '../layouts/header';
-import Footer from '../layouts/footer';
-import SEO from '@/components/SEO';
+import Header from '@/layouts/header';
+import Footer from '@/layouts/footer';
 import ScrollToTop from "@/components/ScrollToTop";
+
+import { buildMetadata } from '@/lib/seo';
+
+export const metadata = buildMetadata({
+  path: '/terms-and-conditions',
+  title: 'Terms and Conditions | PAAN Summit 2026',
+  description: "Read the terms and conditions for PAAN Summit 2026 - Africa's premier creative and tech leadership conference. Learn about registration, payment, cancellation policies, and more.",
+  keywords: 'PAAN Summit 2026, terms and conditions, summit registration, creative conference Africa, tech conference terms',
+});
 
 const TermsAndConditions = () => {
   return (
     <>
-      <SEO
-        title="Terms and Conditions | PAAN Summit 2026"
-        description="Read the terms and conditions for PAAN Summit 2026 - Africa's premier creative and tech leadership conference. Learn about registration, payment, cancellation policies, and more."
-        keywords="PAAN Summit 2026, terms and conditions, summit registration, creative conference Africa, tech conference terms"
-      />
       <main className="min-h-screen flex flex-col relative">
         <Header />
         <div className="flex-grow px-4 py-28 max-w-6xl mx-auto">

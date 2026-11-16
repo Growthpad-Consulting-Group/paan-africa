@@ -179,7 +179,11 @@ Everything created in Phase 1: Sanity client/lib, `blogService`, agency template
 
 ### Strategy
 - Migrate one route at a time; both routers coexist (`src/app/` already exists).
-- Keep `next-intl` working across both during transition (App Router needs `[locale]` segment or cookie-based config — **decide before starting**, this is the riskiest part given `fr.json`).
+- **i18n decision (resolved 2026-11-16):** there is no locale routing (no `i18n` in `next.config.js`; `next-intl` was unused and removed; the language switch is cookie-based Google Translate). `useAppTranslations` now reads only the English messages and no longer touches the Pages Router, so it works in App Router components. No `[locale]` segment is needed.
+- Branch `feat/app-router` (from `feat/sanity-foundation`). Routes move one at a time; the same path must not exist in both routers.
+- **Verification method (App Router output is not byte-comparable):** build the Pages Router baseline, then compare per page: head tags (title, meta, canonical, JSON-LD as sets), and the normalized `<main>` markup. Scratchpad script `cmp-app.py`.
+- **Metadata:** `src/lib/seo.ts` `buildMetadata()` replaces the `<SEO>` component (same tags and defaults; `og:updated_time` dropped, it was a changing timestamp).
+- Client components imported by server pages need `"use client"` (done for `ScrollToTop`; `header`/`footer` already had it).
 
 ### Proposed structure
 ```
@@ -205,8 +209,8 @@ src/app/
 ```
 
 ### Migration order
-1. ⏳ Root layout, providers (`_app`), `<html>` (`_document`), fonts, analytics/pixel scripts
-2. ⏳ Static legal pages
+1. ✅ Root layout (`app/layout.tsx`), `Providers`, shared `AnalyticsScripts`/`siteSchema`/`ServiceWorkerCleanup` (also used by `_app`), fonts, icons/manifest via metadata
+2. ✅ `privacy-policy`, `terms-and-conditions` (main markup identical; head differs only in tag attribute order and the modern `mobile-web-app-capable` tag)
 3. ⏳ Blogs (Sanity, ISR)
 4. ⏳ Certified agencies, masterclasses, events, careers
 5. ⏳ Home + marketing pages

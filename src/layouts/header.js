@@ -8,6 +8,7 @@ import { freelancersMenu, ctaButton } from "../data/menuData";
 import { handleScroll, useFixedHeader } from "../../utils/scrollUtils";
 import LanguageSwitch from "@/components/LanguageSwitch";
 
+/** @param {{ navLinkColor?: string, transparent?: boolean }} props */
 const Header = ({ navLinkColor, transparent = false }) => {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const [activeNav, setActiveNav] = useState("For Agencies"); 
