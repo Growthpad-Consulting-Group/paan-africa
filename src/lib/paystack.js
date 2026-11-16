@@ -141,7 +141,7 @@ export const savePaymentTransaction = async (transactionData) => {
 };
 
 // Update purchase status
-export const updatePurchaseStatus = async (purchaseId, status, paymentReference = null) => {
+export const updatePurchaseStatus = async (purchaseId, status, paymentReference = /** @type {string | null} */ (null)) => {
   try {
     const updateData = {
       status,

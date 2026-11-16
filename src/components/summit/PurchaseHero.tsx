@@ -2,22 +2,27 @@ import { motion } from "framer-motion";
 import { SUMMIT_CANCELLED } from "@/data/summit/status";
 import { Icon } from "@iconify/react";
 import { useEffect, useRef } from "react";
+import { useCountdown } from "@/hooks/useCountdown";
 
-const Hero = ({ sectionRefs, handleScroll, timeLeft }) => {
-  const daysRef = useRef(null);
-  const hoursRef = useRef(null);
-  const minutesRef = useRef(null);
-  const secondsRef = useRef(null);
+// Early-bird deadline: 20 October 2026, 11:59 PM EAT
+const EARLY_BIRD_ENDS = "2026-10-20T23:59:59+03:00";
+
+const PurchaseHero = () => {
+  const timeLeft = useCountdown(EARLY_BIRD_ENDS);
+  const daysRef = useRef<HTMLDivElement>(null);
+  const hoursRef = useRef<HTMLDivElement>(null);
+  const minutesRef = useRef<HTMLDivElement>(null);
+  const secondsRef = useRef<HTMLDivElement>(null);
 
   // Update countdown text imperatively so React never re-touches these
   // nodes after mount — Chrome's page-translate feature crashes with a
   // "Maximum call stack size exceeded" error when it and React both keep
   // mutating the same fast-changing text nodes.
   useEffect(() => {
-    if (daysRef.current) daysRef.current.textContent = timeLeft.days || 0;
-    if (hoursRef.current) hoursRef.current.textContent = timeLeft.hours || 0;
-    if (minutesRef.current) minutesRef.current.textContent = timeLeft.minutes || 0;
-    if (secondsRef.current) secondsRef.current.textContent = timeLeft.seconds || 0;
+    if (daysRef.current) daysRef.current.textContent = String(timeLeft.days || 0);
+    if (hoursRef.current) hoursRef.current.textContent = String(timeLeft.hours || 0);
+    if (minutesRef.current) minutesRef.current.textContent = String(timeLeft.minutes || 0);
+    if (secondsRef.current) secondsRef.current.textContent = String(timeLeft.seconds || 0);
   }, [timeLeft]);
 
   return (
@@ -25,7 +30,6 @@ const Hero = ({ sectionRefs, handleScroll, timeLeft }) => {
       <motion.div
         className="relative h-[60vh] sm:h-[70vh] md:h-[75vh] w-full" 
         id="home"
-        ref={sectionRefs.home}
         initial={{ opacity: 0 }}
         animate={{ opacity: 1 }}
         transition={{ duration: 0.8 }}
@@ -147,4 +151,4 @@ const SeminarLocationAndDate = () => {
   );
 };
 
-export default Hero;
+export default PurchaseHero;
