@@ -135,6 +135,8 @@ Both are cancelled and hidden (`SUMMIT_CANCELLED`, `HIDDEN_PATHS` in `next.confi
 ---
 
 ## 2. TypeScript Migration
+
+> **Update 2026-11-16: no `.js` left in `src/`.** The last 78 files (legacy components, services, headers, the trends code) are `.ts`/`.tsx`; `next.config.ts` and `tailwind.config.ts` replace the JS configs and the disabled `next-pwa` wrapper is gone. Props of the old components are typed from their destructuring and defaults (mostly `any` fields): worth tightening when each is next edited. Found while converting: `applyPromoCode` called the non-existent `supabase.raw()` (promo usage was never incremented); it now reads and writes the count. Still JS by necessity: `postcss.config.js`, `next-sitemap.config.js`, and the one-time `scripts/*` (deleted in Phase 1.4).
 Greenfield: nothing is typed yet. Do it **alongside** the CMS work so new code is typed from day one.
 
 ### Rule (2026-11-15): convert a file to TypeScript whenever it is touched

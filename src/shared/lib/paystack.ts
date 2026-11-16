@@ -1,0 +1,197 @@
+import { supabase } from '@/shared/lib/supabase';
+
+// Paystack configuration
+const PAYSTACK_PUBLIC_KEY = process.env.NEXT_PUBLIC_PAYSTACK_PUBLIC_KEY;
+
+// Initialize Paystack
+export const initializePaystack = () => {
+  if (typeof window !== 'undefined' && window.PaystackPop) {
+    return window.PaystackPop.setup;
+  }
+  return null;
+};
+
+// Wait for Paystack to load
+export const waitForPaystack = () => {
+  return new Promise((resolve: any, reject: any) => {
+    if (typeof window === 'undefined') {
+      reject(new Error('Window not available'));
+      return;
+    }
+
+    if (window.PaystackPop) {
+      resolve(window.PaystackPop);
+      return;
+    }
+
+    // Wait for script to load
+    const checkPaystack = () => {
+      if (window.PaystackPop) {
+        resolve(window.PaystackPop);
+      } else {
+        setTimeout(checkPaystack, 100);
+      }
+    };
+
+    checkPaystack();
+  });
+};
+
+// Create payment reference
+export const generatePaymentReference = () => {
+  return `PAAN_${Date.now()}_${Math.random().toString(36).substr(2, 9)}`;
+};
+
+// Initialize payment with Paystack
+export const initializePayment = async (paymentData: any) => {
+  const {
+    email,
+    amount,
+    currency = 'USD',
+    reference,
+    metadata = {},
+    callback_url,
+    onSuccess,
+    onClose
+  } = paymentData;
+
+  try {
+    // Wait for Paystack to load
+    const PaystackPop: any = await waitForPaystack();
+    
+    if (!PaystackPop || !PaystackPop.setup) {
+      throw new Error('Paystack not properly loaded');
+    }
+
+    // Paystack expects all amounts in the smallest unit (cents)
+    // For USD: amount * 100 (dollars to cents)
+    // For KES: amount * 100 (shillings to cents)
+    const amountInSmallestUnit = Math.round(amount * 100);
+
+    const handler = PaystackPop.setup({
+      key: PAYSTACK_PUBLIC_KEY,
+      email,
+      amount: amountInSmallestUnit,
+      currency,
+      ref: reference,
+      metadata,
+      callback: (response: any) => onSuccess ? onSuccess(response) : console.log('Payment successful', response),
+      onClose: onClose ?? (() => console.log('Payment cancelled')),
+    });
+
+    return handler;
+  } catch (error) {
+    console.error('Paystack initialization error:', error);
+    throw new Error('Failed to initialize Paystack payment');
+  }
+};
+
+// Verify payment with Paystack API
+export const verifyPayment = async (reference: any) => {
+  try {
+    const response = await fetch(`/api/verify-payment?reference=${reference}`);
+
+    if (!response.ok) {
+      throw new Error(`Payment verification failed: ${response.statusText}`);
+    }
+
+    return await response.json();
+  } catch (error) {
+    console.error('Payment verification error:', error);
+    throw error;
+  }
+};
+
+// Save payment transaction to database
+export const savePaymentTransaction = async (transactionData: any) => {
+  const {
+    purchaseId,
+    paystackReference,
+    amount,
+    currency = 'USD',
+    status,
+    paymentMethod,
+    gatewayResponse
+  } = transactionData;
+
+  try {
+    const { data, error } = await supabase
+      .from('payment_transactions')
+      .insert({
+        purchase_id: purchaseId,
+        paystack_reference: paystackReference,
+        amount,
+        currency,
+        status,
+        payment_method: paymentMethod,
+        gateway_response: gatewayResponse
+      })
+      .select()
+      .single();
+
+    if (error) {
+      throw error;
+    }
+
+    return data;
+  } catch (error) {
+    console.error('Error saving payment transaction:', error);
+    throw error;
+  }
+};
+
+// Update purchase status
+export const updatePurchaseStatus = async (purchaseId: any, status: any, paymentReference: string | null = null) => {
+  try {
+    const updateData: Record<string, any> = {
+      status,
+      payment_status: status === 'paid' ? 'completed' : 'pending',
+      updated_at: new Date().toISOString()
+    };
+
+    if (paymentReference) {
+      updateData.payment_reference = paymentReference;
+      updateData.paystack_transaction_id = paymentReference;
+    }
+
+    if (status === 'paid') {
+      updateData.paid_at = new Date().toISOString();
+    }
+
+    const { data, error } = await supabase
+      .from('ticket_purchases')
+      .update(updateData)
+      .eq('id', purchaseId)
+      .select()
+      .single();
+
+    if (error) {
+      throw error;
+    }
+
+    return data;
+  } catch (error) {
+    console.error('Error updating purchase status:', error);
+    throw error;
+  }
+};
+
+// Get payment status
+export const getPaymentStatus = async (reference: any) => {
+  try {
+    const { data, error } = await supabase
+      .from('payment_transactions')
+      .select('status, amount, currency, created_at')
+      .eq('paystack_reference', reference)
+      .single();
+
+    if (error) {
+      throw error;
+    }
+
+    return data;
+  } catch (error) {
+    console.error('Error getting payment status:', error);
+    throw error;
+  }
+};
