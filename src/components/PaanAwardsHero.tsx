@@ -1,3 +1,4 @@
+import type { RefObject } from "react";
 import { motion } from 'framer-motion';
 import Image from 'next/image';
 import { Icon } from '@iconify/react';
@@ -30,7 +31,13 @@ const scaleIn = {
   }
 };
 
-const Hero = ({ sectionRefs, handleScroll, isFixed, scrollToSection, timeLeft, onApplyNowClick }) => {
+type Props = {
+  sectionRefs?: { home?: RefObject<HTMLDivElement | null> };
+  scrollToSection?: (id: string) => void;
+  onApplyNowClick?: () => void;
+};
+
+const Hero = ({ sectionRefs, scrollToSection, onApplyNowClick }: Props) => {
 
   return (
     <>

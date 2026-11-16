@@ -6,7 +6,9 @@ import { useState, useEffect } from "react";
 import { useFixedHeader, handleScroll } from "../../utils/scrollUtils";
 import LanguageSwitch from "../components/LanguageSwitch";
 
-const PAANAwardsHeader = ({ navLinkColor, onApplyNowClick, onJoinSummitClick }) => {
+type Props = { navLinkColor?: string; onApplyNowClick?: () => void; onJoinSummitClick?: () => void };
+
+const PAANAwardsHeader = ({ navLinkColor, onApplyNowClick, onJoinSummitClick }: Props) => {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const [activeSection, setActiveSection] = useState('home');
   const isFixed = useFixedHeader();
@@ -60,8 +62,8 @@ const PAANAwardsHeader = ({ navLinkColor, onApplyNowClick, onJoinSummitClick }) 
 
   // Close menu when clicking outside
   useEffect(() => {
-    const handleClickOutside = (event) => {
-      if (isMenuOpen && !event.target.closest('nav')) {
+    const handleClickOutside = (event: MouseEvent) => {
+      if (isMenuOpen && !(event.target as HTMLElement).closest('nav')) {
         setIsMenuOpen(false);
       }
     };
@@ -83,7 +85,7 @@ const PAANAwardsHeader = ({ navLinkColor, onApplyNowClick, onJoinSummitClick }) 
   }, [isMenuOpen]);
 
   // Get navigation item styling based on active state
-  const getNavItemStyle = (href) => {
+  const getNavItemStyle = (href: string) => {
     const sectionId = href.replace('#', '');
     const isActive = activeSection === sectionId;
     
@@ -286,7 +288,7 @@ const PAANAwardsHeader = ({ navLinkColor, onApplyNowClick, onJoinSummitClick }) 
               </button>
               <button
                 onClick={() => {
-                  ctaButtons.applyNow.onClick();
+                  ctaButtons.applyNow.onClick?.();
                   setIsMenuOpen(false);
                 }}
                 className={ctaButtons.applyNow.mobileClassName}
