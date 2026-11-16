@@ -4,6 +4,7 @@ import AnalyticsScripts from '@/components/AnalyticsScripts'
 import ServiceWorkerCleanup from '@/components/ServiceWorkerCleanup'
 import { globalSchema } from '@/data/siteSchema'
 import Providers from './providers'
+import HideOnStudio from '@/components/HideOnStudio'
 
 export const metadata: Metadata = {
   manifest: '/manifest.json',
@@ -33,8 +34,10 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
         <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(globalSchema) }} />
       </head>
       <body>
-        <AnalyticsScripts />
-        <ServiceWorkerCleanup />
+        <HideOnStudio>
+          <AnalyticsScripts />
+          <ServiceWorkerCleanup />
+        </HideOnStudio>
         <Providers>{children}</Providers>
       </body>
     </html>

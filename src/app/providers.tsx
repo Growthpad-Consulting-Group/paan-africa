@@ -3,13 +3,16 @@
 import { Toaster } from 'react-hot-toast'
 import { ChristmasProvider } from '@/contexts/ChristmasContext'
 import ChristmasEffects from '@/components/ChristmasEffects'
+import HideOnStudio from '@/components/HideOnStudio'
 
 /** Client-side providers and the global toaster (what the Pages Router `_app` wrapped every page in). */
 export default function Providers({ children }: { children: React.ReactNode }) {
   return (
     <>
       <ChristmasProvider>
-        <ChristmasEffects />
+        <HideOnStudio>
+          <ChristmasEffects />
+        </HideOnStudio>
         {children}
       </ChristmasProvider>
       <Toaster

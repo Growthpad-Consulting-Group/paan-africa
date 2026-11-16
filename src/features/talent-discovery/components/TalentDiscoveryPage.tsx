@@ -1,7 +1,6 @@
 "use client";
 
 import React, { useState, useEffect } from 'react';
-import Head from 'next/head';
 import dynamic from 'next/dynamic';
 import { motion } from 'framer-motion';
 import { Icon } from '@iconify/react';

@@ -1,7 +1,6 @@
 "use client";
 
 import React, { useState } from 'react';
-import Head from 'next/head';
 import Image from 'next/image';
 import Header from '@/shared/layouts/standard-header';
 import Footer from '@/shared/layouts/footer';

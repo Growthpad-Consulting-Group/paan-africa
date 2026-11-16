@@ -5,7 +5,6 @@ import Slider from "react-slick";
 import "slick-carousel/slick/slick.css";
 import "slick-carousel/slick/slick-theme.css";
 import { useRef } from "react";
-import Head from "next/head";
 
 const FreelancerHero = () => {
   const freelancers = [
@@ -186,12 +185,10 @@ const FreelancerHero = () => {
 
   return (
     <>
-      <Head>
-        {/* Preload hero vector and first two freelancer images */}
-        <link rel="preload" as="image" href="/assets/images/hero-vector.webp" />
-        <link rel="preload" as="image" href="/assets/images/freelancers/1.webp" />
-        <link rel="preload" as="image" href="/assets/images/freelancers/2.webp" />
-      </Head>
+      {/* Preload hero vector and first two freelancer images */}
+      <link rel="preload" as="image" href="/assets/images/hero-vector.webp" />
+      <link rel="preload" as="image" href="/assets/images/freelancers/1.webp" />
+      <link rel="preload" as="image" href="/assets/images/freelancers/2.webp" />
       <div
         className="relative h-full w-full overflow-hidden pb-10 pt-10 md:pt-0 "
         id="home"

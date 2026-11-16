@@ -217,16 +217,8 @@ const nextConfig = {
     },
   },
   turbopack: {},
-  
-  webpack: (config, { isServer }) => {
-    if (isServer) {
-      config.externals = config.externals || [];
-      config.externals.push({
-        '@napi-rs/canvas': 'commonjs @napi-rs/canvas'
-      });
-    }
-    return config;
-  },
+  // Native module: must be loaded from node_modules instead of being bundled into the route
+  serverExternalPackages: ['@napi-rs/canvas'],
 
   async redirects() {
     return [
