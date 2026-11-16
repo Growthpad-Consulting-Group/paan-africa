@@ -1,10 +1,11 @@
-import { useState, useRef } from 'react';
+import { useState } from 'react';
 import { Icon } from '@iconify/react';
 import toast from 'react-hot-toast';
 import ReCAPTCHA from 'react-google-recaptcha';
 import Modal, { ModalHeader } from './Modal';
 import { countries } from '@/data/countries';
 import type { FieldChange } from "@/types/forms";
+import { useRecaptcha } from "@/hooks/useRecaptcha";
 
 const ExhibitionApplicationModal = ({ isOpen, onClose }: { isOpen: boolean; onClose: () => void }) => {
   const [formData, setFormData] = useState({
@@ -24,16 +25,7 @@ const ExhibitionApplicationModal = ({ isOpen, onClose }: { isOpen: boolean; onCl
 
   const [errors, setErrors] = useState<Record<string, string>>({});
   const [isSubmitting, setIsSubmitting] = useState(false);
-  const [recaptchaToken, setRecaptchaToken] = useState<string | null>(null);
-  const recaptchaRef = useRef<ReCAPTCHA>(null);
-
-  // Check if reCAPTCHA site key is available
-  const recaptchaSiteKey = process.env.NEXT_PUBLIC_RECAPTCHA_SITE_KEY;
-  if (!recaptchaSiteKey) {
-    console.error(
-      "reCAPTCHA site key is missing. Please set NEXT_PUBLIC_RECAPTCHA_SITE_KEY in .env.local"
-    );
-  }
+  const { siteKey: recaptchaSiteKey, ref: recaptchaRef, token: recaptchaToken, setToken: setRecaptchaToken } = useRecaptcha();
 
   const industries = [
     'Creative Agency',

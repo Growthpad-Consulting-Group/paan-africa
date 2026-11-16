@@ -10,6 +10,7 @@ import Footer from '@/layouts/footer';
 import Image from 'next/image';
 import { countries } from '@/data/countries';
 import type { FieldChange } from "@/types/forms";
+import { useRecaptcha } from "@/hooks/useRecaptcha";
 
 // Animation variants - defined outside component for global access
 const fadeInUp = {
@@ -67,16 +68,7 @@ const SpeakerApplicationPage = () => {
 
   const [errors, setErrors] = useState<Record<string, string>>({});
   const [isSubmitting, setIsSubmitting] = useState(false);
-  const [recaptchaToken, setRecaptchaToken] = useState<string | null>(null);
-  const recaptchaRef = useRef<ReCAPTCHA>(null);
-
-  // Check if reCAPTCHA site key is available
-  const recaptchaSiteKey = process.env.NEXT_PUBLIC_RECAPTCHA_SITE_KEY;
-  if (!recaptchaSiteKey) {
-    console.error(
-      "reCAPTCHA site key is missing. Please set NEXT_PUBLIC_RECAPTCHA_SITE_KEY in .env.local"
-    );
-  }
+  const { siteKey: recaptchaSiteKey, ref: recaptchaRef, token: recaptchaToken, setToken: setRecaptchaToken } = useRecaptcha();
 
   const sessionTypes = [
     'Keynote (15–20 mins)',

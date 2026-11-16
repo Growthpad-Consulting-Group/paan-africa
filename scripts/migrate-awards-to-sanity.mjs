@@ -25,7 +25,7 @@ const build = (groups, audience, featured) => groups.map((g, i) => ({
   _id: `award-group-${EDITION}-${g.id}`, _type: 'awardGroup', audience, groupId: g.id, name: g.name, description: g.description, order: i + 1, edition: EDITION,
   awards: g.subcategories.map((s) => ({
     _key: s.id, _type: 'award', awardId: s.id, name: s.name ?? s.title, description: s.description,
-    ...(s.icon ? { icon: s.icon } : {}), featured: featured.includes(s.id),
+    ...(s.icon ? { icon: s.icon } : {}),
   })),
 }))
 const docs = [...build(agency, 'agency', featuredAgency), ...build(freelancer, 'freelancer', featuredFreelancer)]

@@ -12,6 +12,7 @@ import ScrollToTop from "@/components/ScrollToTop";
 import Head from "next/head";
 import { countries } from '@/data/countries';
 import type { FieldChange } from "@/types/forms";
+import { useRecaptcha } from "@/hooks/useRecaptcha";
 
 const ExhibitionApplication = () => {
   const router = useRouter();
@@ -32,8 +33,7 @@ const ExhibitionApplication = () => {
 
   const [errors, setErrors] = useState<Record<string, string>>({});
   const [isSubmitting, setIsSubmitting] = useState(false);
-  const [recaptchaToken, setRecaptchaToken] = useState<string | null>(null);
-  const recaptchaRef = useRef<ReCAPTCHA>(null);
+  const { siteKey: recaptchaSiteKey, ref: recaptchaRef, token: recaptchaToken, setToken: setRecaptchaToken } = useRecaptcha();
   const [selectedBooth, setSelectedBooth] = useState<{ number: string; size: string; price: string; type: string } | null>(null);
 
   // Auto-select booth information from URL parameters
@@ -57,14 +57,6 @@ const ExhibitionApplication = () => {
       }
     }
   }, [router.isReady, router.query]);
-
-  // Check if reCAPTCHA site key is available
-  const recaptchaSiteKey = process.env.NEXT_PUBLIC_RECAPTCHA_SITE_KEY;
-  if (!recaptchaSiteKey) {
-    console.error(
-      "reCAPTCHA site key is missing. Please set NEXT_PUBLIC_RECAPTCHA_SITE_KEY in .env.local"
-    );
-  }
 
   const industries = [
     'Creative Agency',

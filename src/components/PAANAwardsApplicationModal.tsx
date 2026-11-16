@@ -8,6 +8,7 @@ import PaystackScript from './PaystackScript';
 import Modal, { ModalHeader } from './Modal';
 import { countries } from '@/data/countries';
 import type { FieldChange } from "@/types/forms";
+import { useRecaptcha } from "@/hooks/useRecaptcha";
 
 const PAANAwardsApplicationModal = ({ isOpen, onClose }: { isOpen: boolean; onClose: () => void }) => {
   const [formData, setFormData] = useState({
@@ -49,17 +50,8 @@ const PAANAwardsApplicationModal = ({ isOpen, onClose }: { isOpen: boolean; onCl
 
   const [errors, setErrors] = useState<Record<string, string>>({});
   const [isSubmitting, setIsSubmitting] = useState(false);
-  const [recaptchaToken, setRecaptchaToken] = useState<string | null>(null);
+  const { siteKey: recaptchaSiteKey, ref: recaptchaRef, token: recaptchaToken, setToken: setRecaptchaToken } = useRecaptcha();
   const [paystackReady, setPaystackReady] = useState(false);
-  const recaptchaRef = useRef<ReCAPTCHA>(null);
-
-  // Check if reCAPTCHA site key is available
-  const recaptchaSiteKey = process.env.NEXT_PUBLIC_RECAPTCHA_SITE_KEY;
-  if (!recaptchaSiteKey) {
-    console.error(
-      "reCAPTCHA site key is missing. Please set NEXT_PUBLIC_RECAPTCHA_SITE_KEY in .env.local"
-    );
-  }
 
   // Award categories - New structure with grouped categories
   const awardCategories = [

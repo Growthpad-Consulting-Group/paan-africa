@@ -139,7 +139,7 @@ export async function getStaticProps() {
   } catch (error) {
     console.error("Error loading awards from Sanity:", error);
     return {
-      props: { awards: { agencyGroups: [], freelancerGroups: [], featuredAgencyIds: [], featuredFreelancerIds: [] } },
+      props: { awards: { agencyGroups: [], freelancerGroups: [] } },
       revalidate: 60,
     };
   }
