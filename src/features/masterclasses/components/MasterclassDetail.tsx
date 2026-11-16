@@ -1,13 +1,13 @@
+"use client";
+
 import { useState, useEffect } from "react";
-import Head from "next/head";
 import { Icon } from "@iconify/react";
 import Header from "@/shared/layouts/standard-header";
 import Footer from "@/shared/layouts/footer";
 import PaystackScript from "@/components/PaystackScript";
 import jsPDF from 'jspdf';
 import { validateMasterclassPromoCode } from "@/lib/masterclassPromoCodeService";
-import type { GetStaticPaths, GetStaticProps } from "next";
-import { getMasterclassBySlug, getMasterclassSlugById, getMasterclassSlugs, type Masterclass } from "@/lib/masterclassService";
+import type { Masterclass } from "@/features/masterclasses/lib/masterclassService";
 
 type AppliedPromo = {
   id: string;
@@ -23,7 +23,7 @@ type AppliedPromo = {
 
 type Props = { masterclass: Masterclass };
 
-const MasterclassDetailPage = ({ masterclass }: Props) => {
+const MasterclassDetail = ({ masterclass }: Props) => {
   const [selectedPricing, setSelectedPricing] = useState('member');
   const [isLoading, setIsLoading] = useState(false);
   const [paystackReady, setPaystackReady] = useState(false);
@@ -84,28 +84,6 @@ const MasterclassDetailPage = ({ masterclass }: Props) => {
   // `masterclass` comes from Sanity (Masterclass document). `masterclass.id` is the permanent numeric id
   // used in payment references and promo codes, so it must not change.
   const h1Title = masterclass?.title;
-
-  if (!masterclass) {
-    return (
-      <>
-        <Head>
-          <title>{h1Title ? `${h1Title} - PAAN Masterclass` : "PAAN Masterclass"}</title>
-        </Head>
-        <Header navLinkColor="text-gray-950" />
-        <div className="min-h-screen bg-gray-50 pt-40 pb-16 px-4 sm:px-6 lg:px-8">
-          <div className="max-w-7xl mx-auto">
-            {h1Title && (
-              <h1 className="text-3xl md:text-4xl font-bold text-slate-900 leading-tight mb-8">
-                {h1Title}
-              </h1>
-            )}
-            <div className="flex items-center justify-center py-12 text-gray-600">Loading...</div>
-          </div>
-        </div>
-        <Footer />
-      </>
-    );
-  }
 
   // Generate meta data
   const pageTitle = `${masterclass.title} - PAAN Masterclass`;
@@ -523,78 +501,10 @@ const MasterclassDetailPage = ({ masterclass }: Props) => {
 
   return (
     <>
-      <Head>
-        {/* Basic Meta Tags */}
-        <title>{pageTitle}</title>
-        <meta name="description" content={pageDescription} />
-        <meta name="keywords" content={`PAAN, masterclass, ${masterclass.category}, ${instructorName}, advertising, marketing, professional development, ${masterclass.level}`} />
-        <meta name="author" content="Pan-African Advertising Network" />
-        <meta name="robots" content="index, follow" />
-        <link rel="canonical" href={pageUrl} />
-
-        {/* Open Graph Meta Tags */}
-        <meta property="og:type" content="website" />
-        <meta property="og:title" content={pageTitle} />
-        <meta property="og:description" content={pageDescription} />
-        <meta property="og:image" content={pageImage} />
-        <meta property="og:url" content={pageUrl} />
-        <meta property="og:site_name" content="PAAN - Pan-African Advertising Network" />
-        <meta property="og:locale" content="en_US" />
-
-        {/* Course-specific Open Graph tags */}
-        <meta property="course:instructor" content={instructorName ?? undefined} />
-        <meta property="course:instructor_title" content={instructorTitle ?? undefined} />
-        <meta property="course:date" content={masterclassDate ?? undefined} />
-        <meta property="course:time" content={masterclassTime ?? undefined} />
-        <meta property="course:format" content={masterclassFormat ?? undefined} />
-        <meta property="course:level" content={masterclass.level ?? undefined} />
-        <meta property="course:category" content={masterclass.category ?? undefined} />
-
-        {/* Twitter Card Meta Tags */}
-        <meta name="twitter:card" content="summary_large_image" />
-        <meta name="twitter:site" content="@PAAN_Africa" />
-        <meta name="twitter:creator" content="@PAAN_Africa" />
-        <meta name="twitter:title" content={pageTitle} />
-        <meta name="twitter:description" content={pageDescription} />
-        <meta name="twitter:image" content={pageImage} />
-
-        {/* Additional Meta Tags */}
-        <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-        <meta httpEquiv="Content-Type" content="text/html; charset=utf-8" />
-        <meta name="language" content="English" />
-        <meta name="revisit-after" content="7 days" />
-        <meta name="distribution" content="global" />
-        <meta name="rating" content="general" />
-
-        {/* Pricing Information */}
-        <meta name="price:member" content={`${memberPrice} ${currency}`} />
-        <meta name="price:non-member" content={`${nonMemberPrice} ${currency}`} />
-        <meta name="currency" content={currency} />
-
-        {/* Event Information */}
-        <meta name="event:date" content={masterclassDate ?? undefined} />
-        <meta name="event:time" content={masterclassTime ?? undefined} />
-        <meta name="event:format" content={masterclassFormat ?? undefined} />
-
-        {/* Structured Data */}
-        <script
-          type="application/ld+json"
-          dangerouslySetInnerHTML={{
-            __html: JSON.stringify(structuredData)
-          }}
-        />
-
-        {/* Additional SEO Meta Tags */}
-        <meta name="theme-color" content="#172840" />
-        <meta name="msapplication-TileColor" content="#172840" />
-        <meta name="apple-mobile-web-app-capable" content="yes" />
-        <meta name="apple-mobile-web-app-status-bar-style" content="default" />
-        <meta name="apple-mobile-web-app-title" content="PAAN Masterclass" />
-
-        {/* Preconnect to external domains for performance */}
-        <link rel="preconnect" href="https://ik.imagekit.io" />
-        <link rel="preconnect" href="https://js.paystack.co" />
-      </Head>
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{ __html: JSON.stringify(structuredData) }}
+      />
       <PaystackScript />
       <Header navLinkColor="text-gray-950" />
       <div className="relative">
@@ -1153,21 +1063,4 @@ const MasterclassDetailPage = ({ masterclass }: Props) => {
   );
 };
 
-export const getStaticPaths: GetStaticPaths = async () => {
-  const slugs = await getMasterclassSlugs();
-  return { paths: slugs.map((slug) => ({ params: { slug } })), fallback: 'blocking' };
-};
-
-export const getStaticProps: GetStaticProps<Props, { slug: string }> = async ({ params }) => {
-  const { slug } = params!;
-  // Old links were /masterclasses/<number>: permanently redirect them to the slug URL.
-  if (/^\d+$/.test(slug)) {
-    const target = await getMasterclassSlugById(Number(slug));
-    return target ? { redirect: { destination: `/masterclasses/${target}`, permanent: true } } : { notFound: true, revalidate: 60 };
-  }
-  const masterclass = await getMasterclassBySlug(slug);
-  if (!masterclass) return { notFound: true, revalidate: 60 };
-  return { props: { masterclass }, revalidate: 3600 };
-};
-
-export default MasterclassDetailPage;
+export default MasterclassDetail;
