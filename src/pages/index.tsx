@@ -19,7 +19,7 @@ import AgenciesMarquee from "@/components/AgenciesMarquee";
 import VoicesFromNetwork from "@/components/VoicesFromNetwork";
 import AgencyLogosGrid from "@/components/AgencyLogosGrid";
 import AgencyLogosMarquee from "@/components/AgencyLogosMarquee";
-import { getAgencyLogos, type AgencyLogo } from "@/lib/agencyService";
+import { getAgencyLogos, type AgencyLogo } from "@/features/agencies/lib/agencyService";
 import ScrollToTop from "@/shared/components/ScrollToTop";
 import ConnectingDots from "@/components/ConnectingDots";
 import ProgramCard from "@/components/ProgramCard";

@@ -3,7 +3,7 @@
 import Image from 'next/image';
 import styles from './AgencyLogosMarquee.module.css';
 import { freeMemberLogos as agencyLogosRight, type MemberLogo } from '@/data/members';
-import type { AgencyLogo } from '@/lib/agencyService';
+import type { AgencyLogo } from '@/features/agencies/lib/agencyService';
 
 const AgencyLogosMarquee = ({ agencies = [] }: { agencies?: AgencyLogo[] }) => {
   // Certified agencies (managed in Sanity: Certified Agency documents, ordered by "Display order")
