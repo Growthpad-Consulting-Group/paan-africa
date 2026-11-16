@@ -1,15 +1,22 @@
-import { useRouter } from 'next/router';
+"use client";
+
 import { useEffect, useState } from 'react';
 import { Icon } from '@iconify/react';
 import Link from 'next/link';
 import Header from '@/shared/layouts/standard-header';
 import Footer from '@/shared/layouts/footer';
-import SEO from '@/components/SEO';
 
 const PaymentSuccessPage = () => {
-  const router = useRouter();
-  const { reference, type, amount, currency } = router.query;
-  const [paymentDetails, setPaymentDetails] = useState(null);
+  // Read after mount (like the old router.query): the page is statically rendered without them.
+  const [searchParams, setSearchParams] = useState<URLSearchParams | null>(null);
+  useEffect(() => {
+    setSearchParams(new URLSearchParams(window.location.search));
+  }, []);
+  const reference = searchParams?.get('reference') ?? undefined;
+  const type = searchParams?.get('type') ?? undefined;
+  const amount = searchParams?.get('amount') ?? undefined;
+  const currency = searchParams?.get('currency') ?? undefined;
+  const [paymentDetails, setPaymentDetails] = useState<any>(null);
 
   useEffect(() => {
     if (reference && type) {
@@ -115,10 +122,6 @@ const PaymentSuccessPage = () => {
 
   return (
     <>
-      <SEO
-        title="Payment Successful | PAAN Africa"
-        description="Your payment has been processed successfully. Thank you for your purchase."
-      />
       
       <Header />
       

@@ -1,7 +1,8 @@
+"use client";
+
 // pages/index.js
-import SEO from "@/components/SEO";
 import Header from "@/shared/layouts/standard-header";
-import CustomSlider from "../components/CustomSlider";
+import CustomSlider from "@/components/CustomSlider";
 import Image from "next/image";
 import Link from "next/link";
 import { Icon } from "@iconify/react";
@@ -12,7 +13,7 @@ import OfferingTab from "@/components/OfferingTab";
 import Footer from "@/shared/layouts/footer";
 import { useEffect, useRef, useState } from "react";
 import { useFixedHeader, handleScroll } from '@/shared/lib/scrollUtils';
-import { useAppTranslations } from '../hooks/useTranslations';
+import { useAppTranslations } from '@/hooks/useTranslations';
 import ContactSection from "@/components/ContactSection";
 import AgencyEnquiryModal from "@/components/AgencyEnquiryModal";
 import AgenciesMarquee from "@/components/AgenciesMarquee";
@@ -99,12 +100,6 @@ const HomePage = ({ agencyLogos = [] }: { agencyLogos?: AgencyLogo[] }) => {
 
   return (
     <>
-    <SEO
-      title="PAAN | Alliance of independent agencies in Africa"
-      description="A collaborative ecosystem bringing together agencies, freelancers, clients, and partners across Africa. We exist to transform a fragmented industry into a united creative force capable of shaping global markets."
-      keywords="Pan Africa, PAAN, creative agencies, top African tech agencies, African digital marketing network, join African agency network, creative agencies in Africa, leading African digital innovation, pan-African collaboration platform, agency network in Africa, African creatives community, tech partnerships Africa, Africa digital marketing agencies, pan-African tech innovation, African creative strategy partners, African digital agency network, pan-African business development, Africa’s creative agency network, digital marketing agencies in Africa, tech agency partnerships Africa"
-      canonicalUrl="https://paan.africa/"
-    />
     <div className="relative">
       <main className="px-3 pt-6 sm:px-0 sm:pt-0 relative">
         <ConnectingDots 
@@ -871,14 +866,5 @@ const HomePage = ({ agencyLogos = [] }: { agencyLogos?: AgencyLogo[] }) => {
     </>
   );
 };
-
-export async function getStaticProps() {
-  try {
-    return { props: { agencyLogos: await getAgencyLogos() }, revalidate: 3600 };
-  } catch (error) {
-    console.error('Error loading agency logos from Sanity:', error);
-    return { props: { agencyLogos: [] }, revalidate: 60 };
-  }
-}
 
 export default HomePage;

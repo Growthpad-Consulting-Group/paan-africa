@@ -1,15 +1,23 @@
-import { useRouter } from 'next/router';
+"use client";
+
+import { useRouter } from 'next/navigation';
 import { useEffect, useState } from 'react';
 import { Icon } from '@iconify/react';
 import Link from 'next/link';
 import Header from '@/shared/layouts/standard-header';
 import Footer from '@/shared/layouts/footer';
-import SEO from '@/components/SEO';
 
 const PaymentFailurePage = () => {
   const router = useRouter();
-  const { error, reference, type } = router.query;
-  const [paymentDetails, setPaymentDetails] = useState(null);
+  // Read after mount (like the old router.query): the page is statically rendered without them.
+  const [searchParams, setSearchParams] = useState<URLSearchParams | null>(null);
+  useEffect(() => {
+    setSearchParams(new URLSearchParams(window.location.search));
+  }, []);
+  const error = searchParams?.get('error') ?? undefined;
+  const reference = searchParams?.get('reference') ?? undefined;
+  const type = searchParams?.get('type') ?? undefined;
+  const [paymentDetails, setPaymentDetails] = useState<any>(null);
 
   useEffect(() => {
     if (reference && type) {
@@ -78,10 +86,6 @@ const PaymentFailurePage = () => {
 
   return (
     <>
-      <SEO
-        title="Payment Failed | Try Again | PAAN Africa"
-        description="Payment processing failed. Please try again or contact support for assistance."
-      />
       
       <Header />
       
