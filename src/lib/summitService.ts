@@ -106,3 +106,49 @@ export const getExhibitorBooths = (edition = SUMMIT_EDITION) =>
     `*[_type == "exhibitorBooth" && edition == $edition] | order(number asc){ "id": number, number, status, size, price, type }`,
     { edition }
   )
+
+// ── Edition info (dates + venue) ─────────────────────────────────────────────
+
+export type SummitEdition = {
+  year: number
+  startDate: string
+  endDate: string
+  displayDates: string
+  venueName: string
+  streetAddress: string
+  city: string
+  region: string
+  postalCode: string
+  country: string
+  latitude: string
+  longitude: string
+  inPersonLabel: string
+  streamingLabel: string
+}
+
+/** Used if the edition document is missing, so the pages never break. Mirrors the 2026 values. */
+export const DEFAULT_EDITION: SummitEdition = {
+  year: SUMMIT_EDITION,
+  startDate: '2026-10-28T09:00:00+03:00',
+  endDate: '2026-10-29T17:00:00+03:00',
+  displayDates: '28 - 29 October 2026',
+  venueName: 'TBC',
+  streetAddress: 'TBC',
+  city: 'Nairobi',
+  region: 'Nairobi County',
+  postalCode: '00100',
+  country: 'KE',
+  latitude: '-1.2921',
+  longitude: '36.8219',
+  inPersonLabel: '500+ In Person',
+  streamingLabel: '2,000+ Streaming',
+}
+
+export async function getSummitEdition(year = SUMMIT_EDITION): Promise<SummitEdition> {
+  const doc = await sanityFetch<Partial<SummitEdition> | null>(
+    `*[_type == "summitEdition" && year == $year][0]{ year, startDate, endDate, displayDates, venueName, streetAddress, city, region, postalCode, country, latitude, longitude, inPersonLabel, streamingLabel }`,
+    { year }
+  )
+  // fill any empty field from the defaults
+  return Object.fromEntries(Object.entries(DEFAULT_EDITION).map(([k, v]) => [k, (doc as Record<string, unknown> | null)?.[k] ?? v])) as SummitEdition
+}

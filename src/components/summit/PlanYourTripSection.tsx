@@ -1,7 +1,7 @@
 import { Icon } from "@iconify/react";
 import Accordion from "@/components/Accordion";
 
-const PlanYourTripSection = () => {
+export default function PlanYourTripSection() {
   return (
     <div className="bg-white relative py-12 sm:py-16 md:py-20" id="plan-your-trip">
       <section className="relative mx-auto max-w-6xl px-4 sm:px-6">
@@ -37,11 +37,11 @@ const PlanYourTripSection = () => {
                   <Icon icon="mdi:calendar" className="text-paan-red" width="16" height="16" />
                   <h4 className="font-semibold text-paan-dark-blue text-sm sm:text-base">Event Dates</h4>
                 </div>
-                <p className="text-paan-dark-blue text-sm sm:text-base">October 28-29, 2026</p>
+                <p className="text-paan-dark-blue text-sm sm:text-base">Oct 28-29, 2026</p>
               </div>
             </div>
           </div>
-
+    
           {/* Travel Support Card */}
           <div className="bg-gradient-to-br from-[#F3F9FB] to-[#DAECF4] rounded-xl p-4 sm:p-6 shadow-lg">
             <div className="flex items-center gap-2 sm:gap-3 mb-3 sm:mb-4">
@@ -104,6 +104,4 @@ const PlanYourTripSection = () => {
       </section>
     </div>
   );
-};
-
-export default PlanYourTripSection;
+}

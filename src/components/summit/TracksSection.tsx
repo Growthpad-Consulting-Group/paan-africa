@@ -1,7 +1,14 @@
 import Image from "next/image";
+import type { RefObject } from "react";
+import type { SummitTrack } from "@/lib/summitService";
 
-const TracksSection = ({ sectionRefs, handleScroll, isFixed, tracks = [] }) => {
-  const handleMouseEnter = (e) => {
+type Props = {
+  sectionRefs?: { program?: RefObject<HTMLDivElement | null> };
+  tracks?: SummitTrack[];
+};
+
+const TracksSection = ({ sectionRefs, tracks = [] }: Props) => {
+  const handleMouseEnter = (e: React.MouseEvent<HTMLElement>) => {
     const infoSection = e.currentTarget;
     infoSection.style.backgroundColor = 'transparent';
     infoSection.style.backgroundImage = 'url(https://ik.imagekit.io/nkmvdjnna/PAAN/summit/tracks-pattern.webp), linear-gradient(to bottom left, #172840, #F25849)';
@@ -10,20 +17,20 @@ const TracksSection = ({ sectionRefs, handleScroll, isFixed, tracks = [] }) => {
     infoSection.style.backgroundBlendMode = 'overlay';
     
     // Change text colors to white
-    const textElements = infoSection.querySelectorAll('h4, p, small');
-    textElements.forEach(el => {
+    const textElements = infoSection.querySelectorAll<HTMLElement>("h4, p, small");
+    textElements.forEach((el) => {
       el.style.color = '#ffffff';
     });
   };
 
-  const handleMouseLeave = (e) => {
+  const handleMouseLeave = (e: React.MouseEvent<HTMLElement>) => {
     const infoSection = e.currentTarget;
     infoSection.style.backgroundColor = '#DAECF3';
     infoSection.style.backgroundImage = 'none';
     
     // Restore text colors
-    const textElements = infoSection.querySelectorAll('h4, p, small');
-    textElements.forEach(el => {
+    const textElements = infoSection.querySelectorAll<HTMLElement>("h4, p, small");
+    textElements.forEach((el) => {
       el.style.color = '';
     });
   };

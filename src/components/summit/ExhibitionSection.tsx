@@ -1,4 +1,6 @@
-const ExhibitionSection = () => {
+
+
+export default function ExhibitionSection() {
   return (
     <div className="relative py-6 sm:py-8 md:py-12 lg:py-16 xl:py-20 overflow-hidden h-[320px] sm:h-[400px] md:h-[450px] lg:h-[500px] xl:h-[550px]" id="exhibition">
       {/* Parallax Background Image */}
@@ -14,16 +16,15 @@ const ExhibitionSection = () => {
       {/* Dark overlay for better text readability */}
       <div className="absolute inset-0 bg-paan-dark-blue/40 sm:bg-paan-dark-blue/30"></div>
       
+      {/* Paan-yellow gradient overlay from right to left */}
+      <div className="absolute inset-0 bg-gradient-to-l from-paan-yellow/30 to-transparent"></div>
+      
       <section className="relative mx-auto max-w-7xl px-3 sm:px-4 md:px-6 lg:px-8 h-full flex items-center">
         <div className="w-full">
           <div className="flex flex-col justify-center items-center text-center sm:text-left sm:items-start space-y-4 sm:space-y-6 md:space-y-8">
-            {/* Badge */}
-            <h2 className="text-xs sm:text-sm w-fit text-white border border-white/80 bg-transparent rounded-full px-3 sm:px-4 py-1.5 sm:py-2 backdrop-blur-sm">
-              Exhibition Opportunities
-            </h2>
             
             {/* Main Heading */}
-            <h3 className="text-lg sm:text-xl md:text-2xl lg:text-3xl text-white font-bold uppercase leading-tight max-w-3xl">
+            <h3 className="text-lg sm:text-2xl md:text-3xl lg:text-4xl text-white font-normal leading-tight max-w-3xl">
               Showcase your brand at Africa's Borderless Creative Economy Summit.
             </h3>
             
@@ -36,7 +37,7 @@ const ExhibitionSection = () => {
           {/* CTA Button */}
           <div className="flex justify-center sm:justify-start mt-6 sm:mt-8 md:mt-10">
             <button 
-              onClick={() => window.location.href = '/summit/exhibitors'} 
+              onClick={()=>window.location.href='/summit/exhibitors'} 
               className="bg-paan-red hover:bg-paan-red/90 text-white px-6 sm:px-8 md:px-10 py-3 sm:py-4 rounded-full transition-all duration-300 font-medium text-sm sm:text-base shadow-lg hover:shadow-xl flex items-center justify-center gap-2 w-full max-w-xs sm:max-w-sm md:w-auto min-h-[48px] active:scale-95"
             >
               <span>View Exhibition Options</span>
@@ -49,6 +50,4 @@ const ExhibitionSection = () => {
       </section>
     </div>
   );
-};
-
-export default ExhibitionSection;
+}

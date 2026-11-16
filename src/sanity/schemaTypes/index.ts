@@ -13,8 +13,9 @@ import summitTrack from './summitTrack'
 import awardGroup from './awardGroup'
 import summitExperience from './summitExperience'
 import exhibitorBooth from './exhibitorBooth'
+import summitEdition from './summitEdition'
 import masterclassSeries from './masterclassSeries'
 import { localizedString, localizedText } from './localized'
 
-// Next phases add: agency, event, jobPosting, masterclass, summitSpeaker, summitSession, summitTrack, awardGroup, summitExperience, exhibitorBooth, siteSettings, ...
-export const schemaTypes: SchemaTypeDefinition[] = [post, author, category, blockContent, agency, event, jobPosting, masterclass, summitSpeaker, summitSession, summitTrack, awardGroup, summitExperience, exhibitorBooth, masterclassSeries, localizedString, localizedText]
+// Next phases add: agency, event, jobPosting, masterclass, summitSpeaker, summitSession, summitTrack, awardGroup, summitExperience, exhibitorBooth, summitEdition, siteSettings, ...
+export const schemaTypes: SchemaTypeDefinition[] = [post, author, category, blockContent, agency, event, jobPosting, masterclass, summitSpeaker, summitSession, summitTrack, awardGroup, summitExperience, exhibitorBooth, summitEdition, masterclassSeries, localizedString, localizedText]
