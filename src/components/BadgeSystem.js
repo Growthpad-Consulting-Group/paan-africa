@@ -356,6 +356,7 @@ const BadgeGrid = ({ userBadges = [], allBadges = false }) => {
 };
 
 // Featured talent component
+/** @param {{ profiles?: any[] }} props */
 const FeaturedTalent = ({ profiles = [] }) => {
   return (
     <div className="space-y-6">
@@ -435,6 +436,7 @@ const FeaturedTalent = ({ profiles = [] }) => {
 };
 
 // Leaderboard component
+/** @param {{ profiles?: any[], category?: string }} props */
 const TalentLeaderboard = ({ profiles = [], category = 'rating' }) => {
   const categories = {
     rating: { label: 'Top Rated', icon: 'lucide:star', key: 'rating' },
