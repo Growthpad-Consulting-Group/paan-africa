@@ -1,4 +1,4 @@
-import { buildMetadata } from '@/lib/seo';
+import { buildMetadata } from '@/shared/lib/seo';
 import PurchaseTicketPage from '@/features/summit/components/PurchaseTicketPage';
 
 export const metadata = buildMetadata({

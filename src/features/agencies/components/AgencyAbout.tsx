@@ -1,4 +1,4 @@
-import type { Video, Translate, Localize, Agency } from "./types";
+import type { Video, Translate, Localize, Agency } from "@/features/agencies/components/types";
 import type { RefObject } from "react";
 
 

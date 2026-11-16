@@ -1,7 +1,7 @@
-import { readJson, reply } from '@/lib/server/http';
-import { errorMessage } from '@/utils/errors';
-import { createMailTransport } from '@/lib/server/mailer';
-import { notifyNewSpeakerApplicationSlack } from "@/utils/slackUtils";
+import { readJson, reply } from '@/shared/lib/server/http';
+import { errorMessage } from '@/shared/lib/errors';
+import { createMailTransport } from '@/shared/lib/server/mailer';
+import { notifyNewSpeakerApplicationSlack } from "@/shared/lib/slackUtils";
 
 export async function sendSpeakerApplication(request: Request): Promise<Response> {
   // eslint-disable-next-line @typescript-eslint/no-explicit-any

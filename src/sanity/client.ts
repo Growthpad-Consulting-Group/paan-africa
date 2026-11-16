@@ -1,5 +1,5 @@
 import { createClient, type QueryParams } from 'next-sanity'
-import { apiVersion, dataset, projectId } from './env'
+import { apiVersion, dataset, projectId } from '@/sanity/env'
 
 /** Read client. CDN in production; ISR + webhook revalidation keep content fresh. */
 export const client = createClient({

@@ -1,9 +1,9 @@
-import { readJson, reply } from '@/lib/server/http';
-import { errorMessage } from '@/utils/errors';
+import { readJson, reply } from '@/shared/lib/server/http';
+import { errorMessage } from '@/shared/lib/errors';
 import { createClient } from '@supabase/supabase-js';
 import nodemailer from 'nodemailer';
-import { generateTicketImage } from '@/lib/ticketGenerator';
-import { generatePDFTicket } from '@/lib/pdfTicketGenerator';
+import { generateTicketImage } from '@/features/tickets/lib/ticketGenerator';
+import { generatePDFTicket } from '@/features/tickets/lib/pdfTicketGenerator';
 
 // Initialize Supabase client
 const supabase = process.env.NEXT_PUBLIC_SUPABASE_URL && process.env.SUPABASE_SERVICE_KEY

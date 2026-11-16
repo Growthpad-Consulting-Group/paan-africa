@@ -1,4 +1,4 @@
-import type { TicketFormData, TicketOption, TimeLeft } from "./types";
+import type { TicketFormData, TicketOption, TimeLeft } from "@/features/summit/components/ticket-form/types";
 import { Icon } from "@iconify/react";
 
 type Props = {

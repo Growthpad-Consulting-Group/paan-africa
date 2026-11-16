@@ -1,4 +1,4 @@
-import type { SectionRefs, Translate, Localize, Agency } from "./types";
+import type { SectionRefs, Translate, Localize, Agency } from "@/features/agencies/components/types";
 import type { RefObject } from "react";
 import { motion } from "framer-motion";
 import Image from "next/image";

@@ -4,10 +4,10 @@ import { useRef, useState } from "react";
 import Header from "@/shared/layouts/summit-header";
 import SummitFooter from "@/shared/layouts/summit-footer";
 import ScrollToTop from "@/shared/components/ScrollToTop";
-import SummitAgenda from "@/components/SummitAgenda";
-import PartnerWithUsModal from "@/components/PartnerWithUsModal";
-import ExhibitionApplicationModal from "@/components/ExhibitionApplicationModal";
-import PaystackScript from "@/components/PaystackScript";
+import SummitAgenda from "@/features/summit/components/SummitAgenda";
+import PartnerWithUsModal from "@/features/summit/components/PartnerWithUsModal";
+import ExhibitionApplicationModal from "@/features/summit/components/ExhibitionApplicationModal";
+import PaystackScript from "@/shared/components/PaystackScript";
 import SummitCancelledBanner from "@/features/summit/components/SummitCancelledBanner";
 import CountdownBanner from "@/features/summit/components/CountdownBanner";
 import ObjectivesSection from "@/features/summit/components/ObjectivesSection";
@@ -26,9 +26,9 @@ import TicketsSection from "@/features/summit/components/TicketsSection";
 import PartnersSection from "@/features/summit/components/PartnersSection";
 import PlanYourTripSection from "@/features/summit/components/PlanYourTripSection";
 import { useFixedHeader, handleScroll } from "@/shared/lib/scrollUtils";
-import { useSectionObserver } from "@/hooks/useSectionObserver";
-import { useCountdown } from "@/hooks/useCountdown";
-import { generateEventSchema } from "@/utils/structuredData";
+import { useSectionObserver } from "@/shared/hooks/useSectionObserver";
+import { useCountdown } from "@/features/summit/hooks/useCountdown";
+import { generateEventSchema } from "@/features/summit/lib/structuredData";
 import {
   getSummitEdition, getSummitSessions, getSummitSpeakers, getSummitTracks, DEFAULT_EDITION,
   type SummitEdition, type SummitSession, type SummitSpeaker, type SummitTrack,

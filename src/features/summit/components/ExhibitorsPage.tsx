@@ -11,7 +11,7 @@ import ExhibitionPackagesSection from "@/features/summit/components/ExhibitionPa
 import WhyExhibitSection from "@/features/summit/components/WhyExhibitSection";
 import ExhibitCtaSection from "@/features/summit/components/ExhibitCtaSection";
 import PatternDivider from "@/features/summit/components/PatternDivider";
-import { useSectionObserver } from "@/hooks/useSectionObserver";
+import { useSectionObserver } from "@/shared/hooks/useSectionObserver";
 import { getExhibitorBooths, getSummitEdition, DEFAULT_EDITION, type ExhibitorBooth, type SummitEdition } from "@/features/summit/lib/summitService";
 
 type Props = { booths: ExhibitorBooth[]; edition: SummitEdition };

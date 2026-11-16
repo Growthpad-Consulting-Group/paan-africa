@@ -1,4 +1,4 @@
-import { buildMetadata } from '@/lib/seo';
+import { buildMetadata } from '@/shared/lib/seo';
 import PrivacyPolicyContent from '@/features/legal/components/PrivacyPolicyContent';
 
 export const metadata = buildMetadata({

@@ -1,4 +1,4 @@
-import type { Translate } from "./types";
+import type { Translate } from "@/features/agencies/components/types";
 import { handleScroll } from "@/shared/lib/scrollUtils";
 
 type Props = {

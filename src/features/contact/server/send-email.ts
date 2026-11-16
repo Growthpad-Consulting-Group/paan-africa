@@ -1,5 +1,5 @@
-import { readJson, reply } from '@/lib/server/http';
-import { errorMessage } from '@/utils/errors';
+import { readJson, reply } from '@/shared/lib/server/http';
+import { errorMessage } from '@/shared/lib/errors';
 // pages/api/send-email.js
 import nodemailer from "nodemailer";
 

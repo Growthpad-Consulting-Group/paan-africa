@@ -2,8 +2,8 @@ import { renderPortableText } from '@/shared/lib/portableText'
 import type { PortableTextBlock } from '@portabletext/types'
 import { sanityFetch } from '@/sanity/client'
 import { urlFor } from '@/sanity/image'
-import { calculateReadTime } from './readTime'
-import { sanitizeBlogHtml } from './sanitizeBlogHtml'
+import { calculateReadTime } from '@/features/blog/lib/readTime'
+import { sanitizeBlogHtml } from '@/features/blog/lib/sanitizeBlogHtml'
 
 const FALLBACK_IMAGE = '/assets/images/opengraph.png'
 

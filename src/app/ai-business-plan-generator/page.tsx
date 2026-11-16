@@ -1,4 +1,4 @@
-import { buildMetadata } from '@/lib/seo';
+import { buildMetadata } from '@/shared/lib/seo';
 import AiBusinessPlanGeneratorPage from '@/features/tools/components/AiBusinessPlanGeneratorPage';
 
 export const metadata = buildMetadata({

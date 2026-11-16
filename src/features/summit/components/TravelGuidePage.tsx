@@ -5,7 +5,7 @@ import SummitCancelledBanner from "@/features/summit/components/SummitCancelledB
 import TravelGuideHeader from "@/shared/layouts/travel-guide-header";
 import SummitFooter from "@/shared/layouts/summit-footer";
 import ScrollToTop from "@/shared/components/ScrollToTop";
-import TicketPurchaseButton from "@/components/TicketPurchaseButton";
+import TicketPurchaseButton from "@/features/tickets/components/TicketPurchaseButton";
 import TravelGuideHero from "@/features/summit/components/TravelGuideHero";
 import SummitExperiencesSection from "@/features/summit/components/SummitExperiencesSection";
 import VisaRequirementsSection from "@/features/summit/components/VisaRequirementsSection";
@@ -16,8 +16,8 @@ import PackSmartSection from "@/features/summit/components/PackSmartSection";
 import ExploreNairobiSection from "@/features/summit/components/ExploreNairobiSection";
 import NeedAssistanceSection from "@/features/summit/components/NeedAssistanceSection";
 import PatternDivider from "@/features/summit/components/PatternDivider";
-import { useSectionObserver } from "@/hooks/useSectionObserver";
-import { generateEventSchema } from "@/utils/structuredData";
+import { useSectionObserver } from "@/shared/hooks/useSectionObserver";
+import { generateEventSchema } from "@/features/summit/lib/structuredData";
 import { getSummitEdition, getSummitExperiences, DEFAULT_EDITION, type SummitEdition, type SummitExperience } from "@/features/summit/lib/summitService";
 
 type Props = { summitExperiences: SummitExperience[]; edition: SummitEdition };

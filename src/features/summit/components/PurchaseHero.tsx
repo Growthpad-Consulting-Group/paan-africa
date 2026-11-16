@@ -2,7 +2,7 @@ import { motion } from "framer-motion";
 import { SUMMIT_CANCELLED } from "@/features/summit/data/status";
 import { Icon } from "@iconify/react";
 import { useEffect, useRef } from "react";
-import { useCountdown } from "@/hooks/useCountdown";
+import { useCountdown } from "@/features/summit/hooks/useCountdown";
 
 // Early-bird deadline: 20 October 2026, 11:59 PM EAT
 const EARLY_BIRD_ENDS = "2026-10-20T23:59:59+03:00";

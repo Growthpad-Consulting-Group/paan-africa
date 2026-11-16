@@ -3,7 +3,7 @@
 import { useState, useEffect } from 'react';
 import { Icon } from '@iconify/react';
 import EventCard from '@/features/events/components/EventCard';
-import { useAppTranslations } from '@/hooks/useTranslations';
+import { useAppTranslations } from '@/shared/hooks/useTranslations';
 import type { EventItem } from '@/features/events/lib/eventService';
 
 type Tab = 'all' | 'upcoming' | 'past';

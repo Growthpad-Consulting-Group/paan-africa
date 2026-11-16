@@ -1,10 +1,10 @@
 // footer.js
 "use client";
 
-import { menuItems } from "@/data/menuData";
+import { menuItems } from "@/shared/data/menuData";
 import { useState, useEffect } from "react";
 import Image from "next/image";
-import { contactEmail } from '@/data/site';
+import { contactEmail } from '@/shared/data/site';
 
 const Footer = () => {
   const currentYear = new Date().getFullYear();

@@ -2,7 +2,7 @@
 
 import { useCallback, useEffect, useMemo, useRef, useState } from "react";
 import { PDFDocument, StandardFonts, degrees, rgb } from "pdf-lib";
-import { errorMessage } from '@/utils/errors';
+import { errorMessage } from '@/shared/lib/errors';
 import { Icon } from "@iconify/react";
 import toast from "react-hot-toast";
 import Header from "@/shared/layouts/standard-header";

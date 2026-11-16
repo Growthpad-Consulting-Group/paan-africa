@@ -5,14 +5,14 @@ import Image from "next/image";
 import Footer from "@/shared/layouts/footer";
 import { useEffect, useRef, useState } from "react";
 import { useFixedHeader } from '@/shared/lib/scrollUtils';
-import FreelanceBenefits from "@/components/FreelanceBenefits";
-import ReadyToApplySection from "@/components/ReadyToApplySection";
-import Marquee from "@/components/Marquee";
-import ContactSection from "@/components/ContactSection";
-import FreelancerHero from "@/components/FreelancerHero";
-import AgencyLogosGrid from "@/components/AgencyLogosGrid";
+import FreelanceBenefits from "@/features/freelancers/components/FreelanceBenefits";
+import ReadyToApplySection from "@/features/freelancers/components/ReadyToApplySection";
+import Marquee from "@/features/freelancers/components/Marquee";
+import ContactSection from "@/shared/components/ContactSection";
+import FreelancerHero from "@/features/freelancers/components/FreelancerHero";
+import AgencyLogosGrid from "@/shared/components/AgencyLogosGrid";
 import ScrollToTop from "@/shared/components/ScrollToTop";
-import { useAppTranslations } from '@/hooks/useTranslations';
+import { useAppTranslations } from '@/shared/hooks/useTranslations';
 
 const FreelancersPage = () => {
   const { t } = useAppTranslations();

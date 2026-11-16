@@ -234,6 +234,8 @@ src/app/
 ---
 
 ## 3b. Feature-based folder structure (final step, after the App Router migration)
+
+> **Status 2026-11-16: ✅ done.** `src/components`, `lib`, `hooks`, `utils`, `contexts` and `data` are gone. Every file moved to `features/<f>/{components,lib,hooks,data,server}` when only one feature imports it, otherwise to `shared/{components,lib,hooks,contexts,data}` (server helpers in `shared/lib/server`). Done with a script that moves files by importer and rewrites every import to an `@/` alias; only CSS-module class-name hashes changed in the rendered pages (they include the file path). Remaining top level: `app`, `features`, `shared`, `sanity`, `messages`, `styles`, `types`, `fonts`.
 Same convention as `growthpad-website`: `src/app` holds thin route files only (fetch + compose), all UI and logic lives in `src/features/<feature>/`, anything used by 2+ features lives in `src/shared/`.
 
 Do this **after** Sections 1–3 are done (not during), so each move is a pure rename/refactor with no behaviour change. Move one feature per PR, run `tsc` + `next build` after each, and keep `@/*` aliases so imports are the only diff.

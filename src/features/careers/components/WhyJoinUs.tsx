@@ -2,8 +2,8 @@
 
 import { Icon } from "@iconify/react";
 import { motion } from "framer-motion";
-import { useAppTranslations } from "@/hooks/useTranslations";
-import type { SectionRefs } from "./types";
+import { useAppTranslations } from "@/shared/hooks/useTranslations";
+import type { SectionRefs } from "@/features/careers/components/types";
 
 export default function WhyJoinUs({ sectionRefs }: { sectionRefs: SectionRefs }) {
   const { t } = useAppTranslations();

@@ -2,7 +2,7 @@
 
 import { useState } from "react";
 import toast from "react-hot-toast";
-import { useRecaptcha } from "@/hooks/useRecaptcha";
+import { useRecaptcha } from "@/shared/hooks/useRecaptcha";
 import type { Agency, Localized } from "@/features/agencies/lib/agencyService";
 import ReCAPTCHA from "react-google-recaptcha";
 

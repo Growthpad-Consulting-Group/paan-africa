@@ -8,7 +8,7 @@ import { Icon } from "@iconify/react";
 import TravelGuideHeader from "@/shared/layouts/travel-guide-header";
 import SummitFooter from "@/shared/layouts/summit-footer";
 import ScrollToTop from "@/shared/components/ScrollToTop";
-import PaystackScript from "@/components/PaystackScript";
+import PaystackScript from "@/shared/components/PaystackScript";
 import { motion } from "framer-motion";
 import type { SummitExperience } from "@/features/summit/lib/summitService";
 import toast, { Toaster } from "react-hot-toast";

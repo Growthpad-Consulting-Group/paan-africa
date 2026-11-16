@@ -1,4 +1,4 @@
-import { buildMetadata } from '@/lib/seo';
+import { buildMetadata } from '@/shared/lib/seo';
 import {
   getSummitEdition, getSummitSessions, getSummitSpeakers, getSummitTracks, DEFAULT_EDITION,
   type SummitEdition, type SummitSession, type SummitSpeaker, type SummitTrack,

@@ -1,6 +1,6 @@
-import type { TicketFormData } from "./types";
+import type { TicketFormData } from "@/features/summit/components/ticket-form/types";
 import type { FieldChange } from "@/types/forms";
-import { countries } from "@/data/countries";
+import { countries } from "@/shared/data/countries";
 
 type Props = {
   formData: TicketFormData;

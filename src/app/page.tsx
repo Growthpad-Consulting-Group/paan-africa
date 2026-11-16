@@ -1,4 +1,4 @@
-import { buildMetadata } from '@/lib/seo';
+import { buildMetadata } from '@/shared/lib/seo';
 import { getAgencyLogos, type AgencyLogo } from '@/features/agencies/lib/agencyService';
 import HomePage from '@/features/home/components/HomePage';
 

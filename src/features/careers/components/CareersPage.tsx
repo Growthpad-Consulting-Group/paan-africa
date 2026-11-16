@@ -4,7 +4,7 @@ import { useRef, useState } from "react";
 import Header from "@/shared/layouts/standard-header";
 import Footer from "@/shared/layouts/footer";
 import ScrollToTop from "@/shared/components/ScrollToTop";
-import { useSectionObserver } from "@/hooks/useSectionObserver";
+import { useSectionObserver } from "@/shared/hooks/useSectionObserver";
 import type { JobPosting } from "@/features/careers/lib/careerService";
 import CareerApplicationModal from "@/features/careers/components/CareerApplicationModal";
 import Hero from "@/features/careers/components/Hero";

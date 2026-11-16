@@ -1,7 +1,7 @@
-import { reply } from '@/lib/server/http';
-import { errorMessage } from '@/utils/errors';
-import { supabaseAdmin } from '@/lib/server/supabaseAdmin';
-import { parseMultipart } from '@/lib/server/multipart';
+import { reply } from '@/shared/lib/server/http';
+import { errorMessage } from '@/shared/lib/errors';
+import { supabaseAdmin } from '@/shared/lib/server/supabaseAdmin';
+import { parseMultipart } from '@/shared/lib/server/multipart';
 import { v4 as uuidv4 } from 'uuid';
 import fs from 'fs';
 import path from 'path';

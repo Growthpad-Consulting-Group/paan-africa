@@ -1,4 +1,4 @@
-import { buildMetadata } from '@/lib/seo';
+import { buildMetadata } from '@/shared/lib/seo';
 import ExpressionOfInterestPage from '@/features/membership/components/ExpressionOfInterestPage';
 
 export const metadata = buildMetadata({

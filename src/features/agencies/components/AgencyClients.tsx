@@ -1,4 +1,4 @@
-import type { Agency } from "./types";
+import type { Agency } from "@/features/agencies/components/types";
 import Image from "next/image";
 
 type Props = {

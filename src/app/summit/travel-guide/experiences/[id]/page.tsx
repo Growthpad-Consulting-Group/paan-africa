@@ -1,7 +1,7 @@
 import { cache } from 'react';
 import { notFound } from 'next/navigation';
 import type { Metadata } from 'next';
-import { buildMetadata } from '@/lib/seo';
+import { buildMetadata } from '@/shared/lib/seo';
 import { getSummitExperience, getSummitExperiences } from '@/features/summit/lib/summitService';
 import ExperienceBookingPage from '@/features/summit/components/ExperienceBookingPage';
 

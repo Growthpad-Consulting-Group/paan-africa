@@ -1,4 +1,4 @@
-import { translate as t } from '@/hooks/useTranslations';
+import { translate as t } from '@/shared/hooks/useTranslations';
 
 export default function EventsCta() {
   return (

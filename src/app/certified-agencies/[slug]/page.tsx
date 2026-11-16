@@ -1,7 +1,7 @@
 import { cache } from 'react'
 import { notFound } from 'next/navigation'
 import type { Metadata } from 'next'
-import { buildMetadata } from '@/lib/seo'
+import { buildMetadata } from '@/shared/lib/seo'
 import { getAgencyBySlug, getAgencySlugs, localize } from '@/features/agencies/lib/agencyService'
 import AgencyProfile from '@/features/agencies/components/AgencyProfile'
 

@@ -5,7 +5,7 @@ import Link from "next/link";
 import { useState, useEffect } from "react";
 import { Icon } from "@iconify/react";
 import { useFixedHeader } from "@/shared/lib/scrollUtils";
-import LanguageSwitch from "@/components/LanguageSwitch";
+import LanguageSwitch from "@/shared/components/LanguageSwitch";
 
 const SpeakerApplicationHeader = ({ navLinkColor }) => {
   const [isMenuOpen, setIsMenuOpen] = useState(false);

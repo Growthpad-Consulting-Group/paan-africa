@@ -1,6 +1,6 @@
-import { reply } from '@/lib/server/http';
+import { reply } from '@/shared/lib/server/http';
 import nodemailer from "nodemailer";
-import { parseMultipart, type UploadedFile } from "@/lib/server/multipart";
+import { parseMultipart, type UploadedFile } from "@/shared/lib/server/multipart";
 import fs from "fs";
 
 export async function sendCareerApplication(request: Request): Promise<Response> {

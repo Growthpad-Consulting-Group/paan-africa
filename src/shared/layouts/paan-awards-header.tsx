@@ -4,7 +4,7 @@ import Image from "next/image";
 import Link from "next/link";
 import { useState, useEffect } from "react";
 import { useFixedHeader, handleScroll } from "@/shared/lib/scrollUtils";
-import LanguageSwitch from "@/components/LanguageSwitch";
+import LanguageSwitch from "@/shared/components/LanguageSwitch";
 
 type Props = { navLinkColor?: string; onApplyNowClick?: () => void; onJoinSummitClick?: () => void };
 

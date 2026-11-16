@@ -1,9 +1,9 @@
 "use client";
 
 import Image from "next/image";
-import { useCountUp } from "@/hooks/useCountUp";
-import { useAppTranslations } from "@/hooks/useTranslations";
-import type { SectionRefs } from "./types";
+import { useCountUp } from "@/features/careers/hooks/useCountUp";
+import { useAppTranslations } from "@/shared/hooks/useTranslations";
+import type { SectionRefs } from "@/features/careers/components/types";
 
 export default function Hero({ sectionRefs }: { sectionRefs: SectionRefs }) {
   const { t } = useAppTranslations();

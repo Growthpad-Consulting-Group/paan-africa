@@ -1,5 +1,5 @@
-import { buildMetadata } from '@/lib/seo';
-import { translate as t } from '@/hooks/useTranslations';
+import { buildMetadata } from '@/shared/lib/seo';
+import { translate as t } from '@/shared/hooks/useTranslations';
 import MaProgramPage from '@/features/ma-program/components/MaProgramPage';
 
 export const metadata = buildMetadata({

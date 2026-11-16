@@ -1,4 +1,4 @@
-import type { TicketFormData, TicketOption } from "./types";
+import type { TicketFormData, TicketOption } from "@/features/summit/components/ticket-form/types";
 
 
 type Props = {

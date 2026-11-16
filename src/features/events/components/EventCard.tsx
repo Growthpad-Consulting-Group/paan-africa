@@ -4,7 +4,7 @@ import Image from 'next/image';
 import { Icon } from '@iconify/react';
 import Link from 'next/link';
 import { useState } from 'react';
-import TicketPurchaseButton from '@/components/TicketPurchaseButton';
+import TicketPurchaseButton from '@/features/tickets/components/TicketPurchaseButton';
 import type { EventItem } from '@/features/events/lib/eventService';
 
 const EventCard = ({ event, isPast = false }: { event: EventItem; isPast?: boolean }) => {

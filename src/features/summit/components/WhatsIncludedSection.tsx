@@ -1,6 +1,6 @@
 import { useEffect, useRef, useState } from "react";
 import { motion } from "framer-motion";
-import { scaleIn, staggerContainer } from "./motion";
+import { scaleIn, staggerContainer } from "@/features/summit/components/motion";
 
 const INCLUDED = [
 {

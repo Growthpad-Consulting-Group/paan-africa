@@ -1,6 +1,6 @@
-import type { AwardFormData } from "./types";
+import type { AwardFormData } from "@/features/awards/components/application/types";
 import type { FieldChange } from "@/types/forms";
-import { countries } from "@/data/countries";
+import { countries } from "@/shared/data/countries";
 
 type Props = {
   formData: AwardFormData;

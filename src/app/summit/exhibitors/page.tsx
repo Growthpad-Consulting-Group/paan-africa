@@ -1,4 +1,4 @@
-import { buildMetadata } from '@/lib/seo';
+import { buildMetadata } from '@/shared/lib/seo';
 import { getExhibitorBooths, getSummitEdition, DEFAULT_EDITION, type ExhibitorBooth, type SummitEdition } from '@/features/summit/lib/summitService';
 import ExhibitorsPage from '@/features/summit/components/ExhibitorsPage';
 

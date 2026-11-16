@@ -1,4 +1,4 @@
-import type { Social, Translate, Agency } from "./types";
+import type { Social, Translate, Agency } from "@/features/agencies/components/types";
 import { Icon } from "@iconify/react";
 
 type Props = {

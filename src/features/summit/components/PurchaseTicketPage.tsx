@@ -16,7 +16,7 @@ import TicketsStep from "@/features/summit/components/TicketsStep";
 import AttendeesStep from "@/features/summit/components/AttendeesStep";
 import PaymentStep from "@/features/summit/components/PaymentStep";
 import StepBar from "@/features/summit/components/StepBar";
-import { useTicketCheckout } from "@/hooks/useTicketCheckout";
+import { useTicketCheckout } from "@/features/tickets/hooks/useTicketCheckout";
 
 const PurchaseTicketPage = () => {
   const {

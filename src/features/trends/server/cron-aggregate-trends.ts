@@ -1,6 +1,6 @@
-import { errorMessage } from '@/utils/errors'
-import { aggregateAllTrends } from '@/lib/trends-api'
-import { reply } from '@/lib/server/http'
+import { errorMessage } from '@/shared/lib/errors'
+import { aggregateAllTrends } from '@/features/trends/lib/trends-api'
+import { reply } from '@/shared/lib/server/http'
 
 /** POST /api/cron/aggregate-trends: scheduled trend aggregation, protected by CRON_SECRET_TOKEN. */
 export async function aggregateTrends(request: Request): Promise<Response> {

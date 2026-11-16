@@ -9,9 +9,9 @@ import { motion } from 'framer-motion';
 import Header from '@/shared/layouts/speaker-application-header';
 import Footer from '@/shared/layouts/footer';
 import Image from 'next/image';
-import { countries } from '@/data/countries';
+import { countries } from '@/shared/data/countries';
 import type { FieldChange } from "@/types/forms";
-import { useRecaptcha } from "@/hooks/useRecaptcha";
+import { useRecaptcha } from "@/shared/hooks/useRecaptcha";
 
 // Animation variants - defined outside component for global access
 const fadeInUp = {

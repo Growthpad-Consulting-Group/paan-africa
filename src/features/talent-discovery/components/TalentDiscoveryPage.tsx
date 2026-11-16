@@ -9,12 +9,12 @@ import toast from 'react-hot-toast';
 // Components
 import Header from '@/shared/layouts/header';
 import Footer from '@/shared/layouts/footer';
-import { FeaturedTalent, TalentLeaderboard } from '@/components/BadgeSystem';
+import { FeaturedTalent, TalentLeaderboard } from '@/features/talent-discovery/components/BadgeSystem';
 
-import MapStyles from '@/components/MapStyles';
+import MapStyles from '@/features/talent-discovery/components/MapStyles';
 
 // Dynamically import Mapbox map to avoid SSR issues
-const MapboxMap = dynamic(() => import('@/components/MapboxMap'), {
+const MapboxMap = dynamic(() => import('@/features/talent-discovery/components/MapboxMap'), {
   ssr: false,
   loading: () => (
     <div className="flex items-center justify-center h-96 bg-gray-50 rounded-lg">

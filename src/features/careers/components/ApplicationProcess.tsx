@@ -1,8 +1,8 @@
 "use client";
 
 import { motion } from "framer-motion";
-import { useAppTranslations } from "@/hooks/useTranslations";
-import type { SectionRefs } from "./types";
+import { useAppTranslations } from "@/shared/hooks/useTranslations";
+import type { SectionRefs } from "@/features/careers/components/types";
 
 export default function ApplicationProcess({ sectionRefs, openModal }: { sectionRefs: SectionRefs; openModal: (slug?: unknown) => void }) {
   const { t } = useAppTranslations();

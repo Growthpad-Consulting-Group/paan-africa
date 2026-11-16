@@ -1,5 +1,5 @@
-import { readJson, reply } from '@/lib/server/http';
-import { createMailTransport } from '@/lib/server/mailer';
+import { readJson, reply } from '@/shared/lib/server/http';
+import { createMailTransport } from '@/shared/lib/server/mailer';
 
 export async function sendMaEoi(request: Request): Promise<Response> {
   // eslint-disable-next-line @typescript-eslint/no-explicit-any

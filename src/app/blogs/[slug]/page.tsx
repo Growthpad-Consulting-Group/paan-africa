@@ -1,7 +1,7 @@
 import { cache } from 'react';
 import { notFound } from 'next/navigation';
 import type { Metadata } from 'next';
-import { buildMetadata } from '@/lib/seo';
+import { buildMetadata } from '@/shared/lib/seo';
 import { getAllSlugs, getPostBySlug, getRelatedPosts } from '@/features/blog/lib/blogService';
 import { formatBlogSeoTitle } from '@/features/blog/lib/formatSeoTitle';
 import BlogPostView from '@/features/blog/components/BlogPostView';

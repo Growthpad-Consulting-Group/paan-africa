@@ -10,9 +10,9 @@ import ReCAPTCHA from 'react-google-recaptcha';
 import { motion } from 'framer-motion';
 import SummitFooter from "@/shared/layouts/summit-footer";
 import ScrollToTop from "@/shared/components/ScrollToTop";
-import { countries } from '@/data/countries';
+import { countries } from '@/shared/data/countries';
 import type { FieldChange } from "@/types/forms";
-import { useRecaptcha } from "@/hooks/useRecaptcha";
+import { useRecaptcha } from "@/shared/hooks/useRecaptcha";
 
 const ExhibitionApplicationPage = () => {
   const router = useRouter();

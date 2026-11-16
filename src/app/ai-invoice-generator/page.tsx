@@ -1,4 +1,4 @@
-import { buildMetadata } from '@/lib/seo';
+import { buildMetadata } from '@/shared/lib/seo';
 import AiInvoiceGeneratorPage from '@/features/tools/components/AiInvoiceGeneratorPage';
 
 export const metadata = buildMetadata({

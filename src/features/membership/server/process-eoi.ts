@@ -1,5 +1,5 @@
-import { readJson, reply } from '@/lib/server/http';
-import { errorMessage } from '@/utils/errors';
+import { readJson, reply } from '@/shared/lib/server/http';
+import { errorMessage } from '@/shared/lib/errors';
 import { createClient } from '@supabase/supabase-js';
 import nodemailer from 'nodemailer';
 
@@ -71,7 +71,7 @@ export async function processEoi(request: Request): Promise<Response> {
       const uploadStart = Date.now();
       console.log('Starting upload for file:', fileToProcess.originalFilename, 'size:', fileToProcess.size, 'bytes');
       // Upload this file to Google Drive
-      const uploadResult = await require('@/utils/googleDrive').uploadFileToDrive(
+      const uploadResult = await require('@/features/membership/lib/googleDrive').uploadFileToDrive(
         submission.name,
         submission.agency_name,
         fileToProcess.base64,

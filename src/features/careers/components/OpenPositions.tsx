@@ -3,10 +3,10 @@
 import { Icon } from "@iconify/react";
 import { motion } from "framer-motion";
 import { PortableText } from "@portabletext/react";
-import { useAppTranslations } from "@/hooks/useTranslations";
-import type { SectionRefs } from "./types";
+import { useAppTranslations } from "@/shared/hooks/useTranslations";
+import type { SectionRefs } from "@/features/careers/components/types";
 import type { JobPosting } from "@/features/careers/lib/careerService";
-import { roleDescriptionComponents } from "./roleDescription";
+import { roleDescriptionComponents } from "@/features/careers/components/roleDescription";
 
 export default function OpenPositions({ sectionRefs, expandedJob, setExpandedJob, openModal, positions }: { sectionRefs: SectionRefs; expandedJob: number | null; setExpandedJob: (index: number | null) => void; openModal: (slug?: unknown) => void; positions: JobPosting[] }) {
   const { t } = useAppTranslations();

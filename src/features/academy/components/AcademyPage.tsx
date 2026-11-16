@@ -5,14 +5,14 @@ import Image from "next/image";
 import Footer from "@/shared/layouts/paan-academy-footer";
 import { useEffect, useRef, useState } from "react";
 import { useFixedHeader } from '@/shared/lib/scrollUtils';
-import PAAacademyMarquee from "@/components/PAAacademyMarquee";
+import PAAacademyMarquee from "@/features/academy/components/PAAacademyMarquee";
 import ScrollToTop from "@/shared/components/ScrollToTop";
-import ConnectingDots from "@/components/ConnectingDots";
-import AcademyEnquiryModal from "@/components/AcademyEnquiryModal";
-import { academyBenefits, academySkills, academyTrainingFormats, freelancerPerks, agencyPerks } from '@/data/academy';
-import { bookingLinks } from '@/data/site';
-import { useSectionObserver } from '@/hooks/useSectionObserver';
-import { useConnectingDots } from '@/hooks/useConnectingDots';
+import ConnectingDots from "@/shared/components/ConnectingDots";
+import AcademyEnquiryModal from "@/features/academy/components/AcademyEnquiryModal";
+import { academyBenefits, academySkills, academyTrainingFormats, freelancerPerks, agencyPerks } from '@/features/academy/data/academy';
+import { bookingLinks } from '@/shared/data/site';
+import { useSectionObserver } from '@/shared/hooks/useSectionObserver';
+import { useConnectingDots } from '@/shared/hooks/useConnectingDots';
 
 
 const AcademyPage = () => {

@@ -1,4 +1,4 @@
-import { buildMetadata } from '@/lib/seo';
+import { buildMetadata } from '@/shared/lib/seo';
 import { getAllPosts } from '@/features/blog/lib/blogService';
 import BlogsBrowser from '@/features/blog/components/BlogsBrowser';
 

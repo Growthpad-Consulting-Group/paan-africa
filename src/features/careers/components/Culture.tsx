@@ -1,7 +1,7 @@
 "use client";
 
 import { motion } from "framer-motion";
-import type { SectionRefs } from "./types";
+import type { SectionRefs } from "@/features/careers/components/types";
 
 export default function Culture({ sectionRefs }: { sectionRefs: SectionRefs }) {
   const values = [

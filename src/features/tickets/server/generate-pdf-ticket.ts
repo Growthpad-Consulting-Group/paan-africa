@@ -1,6 +1,6 @@
-import { errorMessage } from '@/utils/errors'
-import { generatePDFTicket } from '@/lib/pdfTicketGenerator'
-import { readJson, reply } from '@/lib/server/http'
+import { errorMessage } from '@/shared/lib/errors'
+import { generatePDFTicket } from '@/features/tickets/lib/pdfTicketGenerator'
+import { readJson, reply } from '@/shared/lib/server/http'
 
 /** POST /api/generate-pdf-ticket: renders a ticket PDF from the posted ticket data. */
 export async function generatePdfTicket(request: Request): Promise<Response> {

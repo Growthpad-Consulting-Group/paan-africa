@@ -1,9 +1,9 @@
 import { motion } from "framer-motion";
 import dynamic from 'next/dynamic';
-import { convertUSDToKES, formatCurrency } from '@/utils/currencyConverter';
-import FormInput from '@/components/common/FormInput';
+import { convertUSDToKES, formatCurrency } from '@/features/tickets/lib/currencyConverter';
+import FormInput from '@/features/summit/components/FormInput';
 
-const CountrySelect = dynamic(() => import('@/components/common/CountrySelect'), { 
+const CountrySelect = dynamic(() => import('@/features/summit/components/CountrySelect'), { 
   ssr: false,
   loading: () => (
     <div className="animate-pulse">

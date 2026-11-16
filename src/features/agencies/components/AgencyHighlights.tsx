@@ -1,4 +1,4 @@
-import type { Tier, Translate, Agency } from "./types";
+import type { Tier, Translate, Agency } from "@/features/agencies/components/types";
 import Image from "next/image";
 import { Icon } from "@iconify/react";
 

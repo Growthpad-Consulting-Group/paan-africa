@@ -1,4 +1,4 @@
-import type { AwardFormData, AwardPricing } from "./types";
+import type { AwardFormData, AwardPricing } from "@/features/awards/components/application/types";
 
 
 type Props = {

@@ -4,15 +4,15 @@ import Header from "@/shared/layouts/standard-header";
 import Footer from "@/shared/layouts/footer";
 import { useEffect, useRef, useState } from "react";
 import { useFixedHeader } from '@/shared/lib/scrollUtils';
-import PartnerBenefits from "@/components/PartnersBenefits";
-import Steps from "@/components/steps";
+import PartnerBenefits from "@/features/partners/components/PartnersBenefits";
+import Steps from "@/features/partners/components/steps";
 import Link from "next/link";
-import AgencyLogosGrid from "@/components/AgencyLogosGrid";
+import AgencyLogosGrid from "@/shared/components/AgencyLogosGrid";
 import ScrollToTop from "@/shared/components/ScrollToTop";
-import AgencyEnquiryModal from "@/components/AgencyEnquiryModal";
+import AgencyEnquiryModal from "@/shared/components/AgencyEnquiryModal";
 import Image from "next/image";
-import StatsSection from "@/components/StatsSection";
-import { useAppTranslations } from '@/hooks/useTranslations';
+import StatsSection from "@/features/partners/components/StatsSection";
+import { useAppTranslations } from '@/shared/hooks/useTranslations';
 
 const CountUp = ({ end = 200, duration = 3000, start = false }) => {
   const [count, setCount] = useState(0);

@@ -1,4 +1,4 @@
-import { buildMetadata } from '@/lib/seo';
+import { buildMetadata } from '@/shared/lib/seo';
 import { getMasterclasses, getFeaturedSeries } from '@/features/masterclasses/lib/masterclassService';
 import MasterclassesBrowser from '@/features/masterclasses/components/MasterclassesBrowser';
 

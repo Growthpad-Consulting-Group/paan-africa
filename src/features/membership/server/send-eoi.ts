@@ -1,10 +1,10 @@
-import { reply } from '@/lib/server/http';
-import { errorMessage } from '@/utils/errors';
+import { reply } from '@/shared/lib/server/http';
+import { errorMessage } from '@/shared/lib/errors';
 import nodemailer from "nodemailer";
 import fs from 'fs';
 import os from 'os';
-import { parseMultipart } from '@/lib/server/multipart';
-import { uploadFileToDrive } from "@/utils/googleDrive";
+import { parseMultipart } from '@/shared/lib/server/multipart';
+import { uploadFileToDrive } from "@/features/membership/lib/googleDrive";
 import { createClient } from '@supabase/supabase-js';
 
 export async function sendEoi(request: Request): Promise<Response> {

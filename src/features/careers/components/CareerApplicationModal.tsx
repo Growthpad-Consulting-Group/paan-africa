@@ -4,9 +4,9 @@ import { useState, useRef, useEffect } from "react";
 import { Icon } from "@iconify/react";
 import ReCAPTCHA from "react-google-recaptcha";
 import Modal, { ModalHeader } from "@/shared/components/Modal";
-import { errorMessage } from '@/utils/errors';
+import { errorMessage } from '@/shared/lib/errors';
 import type { JobPosting } from '@/features/careers/lib/careerService';
-import { useRecaptcha } from '@/hooks/useRecaptcha';
+import { useRecaptcha } from '@/shared/hooks/useRecaptcha';
 
 type Props = {
   isOpen: boolean;

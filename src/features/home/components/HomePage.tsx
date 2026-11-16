@@ -2,31 +2,31 @@
 
 // pages/index.js
 import Header from "@/shared/layouts/standard-header";
-import CustomSlider from "@/components/CustomSlider";
+import CustomSlider from "@/features/home/components/CustomSlider";
 import Image from "next/image";
 import Link from "next/link";
 import { Icon } from "@iconify/react";
-import Tier1 from "@/components/Tier1";
-import Tier2 from "@/components/Tier2";
-import Tier3 from "@/components/Tier3";
-import OfferingTab from "@/components/OfferingTab";
+import Tier1 from "@/features/home/components/Tier1";
+import Tier2 from "@/features/home/components/Tier2";
+import Tier3 from "@/features/home/components/Tier3";
+import OfferingTab from "@/features/home/components/OfferingTab";
 import Footer from "@/shared/layouts/footer";
 import { useEffect, useRef, useState } from "react";
 import { useFixedHeader, handleScroll } from '@/shared/lib/scrollUtils';
-import { useAppTranslations } from '@/hooks/useTranslations';
-import ContactSection from "@/components/ContactSection";
-import AgencyEnquiryModal from "@/components/AgencyEnquiryModal";
-import AgenciesMarquee from "@/components/AgenciesMarquee";
-import VoicesFromNetwork from "@/components/VoicesFromNetwork";
-import AgencyLogosGrid from "@/components/AgencyLogosGrid";
-import AgencyLogosMarquee from "@/components/AgencyLogosMarquee";
+import { useAppTranslations } from '@/shared/hooks/useTranslations';
+import ContactSection from "@/shared/components/ContactSection";
+import AgencyEnquiryModal from "@/shared/components/AgencyEnquiryModal";
+import AgenciesMarquee from "@/features/home/components/AgenciesMarquee";
+import VoicesFromNetwork from "@/features/home/components/VoicesFromNetwork";
+import AgencyLogosGrid from "@/shared/components/AgencyLogosGrid";
+import AgencyLogosMarquee from "@/features/home/components/AgencyLogosMarquee";
 import { getAgencyLogos, type AgencyLogo } from "@/features/agencies/lib/agencyService";
 import ScrollToTop from "@/shared/components/ScrollToTop";
-import ConnectingDots from "@/components/ConnectingDots";
-import ProgramCard from "@/components/ProgramCard";
-import StrategicPartners from "@/components/StrategicPartners";
-import CookieConsentBanner from "@/components/CookieConsentBanner";
-import { useConnectingDots } from '@/hooks/useConnectingDots';
+import ConnectingDots from "@/shared/components/ConnectingDots";
+import ProgramCard from "@/features/home/components/ProgramCard";
+import StrategicPartners from "@/features/home/components/StrategicPartners";
+import CookieConsentBanner from "@/features/home/components/CookieConsentBanner";
+import { useConnectingDots } from '@/shared/hooks/useConnectingDots';
 
 // Add PasscodeCopy component definition before HomePage
 function PasscodeCopy({ passcode }: { passcode: string }) {

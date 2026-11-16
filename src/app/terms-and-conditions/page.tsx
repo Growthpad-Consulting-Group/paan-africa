@@ -1,4 +1,4 @@
-import { buildMetadata } from '@/lib/seo';
+import { buildMetadata } from '@/shared/lib/seo';
 import TermsAndConditionsContent from '@/features/legal/components/TermsAndConditionsContent';
 
 export const metadata = buildMetadata({

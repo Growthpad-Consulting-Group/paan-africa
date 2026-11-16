@@ -1,4 +1,4 @@
-import type { AwardFormData, AwardPricing } from "./types";
+import type { AwardFormData, AwardPricing } from "@/features/awards/components/application/types";
 import type { FieldChange } from "@/types/forms";
 
 

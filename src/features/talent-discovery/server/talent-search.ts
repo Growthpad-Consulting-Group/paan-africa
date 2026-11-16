@@ -1,6 +1,6 @@
-import { reply } from '@/lib/server/http';
-import { errorMessage } from '@/utils/errors';
-import { supabaseAdmin } from '@/lib/server/supabaseAdmin';
+import { reply } from '@/shared/lib/server/http';
+import { errorMessage } from '@/shared/lib/errors';
+import { supabaseAdmin } from '@/shared/lib/server/supabaseAdmin';
 
 
 export async function searchTalent(request: Request): Promise<Response> {

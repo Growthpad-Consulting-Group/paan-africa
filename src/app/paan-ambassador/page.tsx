@@ -1,4 +1,4 @@
-import { buildMetadata } from '@/lib/seo';
+import { buildMetadata } from '@/shared/lib/seo';
 import AmbassadorPage from '@/features/ambassador/components/AmbassadorPage';
 
 export const metadata = buildMetadata({

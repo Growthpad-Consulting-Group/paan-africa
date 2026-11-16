@@ -1,7 +1,7 @@
-import { readJson, reply } from '@/lib/server/http';
-import { errorMessage } from '@/utils/errors';
+import { readJson, reply } from '@/shared/lib/server/http';
+import { errorMessage } from '@/shared/lib/errors';
 import { createClient } from "@supabase/supabase-js";
-import { createMailTransport } from '@/lib/server/mailer';
+import { createMailTransport } from '@/shared/lib/server/mailer';
 
 export async function createExperienceBooking(request: Request): Promise<Response> {
   // eslint-disable-next-line @typescript-eslint/no-explicit-any

@@ -4,8 +4,8 @@
 import Header from "@/shared/layouts/standard-header";
 import Footer from "@/shared/layouts/footer";
 import { useRef } from "react";
-import { useSectionObserver } from "@/hooks/useSectionObserver";
-import MemberTiers from "@/components/MemberTiers";
+import { useSectionObserver } from "@/shared/hooks/useSectionObserver";
+import MemberTiers from "@/features/pricing/components/MemberTiers";
 import ScrollToTop from "@/shared/components/ScrollToTop";
 
 const PricingPage = () => {

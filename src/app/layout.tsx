@@ -1,10 +1,10 @@
 import type { Metadata, Viewport } from 'next'
 import '@/styles/globals.css'
-import AnalyticsScripts from '@/components/AnalyticsScripts'
-import ServiceWorkerCleanup from '@/components/ServiceWorkerCleanup'
-import { globalSchema } from '@/data/siteSchema'
-import Providers from './providers'
-import HideOnStudio from '@/components/HideOnStudio'
+import AnalyticsScripts from '@/shared/components/AnalyticsScripts'
+import ServiceWorkerCleanup from '@/shared/components/ServiceWorkerCleanup'
+import { globalSchema } from '@/shared/data/siteSchema'
+import Providers from '@/app/providers'
+import HideOnStudio from '@/shared/components/HideOnStudio'
 
 export const metadata: Metadata = {
   manifest: '/manifest.json',

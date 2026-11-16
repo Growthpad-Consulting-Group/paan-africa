@@ -4,9 +4,9 @@ import Image from "next/image";
 import Link from "next/link";
 import { useState } from "react";
 import { Icon } from "@iconify/react";
-import { freelancersMenu, ctaButton } from "@/data/menuData";
+import { freelancersMenu, ctaButton } from "@/shared/data/menuData";
 import { handleScroll, useFixedHeader } from "@/shared/lib/scrollUtils";
-import LanguageSwitch from "@/components/LanguageSwitch";
+import LanguageSwitch from "@/shared/components/LanguageSwitch";
 
 type Props = { navLinkColor?: string; transparent?: boolean };
 

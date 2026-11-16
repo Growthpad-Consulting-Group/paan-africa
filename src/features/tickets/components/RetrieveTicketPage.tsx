@@ -4,7 +4,7 @@ import React, { useState } from 'react';
 import Image from 'next/image';
 import Header from '@/shared/layouts/standard-header';
 import Footer from '@/shared/layouts/footer';
-import { errorMessage } from '@/utils/errors';
+import { errorMessage } from '@/shared/lib/errors';
 
 type Ticket = {
   id: string;

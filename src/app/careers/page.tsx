@@ -1,4 +1,4 @@
-import { buildMetadata } from '@/lib/seo';
+import { buildMetadata } from '@/shared/lib/seo';
 import { getOpenPositions, type JobPosting } from '@/features/careers/lib/careerService';
 import CareersPage from '@/features/careers/components/CareersPage';
 

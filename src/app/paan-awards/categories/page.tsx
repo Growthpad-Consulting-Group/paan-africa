@@ -1,4 +1,4 @@
-import { buildMetadata } from '@/lib/seo';
+import { buildMetadata } from '@/shared/lib/seo';
 import { getAwards } from '@/features/summit/lib/summitService';
 import AwardCategoriesPage from '@/features/awards/components/AwardCategoriesPage';
 

@@ -4,9 +4,9 @@ import Image from "next/image";
 import { SUMMIT_CANCELLED } from "@/features/summit/data/status";
 import Link from "next/link";
 import { useState, useEffect } from "react";
-import { menuItems, ctaButton } from "@/data/summitMenu";
+import { menuItems, ctaButton } from "@/shared/data/summitMenu";
 import { useFixedHeader, handleScroll } from "@/shared/lib/scrollUtils";
-import LanguageSwitch from "@/components/LanguageSwitch";
+import LanguageSwitch from "@/shared/components/LanguageSwitch";
 
 const Header = ({ navLinkColor }) => {
   const [isMenuOpen, setIsMenuOpen] = useState(false);

@@ -1,4 +1,4 @@
-import type { Localize, Agency } from "./types";
+import type { Localize, Agency } from "@/features/agencies/components/types";
 
 
 type Props = {

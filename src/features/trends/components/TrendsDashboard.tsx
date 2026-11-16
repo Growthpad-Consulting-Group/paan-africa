@@ -4,12 +4,12 @@ import React, { useState, useEffect } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { Icon } from '@iconify/react';
 import Image from 'next/image';
-import TrendCard from './TrendCard';
-import HashtagCloud from './HashtagCloud';
-import AnalyticsChart from './AnalyticsChart';
-import CampaignHighlight from './CampaignHighlight';
-import RegionalFilter from './RegionalFilter';
-import CategoryFilter from './CategoryFilter';
+import TrendCard from '@/features/trends/components/TrendCard';
+import HashtagCloud from '@/features/trends/components/HashtagCloud';
+import AnalyticsChart from '@/features/trends/components/AnalyticsChart';
+import CampaignHighlight from '@/features/trends/components/CampaignHighlight';
+import RegionalFilter from '@/features/trends/components/RegionalFilter';
+import CategoryFilter from '@/features/trends/components/CategoryFilter';
 
 const TrendsDashboard = () => {
   const [activeTab, setActiveTab] = useState('trends');

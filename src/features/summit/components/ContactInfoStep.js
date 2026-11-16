@@ -1,9 +1,9 @@
 import { motion } from "framer-motion";
 import dynamic from 'next/dynamic';
 import { Icon } from '@iconify/react';
-import FormInput from '@/components/common/FormInput';
+import FormInput from '@/features/summit/components/FormInput';
 
-const CountrySelect = dynamic(() => import('@/components/common/CountrySelect'), { 
+const CountrySelect = dynamic(() => import('@/features/summit/components/CountrySelect'), { 
   ssr: false,
   loading: () => (
     <div className="animate-pulse">

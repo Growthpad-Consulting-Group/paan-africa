@@ -4,11 +4,11 @@ import Header from "@/shared/layouts/standard-header";
 import Footer from "@/shared/layouts/footer";
 import { useEffect, useRef, useState } from "react";
 import { useFixedHeader } from '@/shared/lib/scrollUtils';
-import FAQs from "@/components/FAQs";
+import FAQs from "@/features/faqs/components/FAQs";
 import Link from "next/link";
-import { useAppTranslations } from '@/hooks/useTranslations';
-import { bookingLinks } from '@/data/site';
-import { useSectionObserver } from '@/hooks/useSectionObserver';
+import { useAppTranslations } from '@/shared/hooks/useTranslations';
+import { bookingLinks } from '@/shared/data/site';
+import { useSectionObserver } from '@/shared/hooks/useSectionObserver';
 
 
 const FaqsPage = () => {

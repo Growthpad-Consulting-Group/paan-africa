@@ -1,6 +1,6 @@
-import { errorMessage } from '@/utils/errors'
-import { generateTicketImage } from '@/lib/ticketGenerator'
-import { readJson, reply } from '@/lib/server/http'
+import { errorMessage } from '@/shared/lib/errors'
+import { generateTicketImage } from '@/features/tickets/lib/ticketGenerator'
+import { readJson, reply } from '@/shared/lib/server/http'
 
 /** POST /api/generate-ticket: renders a ticket PNG from the posted ticket data. */
 export async function generateTicket(request: Request): Promise<Response> {

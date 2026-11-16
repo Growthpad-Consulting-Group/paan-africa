@@ -1,4 +1,4 @@
-import { buildMetadata } from '@/lib/seo';
+import { buildMetadata } from '@/shared/lib/seo';
 import PdfEditorPage from '@/features/tools/components/PdfEditorPage';
 
 export const metadata = buildMetadata({

@@ -8,7 +8,7 @@ import Link from 'next/link';
 import Header from "@/shared/layouts/standard-header";
 import Footer from "@/shared/layouts/footer";
 import ScrollToTop from "@/shared/components/ScrollToTop";
-import AIBusinessPlanGenerator from "@/components/AIBusinessPlanGenerator";
+import AIBusinessPlanGenerator from "@/features/tools/components/AIBusinessPlanGenerator";
 
 const AiBusinessPlanGeneratorPage = () => {
   return (

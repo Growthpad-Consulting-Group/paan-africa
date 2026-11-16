@@ -1,4 +1,4 @@
-import { buildMetadata } from '@/lib/seo';
+import { buildMetadata } from '@/shared/lib/seo';
 import AiBriefBuilderPage from '@/features/tools/components/AiBriefBuilderPage';
 
 export const metadata = buildMetadata({

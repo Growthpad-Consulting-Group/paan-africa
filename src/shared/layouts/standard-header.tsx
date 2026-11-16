@@ -1,9 +1,9 @@
 "use client";
 
 import { useState, useEffect } from 'react';
-import LanguageSwitch from '@/components/LanguageSwitch';
+import LanguageSwitch from '@/shared/components/LanguageSwitch';
 import { ChevronDown, Menu, X, ChevronRight } from 'lucide-react';
-import { mainNavigation as menuItems, type NavLink } from '@/data/navigation';
+import { mainNavigation as menuItems, type NavLink } from '@/shared/data/navigation';
 
 /** Pages pass these, but the header currently ignores them; kept so callers type-check. */
 type HeaderProps = { navLinkColor?: string; transparent?: boolean; openModal?: () => void };

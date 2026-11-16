@@ -1,4 +1,4 @@
-import type { AwardFormData, AwardCategory } from "./types";
+import type { AwardFormData, AwardCategory } from "@/features/awards/components/application/types";
 import { Icon } from "@iconify/react";
 
 type Props = {

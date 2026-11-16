@@ -3,7 +3,7 @@
 import Image from "next/image";
 import { Icon } from "@iconify/react";
 import Link from "next/link";
-import NewsletterSignup from "@/components/NewsletterSignup";
+import NewsletterSignup from "@/shared/components/NewsletterSignup";
 import { useMemo } from "react";
 
 const SummitFooter = () => {

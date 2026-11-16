@@ -2,7 +2,7 @@ import Image from 'next/image';
 import { Icon } from '@/shared/components/Icon';
 import Link from 'next/link';
 import type { EventItem } from '@/features/events/lib/eventService';
-import TicketPurchaseButton from '@/components/TicketPurchaseButton';
+import TicketPurchaseButton from '@/features/tickets/components/TicketPurchaseButton';
 
 const EventDetail = ({ event, isPast = false }: { event: EventItem; isPast?: boolean }) => {
   const formatDate = (dateString: string) => {

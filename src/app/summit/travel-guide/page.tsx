@@ -1,4 +1,4 @@
-import { buildMetadata } from '@/lib/seo';
+import { buildMetadata } from '@/shared/lib/seo';
 import { getSummitExperiences, getSummitEdition, DEFAULT_EDITION, type SummitExperience, type SummitEdition } from '@/features/summit/lib/summitService';
 import TravelGuidePage from '@/features/summit/components/TravelGuidePage';
 

@@ -1,14 +1,14 @@
 // footer.js
 "use client";
 
-import NewsletterSignup from "@/components/NewsletterSignup";
+import NewsletterSignup from "@/shared/components/NewsletterSignup";
 import Image from "next/image";
 import { Icon } from "@iconify/react";
 import Link from "next/link";
-import { menuItems } from "@/data/menuData";
+import { menuItems } from "@/shared/data/menuData";
 import { useState, useEffect, useMemo } from "react";
-import { useAppTranslations } from '@/hooks/useTranslations';
-import { socialLinks as siteSocialLinks } from '@/data/site';
+import { useAppTranslations } from '@/shared/hooks/useTranslations';
+import { socialLinks as siteSocialLinks } from '@/shared/data/site';
 
 const Footer = () => {
   const { t } = useAppTranslations();

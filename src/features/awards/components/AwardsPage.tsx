@@ -4,9 +4,9 @@ import { useRef, useState } from "react";
 import PAANAwardsHeader from "@/shared/layouts/paan-awards-header";
 import Footer from "@/shared/layouts/footer";
 import ScrollToTop from "@/shared/components/ScrollToTop";
-import PaystackScript from "@/components/PaystackScript";
-import PAANAwardsApplicationModal from "@/components/PAANAwardsApplicationModal";
-import Hero from "@/components/PaanAwardsHero";
+import PaystackScript from "@/shared/components/PaystackScript";
+import PAANAwardsApplicationModal from "@/features/awards/components/PAANAwardsApplicationModal";
+import Hero from "@/features/awards/components/PaanAwardsHero";
 import CollaborationSection from "@/features/awards/components/CollaborationSection";
 import AwardsAboutSection from "@/features/awards/components/AwardsAboutSection";
 import WhyEnterSection from "@/features/awards/components/WhyEnterSection";
@@ -16,7 +16,7 @@ import JudgingTransparencySection from "@/features/awards/components/JudgingTran
 import WhyParticipateSection from "@/features/awards/components/WhyParticipateSection";
 import KeyDatesSection from "@/features/awards/components/KeyDatesSection";
 import AwardsCtaSection from "@/features/awards/components/AwardsCtaSection";
-import { useSectionObserver } from "@/hooks/useSectionObserver";
+import { useSectionObserver } from "@/shared/hooks/useSectionObserver";
 
 const AwardsPage = () => {
   const sectionRefs = {

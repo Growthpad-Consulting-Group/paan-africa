@@ -1,5 +1,5 @@
-import { convertUSDToKES, formatCurrency } from '@/utils/currencyConverter';
-import FormTextarea from '@/components/common/FormTextarea';
+import { convertUSDToKES, formatCurrency } from '@/features/tickets/lib/currencyConverter';
+import FormTextarea from '@/features/summit/components/FormTextarea';
 
 const PaymentStep = ({ 
   onNext, 

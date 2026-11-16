@@ -1,4 +1,4 @@
-import Studio from './Studio'
+import Studio from '@/app/studio/[[...tool]]/Studio'
 
 export const dynamic = 'force-static'
 

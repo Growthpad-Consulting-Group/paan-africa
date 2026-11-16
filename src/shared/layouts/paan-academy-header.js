@@ -3,9 +3,9 @@ import Image from "next/image";
 import Link from "next/link";
 import { useState, useEffect } from "react";
 import { Icon } from "@iconify/react";
-import { paanAcademyMenu } from "@/data/menuData";
+import { paanAcademyMenu } from "@/shared/data/menuData";
 import { handleScroll, useFixedHeader } from "@/shared/lib/scrollUtils";
-import LanguageSwitch from "@/components/LanguageSwitch";
+import LanguageSwitch from "@/shared/components/LanguageSwitch";
 
 const Header = ({  openModal }) => {
   const [isMenuOpen, setIsMenuOpen] = useState(false);

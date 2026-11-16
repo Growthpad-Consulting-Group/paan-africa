@@ -1,9 +1,9 @@
-import { readJson, reply } from '@/lib/server/http';
-import { errorMessage } from '@/utils/errors';
+import { readJson, reply } from '@/shared/lib/server/http';
+import { errorMessage } from '@/shared/lib/errors';
 import nodemailer from 'nodemailer';
-import { generateTicketImage } from '@/lib/ticketGenerator';
-import { generatePDFTicket } from '@/lib/pdfTicketGenerator';
-import { notifyNewTicketPurchaseSlack } from '@/utils/slackUtils';
+import { generateTicketImage } from '@/features/tickets/lib/ticketGenerator';
+import { generatePDFTicket } from '@/features/tickets/lib/pdfTicketGenerator';
+import { notifyNewTicketPurchaseSlack } from '@/shared/lib/slackUtils';
 
 export async function sendSummitTicket(request: Request): Promise<Response> {
   // eslint-disable-next-line @typescript-eslint/no-explicit-any

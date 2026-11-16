@@ -1,5 +1,5 @@
 import { Icon } from "@iconify/react";
-import Accordion from "@/components/Accordion";
+import Accordion from "@/shared/components/Accordion";
 
 export default function PlanYourTripSection() {
   return (

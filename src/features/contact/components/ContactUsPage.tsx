@@ -3,15 +3,15 @@
 import Header from "@/shared/layouts/standard-header";
 import Footer from "@/shared/layouts/footer";
 import { useEffect, useRef, useState, useMemo } from "react";
-import Parallax from "@/components/ContactParallax";
+import Parallax from "@/features/contact/components/ContactParallax";
 import ScrollToTop from "@/shared/components/ScrollToTop";
 import { motion } from "framer-motion";
 import ReCAPTCHA from "react-google-recaptcha";
 import { useRouter } from "next/navigation";
 import { toast } from "react-hot-toast";
-import { socialLinks as siteSocialLinks } from '@/data/site';
-import { useSectionObserver } from '@/hooks/useSectionObserver';
-import { useRecaptcha } from '@/hooks/useRecaptcha';
+import { socialLinks as siteSocialLinks } from '@/shared/data/site';
+import { useSectionObserver } from '@/shared/hooks/useSectionObserver';
+import { useRecaptcha } from '@/shared/hooks/useRecaptcha';
 
 
 const ContactUsPage = () => {

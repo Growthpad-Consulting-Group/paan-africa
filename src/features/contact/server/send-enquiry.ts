@@ -1,7 +1,7 @@
-import { errorMessage } from '@/utils/errors';
-import { createMailTransport } from '@/lib/server/mailer';
-import { verifyRecaptcha } from '@/lib/server/recaptcha';
-import { readJson, reply, text } from '@/lib/server/http';
+import { errorMessage } from '@/shared/lib/errors';
+import { createMailTransport } from '@/shared/lib/server/mailer';
+import { verifyRecaptcha } from '@/shared/lib/server/recaptcha';
+import { readJson, reply, text } from '@/shared/lib/server/http';
 import { createClient } from "@supabase/supabase-js";
 
 /** POST /api/send-enquiry: delivery-partner enquiry from the clients page. */

@@ -1,5 +1,5 @@
 import type { Masterclass } from "@/features/masterclasses/lib/masterclassService";
-import type { AppliedPromo, CustomerInfo } from "./types";
+import type { AppliedPromo, CustomerInfo } from "@/features/masterclasses/components/detail/types";
 import { Icon } from "@iconify/react";
 
 type Props = {

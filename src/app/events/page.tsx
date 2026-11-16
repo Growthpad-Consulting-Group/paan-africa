@@ -1,5 +1,5 @@
-import { buildMetadata } from '@/lib/seo';
-import { translate as t } from '@/hooks/useTranslations';
+import { buildMetadata } from '@/shared/lib/seo';
+import { translate as t } from '@/shared/hooks/useTranslations';
 import { getEvents } from '@/features/events/lib/eventService';
 import Header from '@/shared/layouts/standard-header';
 import Footer from '@/shared/layouts/footer';

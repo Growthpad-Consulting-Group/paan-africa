@@ -5,12 +5,12 @@ import Image from "next/image";
 import Footer from "@/shared/layouts/footer";
 import { useEffect, useRef, useState } from "react";
 import { useFixedHeader } from '@/shared/lib/scrollUtils';
-import EnquiryModal from "@/components/EnquiryModal";
-import MaConsultationModal from "@/components/MaConsultationModal";
+import EnquiryModal from "@/shared/components/EnquiryModal";
+import MaConsultationModal from "@/features/ma-program/components/MaConsultationModal";
 import ScrollToTop from "@/shared/components/ScrollToTop";
-import Accordion from "@/components/Accordion";
+import Accordion from "@/shared/components/Accordion";
 import { motion } from "framer-motion";
-import { useAppTranslations } from '@/hooks/useTranslations';
+import { useAppTranslations } from '@/shared/hooks/useTranslations';
 
 const MaProgramPage = () => {
   const { t } = useAppTranslations();

@@ -1,5 +1,5 @@
 import Image from 'next/image';
-import { translate as t } from '@/hooks/useTranslations';
+import { translate as t } from '@/shared/hooks/useTranslations';
 
 export default function EventsHero({ upcomingCount }: { upcomingCount: number }) {
   return (

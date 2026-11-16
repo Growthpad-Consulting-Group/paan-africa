@@ -5,10 +5,10 @@ import Image from "next/image";
 import Footer from "@/shared/layouts/footer";
 import { useEffect, useRef, useState } from "react";
 import { useFixedHeader } from '@/shared/lib/scrollUtils';
-import Parallax from "@/components/AboutParallax";
+import Parallax from "@/features/about/components/AboutParallax";
 import ScrollToTop from "@/shared/components/ScrollToTop";
 import { motion } from "framer-motion";
-import { useAppTranslations } from '@/hooks/useTranslations';
+import { useAppTranslations } from '@/shared/hooks/useTranslations';
 
 const AboutPage = () => {
   const { t } = useAppTranslations();

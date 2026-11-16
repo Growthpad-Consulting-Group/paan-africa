@@ -1,7 +1,7 @@
-import { reply } from '@/lib/server/http';
+import { reply } from '@/shared/lib/server/http';
 import { createClient } from '@supabase/supabase-js';
-import { updatePurchaseStatus } from '@/lib/paystack';
-import { sendMetaPurchaseEvent } from '@/lib/meta-capi';
+import { updatePurchaseStatus } from '@/shared/lib/paystack';
+import { sendMetaPurchaseEvent } from '@/features/payments/lib/meta-capi';
 import crypto from 'crypto';
 
 // Initialize Supabase client

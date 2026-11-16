@@ -1,6 +1,6 @@
-import { errorMessage } from '@/utils/errors'
-import { mockAnalyticsData, mockFeaturedInsights, getMockData } from '@/lib/mock-data'
-import { reply } from '@/lib/server/http'
+import { errorMessage } from '@/shared/lib/errors'
+import { mockAnalyticsData, mockFeaturedInsights, getMockData } from '@/features/trends/lib/mock-data'
+import { reply } from '@/shared/lib/server/http'
 
 /** GET /api/trends/analytics: analytics and insights (mock data until the live sources are connected). */
 export async function getTrendAnalytics(request: Request): Promise<Response> {

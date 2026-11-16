@@ -5,12 +5,12 @@ import Image from "next/image";
 import Footer from "@/shared/layouts/footer";
 import { useEffect, useRef, useState } from "react";
 import { useFixedHeader } from '@/shared/lib/scrollUtils';
-import AmbassadorPageParallax from "@/components/AmbassadorPageParallax";
-import BecomeAmbassadorModal from "@/components/BecomeAmbassadorModal";
-import ContactSection from "@/components/ContactSection";
+import AmbassadorPageParallax from "@/features/ambassador/components/AmbassadorPageParallax";
+import BecomeAmbassadorModal from "@/features/ambassador/components/BecomeAmbassadorModal";
+import ContactSection from "@/shared/components/ContactSection";
 import ScrollToTop from "@/shared/components/ScrollToTop";
 import { motion } from "framer-motion";
-import { useAppTranslations } from '@/hooks/useTranslations';
+import { useAppTranslations } from '@/shared/hooks/useTranslations';
 import { Linkedin, ChevronLeft, ChevronRight } from "lucide-react"
 
 type Ambassador = {

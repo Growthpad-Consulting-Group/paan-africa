@@ -5,12 +5,12 @@ import Image from "next/image";
 import Footer from "@/shared/layouts/footer";
 import { useEffect, useRef, useState } from "react";
 import { useFixedHeader } from '@/shared/lib/scrollUtils';
-import ClientsSlider from "@/components/ClientsSlider";
+import ClientsSlider from "@/features/clients/components/ClientsSlider";
 import Link from "next/link";
-import EnquiryModal from "@/components/EnquiryModal";
-import AgencyLogosGrid from "@/components/AgencyLogosGrid";
+import EnquiryModal from "@/shared/components/EnquiryModal";
+import AgencyLogosGrid from "@/shared/components/AgencyLogosGrid";
 import ScrollToTop from "@/shared/components/ScrollToTop";
-import { useAppTranslations } from '@/hooks/useTranslations';
+import { useAppTranslations } from '@/shared/hooks/useTranslations';
 
 const ClientsPage = () => {
   const { t } = useAppTranslations();
