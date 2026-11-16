@@ -37,3 +37,6 @@ yarn.lock
 .history
 *.tsbuildinfo
 scripts/backups/
+
+# generated on every build
+/public/sitemap-static.xml
