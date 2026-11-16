@@ -81,7 +81,7 @@ Seven near-identical ~850-line pages (6,000 lines) → one Sanity schema + one t
 | Homepage logo strip (`AgencyLogosMarquee`) from Sanity | ✅ | Left strip is Sanity (10 logos). Right strip = free members, still hardcoded → move in 1.3 (clients/partners) |
 | Deleted: 7 page files, `certifiedAgencies.aquila/liftup` i18n keys | ✅ | Shared form labels moved to `certifiedAgencies.common` |
 | `/certified-agencies` listing page | ⏳ | Did not exist before; now trivial to add from `getAgencyLogos()` if wanted |
-| Delete `public/assets/images/certified-members/*` (≈117 MB, incl. 78 MB of video) | ⏳ | Keep until verified in production. `talent-discovery.js` still references two files there |
+| Delete `public/assets/images/certified-members/*` (≈117 MB, incl. 78 MB of video) | ✅ | Deleted 2026-11-16 (Phase 1.4). The badge was kept as `certified-members-badge.svg` and the 2 mock cover refs in `TalentDiscoveryPage` were repointed |
 
 **Bugs found in the old pages (fixed by the migration):** Media Seal contact enquiries were emailed/stored as agency "LyftUp" and Penquin's as "Aquila"; Nitro's LinkedIn icon linked to Instagram; Omni Options and Xperia had placeholder `#` social links and reused Aquila's YouTube video; Xperia's heading said "Clients Aquila Has Worked With"; Omni Options was "Full Member" in the Associate (grey) colour; the header special-cased `/certified-agencies/omni_options` (404 path). **Not fixed (content, needs the agencies):** real videos for Aquila/Omni/Xperia, social links for Omni/Xperia.
 
@@ -129,8 +129,8 @@ Both are cancelled and hidden (`SUMMIT_CANCELLED`, `HIDDEN_PATHS` in `next.confi
 ---|---|
 | Remove `src/data/*` content files and `mock-data.js` once consumed from Sanity | ⏳ |
 | Remove `usePublicBlog`, blog-related Supabase code, `hr_users` usage | ⏳ |
-| Delete `purchase-ticket.js.backup`, `test-ticket.js`, `api/debug-eoi.js` (non-prod leftovers) | ⏳ |
-| Remove unused deps (`openai` if unused, `@napi-rs/canvas`, duplicate map libs — see `docs/mapping-library-comparison.md`) | ⏳ |
+| Delete `purchase-ticket.js.backup`, `test-ticket.js`, `api/debug-eoi.js` (non-prod leftovers) | ✅ |
+| Remove unused deps (`openai` if unused, `@napi-rs/canvas`, duplicate map libs — see `docs/mapping-library-comparison.md`) | ✅ |
 
 ---
 
