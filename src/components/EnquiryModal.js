@@ -2,7 +2,7 @@ import { useState, useRef } from 'react';
 import Image from 'next/image';
 import toast, { Toaster } from 'react-hot-toast';
 import ReCAPTCHA from 'react-google-recaptcha';
-import Modal, { ModalHeader } from './Modal';
+import Modal, { ModalHeader } from '@/shared/components/Modal';
 
 const EnquiryModal = ({ isOpen, onClose }) => {
   const [formData, setFormData] = useState({

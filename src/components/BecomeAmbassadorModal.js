@@ -1,6 +1,6 @@
 import { useState, useEffect } from 'react';
 import { Icon } from '@iconify/react';
-import Modal, { ModalHeader } from './Modal';
+import Modal, { ModalHeader } from '@/shared/components/Modal';
 
 export default function BecomeAmbassadorModal({ isOpen, onClose }) {
   // Load gtag script if not already loaded

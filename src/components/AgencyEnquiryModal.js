@@ -1,7 +1,7 @@
 import { useState } from 'react';
 import toast, { Toaster } from 'react-hot-toast';
 import ReCAPTCHA from 'react-google-recaptcha';
-import Modal, { ModalHeader } from './Modal';
+import Modal, { ModalHeader } from '@/shared/components/Modal';
 
 const AgencyEnquiryModal = ({ isOpen, onClose }) => {
   const [formData, setFormData] = useState({

@@ -3,7 +3,7 @@
 import { useState, useRef, useEffect } from "react";
 import { Icon } from "@iconify/react";
 import ReCAPTCHA from "react-google-recaptcha";
-import Modal, { ModalHeader } from "@/components/Modal";
+import Modal, { ModalHeader } from "@/shared/components/Modal";
 import { errorMessage } from '@/utils/errors';
 import type { JobPosting } from '@/features/careers/lib/careerService';
 import { useRecaptcha } from '@/hooks/useRecaptcha';

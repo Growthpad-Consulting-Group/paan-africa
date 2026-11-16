@@ -2,7 +2,7 @@ import { useState } from 'react';
 import { Icon } from '@iconify/react';
 import toast from 'react-hot-toast';
 import ReCAPTCHA from 'react-google-recaptcha';
-import Modal, { ModalHeader } from './Modal';
+import Modal, { ModalHeader } from '@/shared/components/Modal';
 import { countries } from '@/data/countries';
 import type { FieldChange } from "@/types/forms";
 import { useRecaptcha } from "@/hooks/useRecaptcha";

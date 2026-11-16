@@ -2,7 +2,7 @@ import { useState, useRef } from 'react';
 import Image from 'next/image';
 import toast, { Toaster } from 'react-hot-toast';
 import ReCAPTCHA from 'react-google-recaptcha';
-import Modal from './Modal';
+import Modal from '@/shared/components/Modal';
 
 const AcademyEnquiryModal = ({ isOpen, onClose }) => {
   const [formData, setFormData] = useState({
