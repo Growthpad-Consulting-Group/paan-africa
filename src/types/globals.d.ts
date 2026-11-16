@@ -15,6 +15,11 @@ declare global {
     fbq?: (...args: any[]) => void;
   }
 
-  /** Google Ads conversion helper defined by the inline script in pages/_app.js. Redirects to `url` after reporting. */
+  /** Global `gtag` / `dataLayer` (bare identifiers, as the legacy components call them) */
+  function gtag(...args: any[]): void;
+  // eslint-disable-next-line no-var
+  var dataLayer: any[];
+
+  /** Google Ads conversion helper defined by the inline script in AnalyticsScripts. Redirects to `url` after reporting. */
   function gtag_report_conversion(url?: string): boolean;
 }
