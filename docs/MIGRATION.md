@@ -212,7 +212,7 @@ src/app/
 1. ✅ Root layout (`app/layout.tsx`), `Providers`, shared `AnalyticsScripts`/`siteSchema`/`ServiceWorkerCleanup` (also used by `_app`), fonts, icons/manifest via metadata
 2. ✅ `privacy-policy`, `terms-and-conditions` (main markup identical; head differs only in tag attribute order and the modern `mobile-web-app-capable` tag)
 3. ✅ Blogs (Sanity, ISR): `app/blogs`, `app/blogs/[slug]` (`generateStaticParams` + `revalidate = 3600`, `dynamicParams`), feature code in `features/blog/{components,lib}`. Index main markup identical; posts identical except `id="blog-author"` (replaces a ref) and extra head tags (author, og:locale, image alt, twitter:domain). **Verify on the preview:** the Sanity webhook (`/api/revalidate`, `res.revalidate`) refreshing an App Router path. `sitemap-blogs.xml` is still a Pages route until step 8
-4. 🔄 Certified agencies ✅ (`app/certified-agencies/[slug]`, `features/agencies`: profile split into 8 sections, contact form state owned by its modal; main markup identical). Masterclasses, events, careers ⏳
+4. 🔄 Certified agencies ✅ (`app/certified-agencies/[slug]`, `features/agencies`: profile split into 8 sections, contact form state owned by its modal; main markup identical). Events ✅ (`app/events`, `app/events/[slug]` incl. the numeric-id permanent redirect; `features/events`; markup identical). Masterclasses, careers ⏳
 5. ⏳ Home + marketing pages
 6. ⏳ Payment pages + retrieve-ticket + (hidden) summit pages (**last, highest risk** — keep Meta CAPI/GA4 purchase events verified before/after). While cancelled, summit/awards routes can be migrated as a pure redirect, not re-built
 7. ⏳ API routes → Route Handlers (Paystack webhook: verify raw-body signature handling changes)

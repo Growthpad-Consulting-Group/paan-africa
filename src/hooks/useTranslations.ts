@@ -15,6 +15,9 @@ function lookup(key: string): string {
   return typeof value === 'string' && value ? value : key
 }
 
+/** Plain translate function for server components (the hook below wraps it for client components). */
+export const translate = (key: string): string => lookup(key)
+
 export const useAppTranslations = () => {
   const t = useMemo(() => (key: string) => lookup(key), [])
   const tn = useMemo(() => (namespace: string, key: string) => t(`${namespace}.${key}`), [t])

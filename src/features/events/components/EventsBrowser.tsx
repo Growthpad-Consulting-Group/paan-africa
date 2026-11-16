@@ -1,18 +1,15 @@
+"use client";
+
 import { useState, useEffect } from 'react';
-import type { GetStaticPropsResult } from 'next';
-import SEO from "@/components/SEO";
-import Header from "@/shared/layouts/standard-header";
-import Footer from "@/shared/layouts/footer";
-import EventCard from "@/components/EventCard";
-import { getEvents, type EventItem } from "@/lib/eventService";
 import { Icon } from '@iconify/react';
-import Image from 'next/image';
-import { useAppTranslations } from '../hooks/useTranslations';
+import EventCard from '@/features/events/components/EventCard';
+import { useAppTranslations } from '@/hooks/useTranslations';
+import type { EventItem } from '@/features/events/lib/eventService';
 
 type Tab = 'all' | 'upcoming' | 'past';
 type Props = { upcoming: EventItem[]; past: EventItem[] };
 
-const EventsPage = ({ upcoming = [], past = [] }: Props) => {
+const EventsBrowser = ({ upcoming = [], past = [] }: Props) => {
   const { t } = useAppTranslations();
   const isText = (v: string | null): v is string => Boolean(v);
   const eventCategories = [...new Set([...upcoming, ...past].map((e) => e.category).filter(isText))];
@@ -54,62 +51,6 @@ const EventsPage = ({ upcoming = [], past = [] }: Props) => {
 
   return (
     <>
-      <SEO 
-        title={t('events.seo.title')}
-        description={t('events.seo.description')}
-        keywords={t('events.seo.keywords')}
-      />
-      <div className='relative'>
-      
-      <Header navLinkColor="text-gray-950" />
-      
-             {/* Hero Section */}
-       <section className="relative pt-24 sm:pt-32 pb-12 sm:pb-16 bg-gradient-to-br from-paan-dark-blue via-paan-blue to-paan-dark-blue overflow-hidden">
-        {/* Background Pattern */}
-        <div className="absolute inset-0 opacity-10">
-          <Image
-            src="/assets/images/pattern-bg-1.webp"
-            alt={t('events.altText.backgroundPattern')}
-            fill
-            className="object-cover"
-          />
-        </div>
-        
-        <div className="relative z-10 container mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="text-center max-w-4xl mx-auto">
-            <h1 className="text-3xl sm:text-4xl md:text-5xl lg:text-6xl font-bold text-white mb-4 sm:mb-6 leading-tight">
-              {t('events.hero.title')} <span className="text-paan-yellow">{t('events.hero.titleHighlight')}</span>
-            </h1>
-            <p className="text-lg sm:text-xl md:text-2xl text-white/90 mb-6 sm:mb-8 leading-relaxed px-2">
-              {t('events.hero.description')}
-            </p>
-            
-            {/* Event Stats */}
-            <div className="grid grid-cols-1 sm:grid-cols-3 gap-4 sm:gap-6 mt-8 sm:mt-12">
-              <div className="bg-white/10 backdrop-blur-sm rounded-xl p-4 sm:p-6 border border-white/20">
-                <div className="text-2xl sm:text-3xl font-bold text-paan-yellow mb-2">
-                  {upcoming.length}
-                </div>
-                <div className="text-sm sm:text-base text-white/90">{t('events.hero.stats.upcomingEvents')}</div>
-              </div>
-              <div className="bg-white/10 backdrop-blur-sm rounded-xl p-4 sm:p-6 border border-white/20">
-                <div className="text-2xl sm:text-3xl font-bold text-paan-yellow mb-2">
-                  10+
-                </div>
-                <div className="text-sm sm:text-base text-white/90">{t('events.hero.stats.pastEvents')}</div>
-              </div>
-              <div className="bg-white/10 backdrop-blur-sm rounded-xl p-4 sm:p-6 border border-white/20">
-                <div className="text-2xl sm:text-3xl font-bold text-paan-yellow mb-2">
-                  20+
-                </div>
-                <div className="text-sm sm:text-base text-white/90">{t('events.hero.stats.citiesAcrossAfrica')}</div>
-              </div>
-            </div>
-          </div>
-        </div>
-      </section>
-
-      {/* Events Section */}
       <section className="py-16 bg-gray-50">
         <div className="container mx-auto px-4 sm:px-6 lg:px-8">
           {/* Tab Navigation */}
@@ -207,40 +148,8 @@ const EventsPage = ({ upcoming = [], past = [] }: Props) => {
           )}
         </div>
       </section>
-
-      {/* CTA Section */}
-      <section className="py-12 sm:py-16 bg-paan-blue text-paan-dark-blue">
-        <div className="container mx-auto px-4 sm:px-6 lg:px-8 text-center pb-12 sm:pb-16">
-          <h2 className="text-2xl sm:text-3xl md:text-4xl font-bold text-paan-dark-blue mb-4 sm:mb-6">
-            {t('events.cta.title')}
-          </h2>
-          <p className="text-lg sm:text-xl text-paan-dark-blue/90 mb-6 sm:mb-8 max-w-2xl mx-auto px-4">
-            {t('events.cta.description')}
-          </p>
-          <div className="flex flex-col sm:flex-row gap-3 sm:gap-4 justify-center items-center max-w-md sm:max-w-none mx-auto">
-            <a
-              href="https://membership.paan.africa/"
-              className="bg-paan-red hover:bg-paan-red/90 text-white px-6 sm:px-8 py-3 sm:py-4 rounded-full font-semibold text-base sm:text-lg shadow-xl hover:shadow-2xl transform hover:scale-105 transition-all duration-300 w-full sm:w-auto text-center"
-            >
-              {t('events.cta.joinNetwork')}
-            </a>
-          </div>
-        </div>
-      </section>
-      <Footer />
-      </div>
     </>
   );
 };
 
-export async function getStaticProps(): Promise<GetStaticPropsResult<Props>> {
-  try {
-    const { upcoming, past } = await getEvents();
-    return { props: { upcoming, past }, revalidate: 3600 };
-  } catch (error) {
-    console.error('Error loading events from Sanity:', error);
-    return { props: { upcoming: [], past: [] }, revalidate: 60 };
-  }
-}
-
-export default EventsPage;
+export default EventsBrowser;

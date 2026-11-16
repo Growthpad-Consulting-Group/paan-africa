@@ -1,10 +1,11 @@
 import Image from 'next/image';
-import { Icon } from '@iconify/react';
+import { Icon } from '@/shared/components/Icon';
 import Link from 'next/link';
-import TicketPurchaseButton from './TicketPurchaseButton';
+import type { EventItem } from '@/features/events/lib/eventService';
+import TicketPurchaseButton from '@/components/TicketPurchaseButton';
 
-const EventDetail = ({ event, isPast = false }) => {
-  const formatDate = (dateString) => {
+const EventDetail = ({ event, isPast = false }: { event: EventItem; isPast?: boolean }) => {
+  const formatDate = (dateString: string) => {
     const date = new Date(dateString);
     return date.toLocaleDateString('en-US', {
       weekday: 'long',
@@ -14,8 +15,8 @@ const EventDetail = ({ event, isPast = false }) => {
     });
   };
 
-  const getCategoryColor = (category) => {
-    const colors = {
+  const getCategoryColor = (category: string) => {
+    const colors: Record<string, string> = {
       'Summit': 'bg-paan-red text-white',
       'Workshop': 'bg-paan-blue text-paan-dark-blue',
       'Webinar': 'bg-paan-green text-white',
