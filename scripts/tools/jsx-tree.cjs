@@ -1,3 +1,5 @@
+// Prints the JSX tree (tag, line span, size) of a React component so page sections can be located.
+//   node scripts/tools/jsx-tree.cjs <file> <ComponentName> [depth]
 const ts = require('typescript'), fs = require('fs')
 const file = process.argv[2]
 const text = fs.readFileSync(file, 'utf8')

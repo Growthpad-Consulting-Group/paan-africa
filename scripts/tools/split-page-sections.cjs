@@ -1,4 +1,12 @@
 // Moves JSX blocks of a page component into their own component files (verbatim), wiring props + imports.
+//
+// Usage (the page must be parseable as TSX; run `node scripts/tools/jsx-tree.cjs <file> <Component> 3` first to see
+// each section's exact start/end lines):
+//   node scripts/tools/split-page-sections.cjs <file> <ComponentName> <spec.json>
+//   spec.json: { "outDir": "src/components/x", "blocks": [{ "start": 392, "end": 501, "name": "AboutSection", "types": { "prop": "TS type" } }] }
+// Block lines must match a JSX element exactly. Page-scope variables a block uses become typed props (default `any`:
+// give `types`, then fix what the type checker reports); imports are copied; `isFixed={isFixed}` junk props are dropped.
+// Verify the result byte-for-byte against a baseline render (see docs/MIGRATION.md, Phase 1.5).
 const ts = require('typescript'), fs = require('fs'), path = require('path')
 const [file, compName, specFile] = process.argv.slice(2)
 const spec = JSON.parse(fs.readFileSync(specFile, 'utf8'))   // { outDir, blocks: [{ start, end, name, types: {prop: "TS type"} }] }

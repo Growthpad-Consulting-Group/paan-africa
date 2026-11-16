@@ -1,6 +1,6 @@
 import type { RefObject } from "react";
 import { motion } from "framer-motion";
-import { Icon } from "@iconify/react";
+import EventLocationAndDate from "@/components/summit/EventLocationAndDate";
 import { handleScroll } from "../../../utils/scrollUtils";
 import { SUMMIT_CANCELLED } from "@/data/summit/status";
 import { staggerContainer, fadeInUp, scaleIn } from "@/components/summit/motion";
@@ -49,7 +49,7 @@ export default function SummitHero({ sectionRefs, edition, onPartnerClick }: Pro
                 className="flex flex-col sm:flex-row gap-2 sm:gap-4 mb-6 sm:mb-10 justify-center"
                 variants={fadeInUp}
               >
-                <SeminarLocationAndDate edition={edition} />
+                <EventLocationAndDate edition={edition} />
               </motion.div>
               <motion.div 
                 className="flex flex-col sm:flex-row justify-center gap-4 sm:gap-6 md:gap-8"
@@ -88,26 +88,5 @@ export default function SummitHero({ sectionRefs, edition, onPartnerClick }: Pro
       </div>
 
     </>
-  );
-}
-
-function SeminarLocationAndDate({ edition }: { edition: SummitEdition }) {
-    
-  return (
-    <div className="flex flex-col sm:flex-row gap-2 sm:gap-4">
-      <div className="flex items-center gap-2 text-white text-xs sm:text-sm">
-        <Icon icon="mdi:map-marker" className="text-red-500 flex-shrink-0" width="20" height="20" />
-        <span className="break-words sm:whitespace-nowrap">{`${edition.venueName} - `}<strong>{edition.displayDates}</strong></span>
-      </div>
-      
-      <div className="flex items-center gap-2 text-white text-xs sm:text-sm">
-        <Icon icon="mdi:user-group" className="text-red-500 flex-shrink-0" width="20" height="20" />
-        <span className="whitespace-nowrap">{edition.inPersonLabel}</span>
-      </div>
-      <div className="flex items-center gap-2 text-white text-xs sm:text-sm">
-        <Icon icon="mdi:globe" className="text-red-500 flex-shrink-0" width="20" height="20" />
-        <span className="whitespace-nowrap">{edition.streamingLabel}</span>
-      </div>
-    </div>
   );
 }
