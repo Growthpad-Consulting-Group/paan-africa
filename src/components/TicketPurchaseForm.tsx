@@ -4,18 +4,18 @@ import { useState, useEffect } from "react";
 import { Icon } from "@iconify/react";
 import { countries } from '@/data/countries';
 import type { FieldChange } from "@/types/forms";
-import type { TicketFormData, TicketOption } from "@/components/summit/ticket-form/types";
-import FormActions from "@/components/summit/ticket-form/FormActions";
-import EarlyBirdFields from "@/components/summit/ticket-form/EarlyBirdFields";
-import VipDelegateFields from "@/components/summit/ticket-form/VipDelegateFields";
-import AgencyGrowthFields from "@/components/summit/ticket-form/AgencyGrowthFields";
-import VirtualAccessFields from "@/components/summit/ticket-form/VirtualAccessFields";
-import InternationalDelegateFields from "@/components/summit/ticket-form/InternationalDelegateFields";
-import CorporateGroupFields from "@/components/summit/ticket-form/CorporateGroupFields";
-import StudentFields from "@/components/summit/ticket-form/StudentFields";
-import AttendeeDetailsFields from "@/components/summit/ticket-form/AttendeeDetailsFields";
-import SelectedTicketSummary from "@/components/summit/ticket-form/SelectedTicketSummary";
-import TicketTypeSelect from "@/components/summit/ticket-form/TicketTypeSelect";
+import type { TicketFormData, TicketOption } from "@/features/summit/components/ticket-form/types";
+import FormActions from "@/features/summit/components/ticket-form/FormActions";
+import EarlyBirdFields from "@/features/summit/components/ticket-form/EarlyBirdFields";
+import VipDelegateFields from "@/features/summit/components/ticket-form/VipDelegateFields";
+import AgencyGrowthFields from "@/features/summit/components/ticket-form/AgencyGrowthFields";
+import VirtualAccessFields from "@/features/summit/components/ticket-form/VirtualAccessFields";
+import InternationalDelegateFields from "@/features/summit/components/ticket-form/InternationalDelegateFields";
+import CorporateGroupFields from "@/features/summit/components/ticket-form/CorporateGroupFields";
+import StudentFields from "@/features/summit/components/ticket-form/StudentFields";
+import AttendeeDetailsFields from "@/features/summit/components/ticket-form/AttendeeDetailsFields";
+import SelectedTicketSummary from "@/features/summit/components/ticket-form/SelectedTicketSummary";
+import TicketTypeSelect from "@/features/summit/components/ticket-form/TicketTypeSelect";
 
 const TicketPurchaseForm = ({ onClose }: { onClose: () => void }) => {
   const [formData, setFormData] = useState<TicketFormData>({

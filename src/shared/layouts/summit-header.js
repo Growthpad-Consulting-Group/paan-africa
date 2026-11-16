@@ -1,7 +1,7 @@
 "use client";
 
 import Image from "next/image";
-import { SUMMIT_CANCELLED } from "@/data/summit/status";
+import { SUMMIT_CANCELLED } from "@/features/summit/data/status";
 import Link from "next/link";
 import { useState, useEffect } from "react";
 import { menuItems, ctaButton } from "@/data/summitMenu";

@@ -1,7 +1,7 @@
 import Image from "next/image";
 import { motion } from "framer-motion";
 import Link from "next/link";
-import { staggerContainer, fadeInUp } from "@/components/summit/motion";
+import { staggerContainer, fadeInUp } from "@/features/summit/components/motion";
 
 export default function MasterclassesHero() {
   return (

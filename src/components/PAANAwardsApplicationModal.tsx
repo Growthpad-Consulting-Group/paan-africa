@@ -9,15 +9,15 @@ import Modal, { ModalHeader } from '@/shared/components/Modal';
 import { countries } from '@/data/countries';
 import type { FieldChange } from "@/types/forms";
 import { useRecaptcha } from "@/hooks/useRecaptcha";
-import type { AwardFormData, AwardCategory, AwardPricing } from "@/components/awards/application/types";
-import FormActions from "@/components/awards/application/FormActions";
-import PaymentSummary from "@/components/awards/application/PaymentSummary";
-import TermsFields from "@/components/awards/application/TermsFields";
-import AdditionalInfoFields from "@/components/awards/application/AdditionalInfoFields";
-import ProjectInfoFields from "@/components/awards/application/ProjectInfoFields";
-import CategorySelectionFields from "@/components/awards/application/CategorySelectionFields";
-import ProfessionalInfoFields from "@/components/awards/application/ProfessionalInfoFields";
-import PersonalInfoFields from "@/components/awards/application/PersonalInfoFields";
+import type { AwardFormData, AwardCategory, AwardPricing } from "@/features/awards/components/application/types";
+import FormActions from "@/features/awards/components/application/FormActions";
+import PaymentSummary from "@/features/awards/components/application/PaymentSummary";
+import TermsFields from "@/features/awards/components/application/TermsFields";
+import AdditionalInfoFields from "@/features/awards/components/application/AdditionalInfoFields";
+import ProjectInfoFields from "@/features/awards/components/application/ProjectInfoFields";
+import CategorySelectionFields from "@/features/awards/components/application/CategorySelectionFields";
+import ProfessionalInfoFields from "@/features/awards/components/application/ProfessionalInfoFields";
+import PersonalInfoFields from "@/features/awards/components/application/PersonalInfoFields";
 
 const PAANAwardsApplicationModal = ({ isOpen, onClose }: { isOpen: boolean; onClose: () => void }) => {
   const [formData, setFormData] = useState<AwardFormData>({
