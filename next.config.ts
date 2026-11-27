@@ -48,6 +48,14 @@ const nextConfig: NextConfig = {
       },
     ],
     qualities: [100, 75],
+    // Cut Vercel image-optimization usage: cache transformed images for 31 days
+    // (default re-validates far more often, each miss is a cache write), serve
+    // WebP only (AVIF doubles transformations per image), and trim the size ladder.
+    loaderFile: './src/shared/lib/image-loader.ts',
+    minimumCacheTTL: 2678400,
+    formats: ['image/webp'],
+    deviceSizes: [640, 828, 1080, 1280, 1920],
+    imageSizes: [64, 128, 256, 384],
   },
   reactStrictMode: true,
   // Optimize serverless function size by excluding large directories
